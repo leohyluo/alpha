@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: alpha-user
+server:
+  port: 19090
+
+#注册中心配置  
+service:  
+  register:
+    center:
+      ip: 127.0.0.1
+      hostname: peer1
+      port: 19081
+    center2: 
+      ip: 127.0.0.1
+      hostname: peer2
+      port: 19082
+
+eureka:
+  client:
+    serviceUrl: 
+      defaultZone: http://${service.register.center.hostname}:${service.register.center.port}/eureka/
+              
