@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: alpha-api-gateway
+  profiles:
+    active: dev
+server:
+  port: 19083
+#配置zuul
+zuul:
+  routes:
+    abc: 
+      path: /user-api/**
+      service-id: alpha-user
+    disease: 
+      path: /diagnosis-api/**
+      service-id: alpha-self-diagnosis
+  

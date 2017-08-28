@@ -28,5 +28,10 @@
     "name": "service.register.center2.port",
     "type": "java.lang.String",
     "description": "A description for 'service.register.center2.port'"
+  },
+  {
+    "name": "hystrix.command.default.execution.isolation.thread.timeout-in-milliseconds",
+    "type": "java.lang.String",
+    "description": "A description for 'hystrix.command.default.execution.isolation.thread.timeout-in-milliseconds'"
   }
 ]}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alpha.user.mapper.UserMapper">
+
+
+    <!-- 根据条件查询其它-->
+    <select id="queryUser" 
+            resultType="com.alpha.user.domain.User">
+
+			SELECT id AS id,user_name as userName from table_user
+       
+    </select>
+
+
+</mapper>
