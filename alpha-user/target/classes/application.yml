@@ -5,3 +5,5 @@ spring:
     name: alpha-user
 server:
   port: 19090
+logging:
+  config: classpath:logback-alpha.xml  

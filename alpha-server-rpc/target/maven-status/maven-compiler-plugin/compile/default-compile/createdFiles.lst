@@ -1,0 +1,4 @@
+com\alpha\server\rpc\user\SelfDiagnosisFeign.class
+com\alpha\server\rpc\user\SelfDiagnosisFallbackFactory$1.class
+com\alpha\server\rpc\user\SelfDiagnosisFallbackFactory.class
+com\alpha\server\rpc\AlphaServerRpcStarter.class

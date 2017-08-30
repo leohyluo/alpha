@@ -1,0 +1,3 @@
+com\alpha\commons\App.class
+com\alpha\commons\mapper\UserTokenMapper.class
+com\alpha\commons\pojo\UserToken.class

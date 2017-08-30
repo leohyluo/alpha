@@ -5,7 +5,7 @@
 
     <!-- 根据条件查询其它-->
     <select id="queryUser" 
-            resultType="com.alpha.user.domain.User">
+            resultType="com.alpha.user.pojo.User">
 
 			SELECT id AS id,user_name as userName from table_user
        

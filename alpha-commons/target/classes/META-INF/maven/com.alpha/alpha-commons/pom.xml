@@ -3,18 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>com.alpha</groupId>
   <artifactId>alpha-commons</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   
   <name>alpha-commons</name>
   <url>http://maven.apache.org</url>
   
-  <properties>
-	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	<java.version>1.8</java.version>
-  </properties>
+  <parent>
+    <groupId>com.alpha</groupId>
+    <artifactId>alpha</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
   
   <dependencies>
     <dependency>

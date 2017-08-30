@@ -20,14 +20,15 @@
 		
 		<!-- 服务注册发现 -->
 		<module>alpha-server-discovery</module>
-		
-		<!-- 系统实体 -->
-		<module>alpha-domain</module>
-		<module>alpha-user</module>
-		<module>alpha-self-diagnosis</module>
-		
+
 		<!-- 远程方法调用服务 -->
 		<module>alpha-server-rpc</module>
+		
+		<!-- 用户微服务 -->		
+		<module>alpha-user</module>
+		
+		<!-- 问诊微服务 -->
+		<module>alpha-self-diagnosis</module>
 	</modules>
 	
 	<parent>

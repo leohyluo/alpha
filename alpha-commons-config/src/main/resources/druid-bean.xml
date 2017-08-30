@@ -13,11 +13,11 @@
 		<!-- 方法名正则匹配拦截配置 -->
 		<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut"
 			scope="prototype">
-			<property name="patterns">
+			<!-- <property name="patterns">
 				<list>
 					<value>com.iebm.aid.service.impl.*</value>
 				</list>
-			</property>
+			</property> -->
 		</bean>
 	
 		<aop:config proxy-target-class="true">
