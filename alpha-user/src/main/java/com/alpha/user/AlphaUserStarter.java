@@ -9,12 +9,12 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
-@ServletComponentScan(basePackages={"com.alpha"})
 @MapperScan("com.alpha.**.mapper")
-@ComponentScan(basePackages={"com.alpha.server.rpc.user,com.alpha"})
-@EnableDiscoveryClient
-@EnableFeignClients
+@ServletComponentScan(basePackages={"com.alpha"})
+@ComponentScan(basePackages={"com.alpha"})
+@EnableFeignClients(basePackages="com.alpha.server.rpc.user")
 @EnableCircuitBreaker
+@EnableDiscoveryClient
 @SpringBootApplication
 public class AlphaUserStarter 
 {

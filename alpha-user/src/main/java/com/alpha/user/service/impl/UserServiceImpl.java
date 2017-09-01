@@ -1,8 +1,7 @@
 package com.alpha.user.service.impl;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -14,6 +13,7 @@ import com.alpha.server.rpc.user.SelfDiagnosisFeign;
 import com.alpha.user.mapper.UserMapper;
 import com.alpha.user.pojo.vo.UserVo;
 import com.alpha.user.service.UserService;
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,7 +28,6 @@ public class UserServiceImpl implements UserService {
 	private UserTokenMapper userTokenMapper;
 
 	public String test() {
-		System.out.println(1/0);
 		return "return from alpha-user";
 	}
 	
