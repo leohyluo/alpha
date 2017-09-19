@@ -1,0 +1,11 @@
+package com.alpha.self.diagnosis.service;
+
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+
+/**
+ * Created by xc.xiong on 2017/9/6.
+ */
+public interface MedicineQuestionService {
+
+    BasicQuestionVo mainSymptomsQuestion(Long questionId);
+}

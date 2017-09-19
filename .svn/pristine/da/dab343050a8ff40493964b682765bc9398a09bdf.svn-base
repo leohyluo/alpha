@@ -1,0 +1,10 @@
+package com.alpha.self.diagnosis.service;
+
+import java.util.List;
+
+import com.alpha.server.rpc.diagnosis.pojo.BasicAnswer;
+
+public interface BasicAnswerService {
+
+	List<BasicAnswer> findByQuestionCode(Long questionCode);
+}

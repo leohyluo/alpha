@@ -1,0 +1,127 @@
+package com.alpha.self.diagnosis.pojo.vo;
+
+import org.springframework.beans.BeanUtils;
+
+import com.alpha.self.diagnosis.pojo.BasicAnswer;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisAllergicHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisPastmedicalHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisSuballergicHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisSubpastmedicalHistory;
+import com.alpha.server.rpc.user.pojo.UserMember;
+
+public class BasicAnswerVo {
+
+	
+	/**
+     * 答案编码
+     */
+	private String answerCode;
+	
+	/**
+	 * 答案值
+	 */
+	private String answerValue;
+
+	/**
+     * 问题内容
+     */
+	private String answerTitle;
+
+	/**
+	 * 描述
+	 */
+	private String description ;
+	/**
+	 * 序号
+	 */
+	private Integer defaultOrder;
+
+	public BasicAnswerVo(BasicAnswer basicAnswer) {
+		BeanUtils.copyProperties(basicAnswer, this);
+	}
+	public BasicAnswerVo() {
+
+	}
+	
+	public BasicAnswerVo(UserMember userMember) {
+		this.answerCode = userMember.getUserId()+"";
+		this.answerTitle = userMember.getMemberName();
+//		this.userId = userMember.getUserId().toString();
+	}
+	
+	public BasicAnswerVo(DiagnosisPastmedicalHistory disease) {
+		this.answerCode = disease.getDiseaseCode();
+		this.answerValue = disease.getDiseaseCode();
+		this.answerTitle = disease.getDiseaseName();
+		this.description = "既往史大类";
+	}
+	
+	public BasicAnswerVo(DiagnosisSubpastmedicalHistory disease) {
+		this.answerCode = disease.getDiseaseCode();
+		this.answerValue = disease.getDiseaseCode();
+		this.answerTitle = disease.getDiseaseName();
+		this.description = "既往史小类";
+	}
+	
+	public BasicAnswerVo(DiagnosisAllergicHistory disease) {
+		this.answerCode = disease.getDiseaseCode();
+		this.answerValue = disease.getDiseaseCode();
+		this.answerTitle = disease.getDiseaseName();
+		this.description = "过敏史大类";
+	}
+	
+	public BasicAnswerVo(DiagnosisSuballergicHistory disease) {
+		this.answerCode = disease.getDiseaseCode();
+		this.answerValue = disease.getDiseaseCode();
+		this.answerTitle = disease.getDiseaseName();
+		this.description = "过敏史小类";
+	}
+
+	public String getAnswerCode() {
+		return answerCode;
+	}
+
+	public void setAnswerCode(String answerCode) {
+		this.answerCode = answerCode;
+	}
+
+	public String getAnswerTitle() {
+		return answerTitle;
+	}
+
+	public void setAnswerTitle(String answerTitle) {
+		this.answerTitle = answerTitle;
+	}
+
+//	public String getUserId() {
+//		return userId;
+//	}
+//
+//	public void setUserId(String userId) {
+//		this.userId = userId;
+//	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Integer getDefaultOrder() {
+		return defaultOrder;
+	}
+
+	public void setDefaultOrder(Integer defaultOrder) {
+		this.defaultOrder = defaultOrder;
+	}
+	public String getAnswerValue() {
+		return answerValue;
+	}
+	public void setAnswerValue(String answerValue) {
+		this.answerValue = answerValue;
+	}
+	
+	
+}

@@ -1,0 +1,282 @@
+package com.alpha.self.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Integer;
+import java.sql.Date;
+
+public class UserBasicRecord{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 成员唯一编号，张三为李四导药，这里放李四编号
+     */
+	private Long memberId;
+
+	/**
+     * 用户唯一编号
+     */
+	private Long userId;
+
+	/**
+     * 诊断号唯一编码
+     */
+	private Long diagnosisId;
+
+	/**
+     * 出生日期
+     */
+	private Date birth;
+
+	/**
+     * 肝功能
+     */
+	private Integer liverFunc;
+
+	/**
+     * 肾功能
+     */
+	private Integer renalFunc;
+
+	/**
+     * 身高
+     */
+	private String height;
+
+	/**
+     * 体重
+     */
+	private String weight;
+
+	/**
+     * 妊娠期
+     */
+	private String gestationPeriod;
+
+	/**
+     * 哺乳期
+     */
+	private String sucklingPeriod;
+
+	/**
+     * 是否特殊时期
+     */
+	private Integer specialPeriod;
+
+	/**
+     * 是否顺产/剖宫产
+     */
+	private Integer fertilityType;
+
+	/**
+     * 是否母乳喂养
+     */
+	private Integer feedType;
+
+	/**
+     * 既往史编码集合
+     */
+	private String pastmedicalHistoryCode;
+
+	/**
+     * 既往史名称集合
+     */
+	private String pastmedicalHistoryText;
+
+	/**
+     * 过敏史编码集合
+     */
+	private String allergicHistoryCode;
+
+	/**
+     * 过敏史名称集合
+     */
+	private String allergicHistoryText;
+
+	/**
+     * 创建时间
+     */
+	private Date createTime;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+	
+	public Long getMemberId() {
+		return this.memberId;
+	}
+	
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public Long getUserId() {
+		return this.userId;
+	}
+	
+
+	public void setDiagnosisId(Long diagnosisId) {
+		this.diagnosisId = diagnosisId;
+	}
+	
+	public Long getDiagnosisId() {
+		return this.diagnosisId;
+	}
+	
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+	
+	public Date getBirth() {
+		return this.birth;
+	}
+	
+
+	public void setLiverFunc(Integer liverFunc) {
+		this.liverFunc = liverFunc;
+	}
+	
+	public Integer getLiverFunc() {
+		return this.liverFunc;
+	}
+	
+
+	public void setRenalFunc(Integer renalFunc) {
+		this.renalFunc = renalFunc;
+	}
+	
+	public Integer getRenalFunc() {
+		return this.renalFunc;
+	}
+	
+
+	public void setHeight(String height) {
+		this.height = height;
+	}
+	
+	public String getHeight() {
+		return this.height;
+	}
+	
+
+	public void setWeight(String weight) {
+		this.weight = weight;
+	}
+	
+	public String getWeight() {
+		return this.weight;
+	}
+	
+
+	public void setGestationPeriod(String gestationPeriod) {
+		this.gestationPeriod = gestationPeriod;
+	}
+	
+	public String getGestationPeriod() {
+		return this.gestationPeriod;
+	}
+	
+
+	public void setSucklingPeriod(String sucklingPeriod) {
+		this.sucklingPeriod = sucklingPeriod;
+	}
+	
+	public String getSucklingPeriod() {
+		return this.sucklingPeriod;
+	}
+	
+
+	public void setSpecialPeriod(Integer specialPeriod) {
+		this.specialPeriod = specialPeriod;
+	}
+	
+	public Integer getSpecialPeriod() {
+		return this.specialPeriod;
+	}
+	
+
+	public void setFertilityType(Integer fertilityType) {
+		this.fertilityType = fertilityType;
+	}
+	
+	public Integer getFertilityType() {
+		return this.fertilityType;
+	}
+	
+
+	public void setFeedType(Integer feedType) {
+		this.feedType = feedType;
+	}
+	
+	public Integer getFeedType() {
+		return this.feedType;
+	}
+	
+
+	public void setPastmedicalHistoryCode(String pastmedicalHistoryCode) {
+		this.pastmedicalHistoryCode = pastmedicalHistoryCode;
+	}
+	
+	public String getPastmedicalHistoryCode() {
+		return this.pastmedicalHistoryCode;
+	}
+	
+
+	public void setPastmedicalHistoryText(String pastmedicalHistoryText) {
+		this.pastmedicalHistoryText = pastmedicalHistoryText;
+	}
+	
+	public String getPastmedicalHistoryText() {
+		return this.pastmedicalHistoryText;
+	}
+	
+
+	public void setAllergicHistoryCode(String allergicHistoryCode) {
+		this.allergicHistoryCode = allergicHistoryCode;
+	}
+	
+	public String getAllergicHistoryCode() {
+		return this.allergicHistoryCode;
+	}
+	
+
+	public void setAllergicHistoryText(String allergicHistoryText) {
+		this.allergicHistoryText = allergicHistoryText;
+	}
+	
+	public String getAllergicHistoryText() {
+		return this.allergicHistoryText;
+	}
+	
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+	
+	
+	
+	
+
+}

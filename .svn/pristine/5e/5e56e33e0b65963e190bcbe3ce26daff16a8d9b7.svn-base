@@ -1,0 +1,128 @@
+package com.alpha.server.rpc.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.Double;
+import java.lang.String;
+import java.lang.Integer;
+
+public class DiagnosisQuestionAnswer{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 问题编码
+     */
+	private String questionCode;
+
+	/**
+     * 答案编码
+     */
+	private String answerCode;
+
+	/**
+     * 疾病编码
+     */
+	private String diseaseCode;
+
+	/**
+     * 1正向特异性,-1反向特异性，0无
+     */
+	private Integer answerSpec;
+
+	/**
+     * 权重
+     */
+	private Double weight;
+
+	/**
+     * 顺序
+     */
+	private Integer tOrder;
+
+	/**
+     * 下一个问题id
+     */
+	private Long nextQuestionId;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setQuestionCode(String questionCode) {
+		this.questionCode = questionCode;
+	}
+	
+	public String getQuestionCode() {
+		return this.questionCode;
+	}
+	
+
+	public void setAnswerCode(String answerCode) {
+		this.answerCode = answerCode;
+	}
+	
+	public String getAnswerCode() {
+		return this.answerCode;
+	}
+	
+
+	public void setDiseaseCode(String diseaseCode) {
+		this.diseaseCode = diseaseCode;
+	}
+	
+	public String getDiseaseCode() {
+		return this.diseaseCode;
+	}
+	
+
+	public void setAnswerSpec(Integer answerSpec) {
+		this.answerSpec = answerSpec;
+	}
+	
+	public Integer getAnswerSpec() {
+		return this.answerSpec;
+	}
+	
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+	
+	public Double getWeight() {
+		return this.weight;
+	}
+	
+
+	public void setTOrder(Integer tOrder) {
+		this.tOrder = tOrder;
+	}
+	
+	public Integer getTOrder() {
+		return this.tOrder;
+	}
+	
+
+	public void setNextQuestionId(Long nextQuestionId) {
+		this.nextQuestionId = nextQuestionId;
+	}
+	
+	public Long getNextQuestionId() {
+		return this.nextQuestionId;
+	}
+	
+	
+	
+	
+
+}

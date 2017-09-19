@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer">
+    <resultMap id="diagnosisQuestionAnswer" type="com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="question_code" jdbcType="VARCHAR" property="questionCode"/>
+        <result column="answer_code" jdbcType="VARCHAR" property="answerCode"/>
+        <result column="disease_code" jdbcType="VARCHAR" property="diseaseCode"/>
+        <result column="answer_spec" jdbcType="INTEGER" property="answerSpec"/>
+        <result column="weight" jdbcType="DOUBLE" property="weight"/>
+        <result column="default_order" jdbcType="INTEGER" property="defaultOrder"/>
+        <result column="next_question_id" jdbcType="VARCHAR" property="nextQuestionId"/>
+        <result column="incre_flag" jdbcType="VARCHAR" property="increFlag"/>
+        <result column="opera_flag" jdbcType="VARCHAR" property="operaFlag"/>
+        <result column="operate_type" jdbcType="VARCHAR" property="operateType"/>
+        <result column="data_version" jdbcType="INTEGER" property="dataVersion"/>
+        <result column="version_evolution" jdbcType="VARCHAR" property="versionEvolution"/>
+    </resultMap>
+
+    <!-- 根据问题编号查询问题 -->
+    <select id="queryDiagnosisQuestionAnswer" parameterType="HashMap" resultType="DataRecord">
+      select dqa.id,dqa.question_code,da.answer_code,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
+      ,da.gender,da.min_age,da.max_age,ddmq.weight as question_weight from diagnosis_question_answer dqa left join diagnosis_answer da on(da.answer_code=dqa.answer_code)
+      left join diagnosis_disease_mainsym_question ddmq on(ddmq.question_code=dqa.question_code)
+      where dqa.question_code=#{questionCode}
+    </select>
+
+    <!-- 根据答案编号查询答案 -->
+    <select id="queryByAnswerCodes" parameterType="HashMap" resultType="DataRecord">
+        select dqa.id,dqa.question_code,da.answer_code,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
+        ,da.gender,da.min_age,da.max_age from diagnosis_question_answer dqa left join diagnosis_answer da on(da.answer_code=dqa.answer_code)
+        where dqa.question_code=#{questionCode} and da.answer_code in
+        <foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据答案编号查询答案 -->
+    <select id="queryByQuestionCodesAndAnswerCodes" parameterType="HashMap" resultType="DataRecord">
+        select dqa.id,dqa.question_code,da.answer_code,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
+        ,da.gender,da.min_age,da.max_age from diagnosis_question_answer dqa left join diagnosis_answer da on(da.answer_code=dqa.answer_code)
+        where dqa.question_code in
+        <foreach item="item" index="index" collection="questionCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and da.answer_code in
+        <foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 根据问题编号查询问题 -->
+    <select id="getDiagnosisQuestionAnswer" parameterType="HashMap" resultType="DataRecord">
+      select dqa.id,dqa.question_code,da.answer_code,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
+      ,da.gender,da.min_age,da.max_age from diagnosis_question_answer dqa left join diagnosis_answer da on(da.answer_code=dqa.answer_code)
+      where dqa.answer_code=#{answerCode} and dqa.question_code=#{questionCode} limit 1
+    </select>
+
+    <select id="queryAnswers" parameterType="HashMap" resultType="DataRecord">
+        select dms.symp_code,dms.symp_name,dms.standard_deviation as 'question_standard_deviation',
+        dmq.question_code,dmq.title as 'question_title',dmq.standard_deviation as 'answer_standard_deviation',
+        ddmq.weight as 'question_weight',
+        dqa.answer_title,dqa.answer_code,dqa.disease_code,dqa.answer_spec,dqa.weight as 'answer_weight'
+        from diagnosis_mainsymp_question dmq
+        left join diagnosis_main_symptoms dms on(dmq.main_symp_code=dms.symp_code)
+        left join diagnosis_question_answer dqa on (dqa.question_code=dmq.question_code )
+        left join diagnosis_disease_mainsym_question ddmq on(ddmq.question_code=dmq.question_code and ddmq.main_sym_code=dmq.main_symp_code and ddmq.disease_code=dqa.disease_code)
+        where dqa.question_code in
+        <foreach item="item" index="index" collection="questionCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and answer_code in
+        <foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        group by dqa.answer_code,dqa.question_code,dqa.disease_code,dms.symp_code
+        order by dqa.disease_code
+    </select>
+
+
+</mapper>

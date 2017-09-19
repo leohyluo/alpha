@@ -1,0 +1,46 @@
+package com.alpha.self.diagnosis.processor;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
+import com.alpha.commons.enums.BasicQuestionType;
+import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.service.DiagnosisAllergicHistoryService;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisAllergicHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisSuballergicHistory;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+import static java.util.stream.Collectors.toList;
+
+@BasicAnswerProcessor
+@Component
+public class AllergicHistoryAnswerProcessor extends AbstractBasicAnswerProcessor {
+	
+	private static final String QUESTION_CODE = BasicQuestionType.ALLERGIC_HISTORY.getValue();
+	
+	@Resource
+	private DiagnosisAllergicHistoryService diagnosisAllergicHistoryService; 
+
+	@Override
+	protected List<BasicAnswerVo> queryAnswers(BasicQuestion question, UserInfo userInfo) {
+		Map<String, Object> param = new HashMap<>();
+		List<DiagnosisAllergicHistory> allergicList = diagnosisAllergicHistoryService.queryAllergicHistory(param);
+		List<DiagnosisSuballergicHistory> subAllergicList = diagnosisAllergicHistoryService.querySubAllergicHistory(param);
+		List<BasicAnswerVo> answervoList = allergicList.stream().map(BasicAnswerVo::new).collect(toList());
+		List<BasicAnswerVo> subAnswervoList = subAllergicList.stream().map(BasicAnswerVo::new).collect(toList());
+		answervoList.addAll(subAnswervoList);
+		return answervoList;
+	}
+	
+	@Override
+	protected String setQuestionCode() {
+		return QUESTION_CODE;
+	}
+
+}

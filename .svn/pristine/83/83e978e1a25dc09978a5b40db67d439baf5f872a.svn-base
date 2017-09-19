@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion">
+    <resultMap id="diagnosisMainsympQuestion" type="com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="question_code" jdbcType="VARCHAR" property="questionCode"/>
+        <result column="main_symp_code" jdbcType="VARCHAR" property="mainSympCode"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="popu_title" jdbcType="VARCHAR" property="popuTitle"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="min_age" jdbcType="INTEGER" property="minAge"/>
+        <result column="max_age" jdbcType="INTEGER" property="maxAge"/>
+        <result column="default_order" jdbcType="INTEGER" property="defaultOrder"/>
+        <result column="incre_flag" jdbcType="VARCHAR" property="increFlag"/>
+        <result column="opera_flag" jdbcType="VARCHAR" property="operaFlag"/>
+        <result column="operate_type" jdbcType="VARCHAR" property="operateType"/>
+        <result column="data_version" jdbcType="INTEGER" property="dataVersion"/>
+        <result column="version_evolution" jdbcType="VARCHAR" property="versionEvolution"/>
+    </resultMap>
+
+    <!-- 查询主症状下的所有问题 -->
+    <select id="queryDiagnosisMainsympQuestion" resultMap="diagnosisMainsympQuestion" parameterType="HashMap">
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode}
+    </select>
+
+    <!-- 查询主症状下的未回答问题 -->
+    <select id="queryUntreatedQuestion" resultMap="diagnosisMainsympQuestion" parameterType="HashMap">
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC
+    </select>
+
+    <!--查询下一个问题 -->
+    <select id="getDiagnosisMainsympQuestion" resultMap="diagnosisMainsympQuestion" parameterType="HashMap">
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC limit 1
+    </select>
+    <!--查询下一个问题 -->
+    <select id="getQuestionByCode" resultMap="diagnosisMainsympQuestion" parameterType="HashMap">
+      select * from diagnosis_mainsymp_question where questionCode=#{questionCode}
+    </select>
+
+</mapper>

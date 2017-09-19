@@ -2,7 +2,7 @@ spring:
   application:
     name: alpha-api-gateway
   profiles:
-    active: dev
+    active: local
 server:
   port: 19083
 #配置zuul

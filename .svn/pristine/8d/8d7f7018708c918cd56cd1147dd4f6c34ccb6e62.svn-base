@@ -1,0 +1,97 @@
+package com.alpha.self.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Integer;
+
+public class BasicAnswer{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 问题id
+     */
+	private Long basicQuestionId;
+
+	/**
+     * 答案编码
+     */
+	private String answerCode;
+
+	/**
+     * 答案内容
+     */
+	private String content;
+
+
+	/**
+     * 计算公式
+     */
+	private String expression;
+
+	/**
+     * 序号
+     */
+	private Integer defaultOrder;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setBasicQuestionId(Long basicQuestionId) {
+		this.basicQuestionId = basicQuestionId;
+	}
+	
+	public Long getBasicQuestionId() {
+		return this.basicQuestionId;
+	}
+	
+
+	public void setAnswerCode(String answerCode) {
+		this.answerCode = answerCode;
+	}
+	
+	public String getAnswerCode() {
+		return this.answerCode;
+	}
+	
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public String getContent() {
+		return this.content;
+	}
+	
+
+	public void setExpression(String expression) {
+		this.expression = expression;
+	}
+	
+	public String getExpression() {
+		return this.expression;
+	}
+
+
+	public Integer getDefaultOrder() {
+		return defaultOrder;
+	}
+
+	public void setDefaultOrder(Integer defaultOrder) {
+		this.defaultOrder = defaultOrder;
+	}
+
+
+}

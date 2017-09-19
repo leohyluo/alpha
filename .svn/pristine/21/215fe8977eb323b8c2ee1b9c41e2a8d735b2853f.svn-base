@@ -1,0 +1,31 @@
+package com.alpha.self.diagnosis.processor;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.alpha.commons.enums.BasicQuestionType;
+import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+
+@BasicAnswerProcessor(enable = false)
+@Component
+public class LiverAnswerProcessor extends AbstractBasicAnswerProcessor {
+	
+	private static final String QUESTION_CODE = BasicQuestionType.PAST_MEDICAL_HISTORY.getValue();
+
+	@Override
+	protected List<IAnswerVo> queryAnswers(BasicQuestion question, UserInfo userInfo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected String setQuestionCode() {
+		// TODO Auto-generated method stub
+		return QUESTION_CODE;
+	}
+}

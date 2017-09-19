@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alpha.user.mapper.UserInfoMapper">
+
+
+    <!-- 根据条件查询用户信息-->
+    <select id="queryUserInfo" resultType="com.alpha.server.rpc.user.pojo.UserInfo">
+			SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type from user_info
+    </select>
+
+    <!-- 根据条件查询用户信息-->
+    <select id="getUserInfoByExternalUserId" resultType="com.alpha.server.rpc.user.pojo.UserInfo">
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type
+        from user_info where external_user_id=#externalUserId and in_type=#inType LIMIT 1
+    </select>
+
+</mapper>

@@ -1,0 +1,84 @@
+package com.alpha.self.diagnosis.pojo.vo;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+
+public class BasicQuestionVo implements Serializable {
+
+	private static final long serialVersionUID = 6688903127327118326L;
+
+	private Long diagnosisId;
+	
+	private String displayType;
+	
+	private String questionTitle;
+
+	private int type;//问题类型
+	
+	/**
+     * 问题编码
+     */
+    private String questionId;
+    
+    private List<BasicAnswerVo> answers;
+    
+    public BasicQuestionVo(Long diagnosisId, BasicQuestion basicQuestion, List<BasicAnswerVo> answers) {
+    	this.diagnosisId = diagnosisId;
+    	this.displayType = basicQuestion.getDisplayType();
+    	this.questionId = basicQuestion.getQuestionCode();
+    	this.questionTitle = basicQuestion.getTitle();
+    	this.answers = answers;
+    }
+    public BasicQuestionVo() {
+    }
+
+	public Long getDiagnosisId() {
+		return diagnosisId;
+	}
+
+	public void setDiagnosisId(Long diagnosisId) {
+		this.diagnosisId = diagnosisId;
+	}
+
+	public String getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+
+	public String getQuestionId() {
+		return questionId;
+	}
+
+	public void setQuestionId(String questionId) {
+		this.questionId = questionId;
+	}
+
+	public List<BasicAnswerVo> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<BasicAnswerVo> answers) {
+		this.answers = answers;
+	}
+
+	public String getQuestionTitle() {
+		return questionTitle;
+	}
+
+	public void setQuestionTitle(String questionTitle) {
+		this.questionTitle = questionTitle;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+}

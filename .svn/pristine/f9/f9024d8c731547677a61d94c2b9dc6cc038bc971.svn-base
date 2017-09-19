@@ -1,0 +1,14 @@
+package com.alpha.self.diagnosis.dao;
+
+import com.alpha.commons.core.dao.IBaseDao;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
+import org.springframework.stereotype.Component;
+
+/**
+ * Created by xc.xiong on 2017/9/5.
+ */
+@Component
+public interface DiagnosisMainSymptomsDao extends IBaseDao<DiagnosisMainSymptoms, Long> {
+
+
+}

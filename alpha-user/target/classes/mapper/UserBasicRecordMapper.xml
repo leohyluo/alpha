@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.alpha.user.mapper.UserBasicRecordMapper">
+	<resultMap id="BaseResultMap" type="com.alpha.server.rpc.diagnosis.pojo.UserBasicRecord">
+	    <id column="id" jdbcType="BIGINT" property="id" />
+	    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+	    <result column="user_id" jdbcType="BIGINT" property="userId" />
+	    <result column="diagnosis_id" jdbcType="BIGINT" property="diagnosisId" />
+	    <result column="birth" jdbcType="DATE" property="birth" />
+	    <result column="liver_func" jdbcType="INTEGER" property="liverFunc" />
+	    <result column="liver_func_text" jdbcType="VARCHAR" property="liverFuncText" />
+	    <result column="renal_func_text" jdbcType="VARCHAR" property="renalFuncText" />
+	    <result column="renal_func" jdbcType="INTEGER" property="renalFunc" />
+	    <result column="height" jdbcType="VARCHAR" property="height" />
+	    <result column="weight" jdbcType="VARCHAR" property="weight" />
+	    <result column="special_period" jdbcType="VARCHAR" property="specialPeriod" />
+	    <result column="fertility_type" jdbcType="VARCHAR" property="fertilityType" />
+	    <result column="gestational_age" jdbcType="VARCHAR" property="gestationalAge" />
+	    <result column="feed_type" jdbcType="VARCHAR" property="feedType" />
+	    <result column="pastmedical_history_code" jdbcType="VARCHAR" property="pastmedicalHistoryCode" />
+	    <result column="pastmedical_history_text" jdbcType="VARCHAR" property="pastmedicalHistoryText" />
+	    <result column="allergic_history_code" jdbcType="VARCHAR" property="allergicHistoryCode" />
+	    <result column="allergic_history_text" jdbcType="VARCHAR" property="allergicHistoryText" />
+	    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	    <result column="incre_flag" jdbcType="VARCHAR" property="increFlag" />
+	    <result column="opera_flag" jdbcType="VARCHAR" property="operaFlag" />
+	    <result column="operate_type" jdbcType="VARCHAR" property="operateType" />
+	    <result column="data_version" jdbcType="INTEGER" property="dataVersion" />
+	    <result column="version_evolution" jdbcType="VARCHAR" property="versionEvolution" />
+	    <result column="source_" jdbcType="VARCHAR" property="source" />
+	    <result column="version_" jdbcType="VARCHAR" property="version" />
+	    <result column="creator" jdbcType="VARCHAR" property="creator" />
+	    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	    <result column="reviewer" jdbcType="VARCHAR" property="reviewer" />
+	    <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime" />
+ 	</resultMap>
+ 	
+ 	<select id="findByDiagnosisId" resultType="DataRecord" parameterType="HashMap">
+ 		select * from user_basic_record
+ 		<where>
+ 			<if test="diagnosisId != null">
+ 				diagnosis_id = #{diagnosisId}
+ 			</if>
+ 		</where>
+ 	</select>
+</mapper>

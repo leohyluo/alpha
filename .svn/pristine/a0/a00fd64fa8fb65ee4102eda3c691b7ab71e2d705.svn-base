@@ -1,0 +1,61 @@
+package com.alpha.self.diagnosis.service.impl;
+
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.alpha.commons.core.service.SysSequenceService;
+import com.alpha.self.diagnosis.pojo.BasicAnswer;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.service.BasicAnswerService;
+import com.alpha.self.diagnosis.service.BasicQuestionService;
+import com.alpha.self.diagnosis.service.DiagnosisService;
+import com.alpha.server.rpc.user.pojo.UserMember;
+import com.alpha.user.service.UserMemberService;
+
+@Service
+public class DiagnosisServiceImpl implements DiagnosisService {
+	
+	@Resource
+	private UserMemberService userMemberService; 
+	
+	@Resource
+	private SysSequenceService sysSequenceService;
+	
+	@Resource
+	private BasicQuestionService basicQuestionService;
+	
+	@Resource
+	private BasicAnswerService basicAnswerService;
+
+	@Override
+	public BasicQuestionVo start(Long userId, Integer inType) {
+		String questionCode = null;
+		Long diagnosisId = sysSequenceService.getNextSequence("diagnosis_seq");
+		//获取第一个问题
+		BasicQuestion param = new BasicQuestion(1, null, null, null, null);
+		BasicQuestion question = basicQuestionService.find(param);
+		if(question != null) {
+			questionCode = question.getQuestionCode();
+		}
+		//获取第一个问题的答案
+		List<BasicAnswer> answerList = basicAnswerService.findByQuestionCode(questionCode);
+		//获取用户下的成员
+		UserMember memberParam = new UserMember(userId, null, null);
+		List<UserMember> userMemberList = userMemberService.find(memberParam);
+		
+		List<IAnswerVo> answervoList = answerList.stream().map(BasicAnswerVo::new).collect(toList());
+		List<BasicAnswerVo> answervoList4userMember = userMemberList.stream().map(BasicAnswerVo::new).collect(toList());
+		answervoList.addAll(answervoList4userMember);
+		
+		return new BasicQuestionVo(diagnosisId, question, answervoList);
+	}
+
+}

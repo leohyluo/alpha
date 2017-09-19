@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/main/java/com/alpha/commons/core/dao/impl/BaseDao.java=UTF-8
+encoding//src/main/java/com/alpha/commons/core/framework/SpringContextHolder.java=UTF-8
+encoding//src/main/java/com/alpha/commons/core/pojo/SysSequence.java=UTF-8
+encoding//src/main/java/com/alpha/commons/core/service/impl/SysSequenceServiceImpl.java=UTF-8

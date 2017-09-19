@@ -1,0 +1,10 @@
+package com.alpha.user.service;
+
+import java.util.List;
+
+import com.alpha.server.rpc.user.pojo.UserMember;
+
+public interface UserMemberService {
+
+	List<UserMember> findByUserId(Long userId);
+}

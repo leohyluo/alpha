@@ -1,0 +1,6 @@
+package com.alpha.user.service;
+
+public interface UserInfoService {
+
+
+}

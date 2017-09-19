@@ -1,0 +1,141 @@
+package com.alpha.server.rpc.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.String;
+import java.lang.Integer;
+
+public class BasicQuestion{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 问题内容
+     */
+	private String title;
+
+	/**
+     * 问题编码
+     */
+	private String questionCode;
+
+	/**
+     * 问题类型 1. 单选 2. 单选+输入+确认按钮 3. 单选+图片 4. 单选+更多按钮 5. 双单选 6. 多选+确认按钮 7. 多选+搜索+确认按钮 8. 多选+更多+搜索+确认按钮 9.  日期选择框 10. 时间选择框 11. 滑尺
+     */
+	private String displayType;
+
+	/**
+     * 问题序号
+     */
+	private Integer tOrder;
+
+	/**
+     * 所属入口类型
+     */
+	private Integer inType;
+
+	/**
+     * 性别
+     */
+	private Integer gender;
+
+	/**
+     * 最小年龄
+     */
+	private Integer minAge;
+
+	/**
+     * 最大年龄
+     */
+	private Integer maxAge;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getTitle() {
+		return this.title;
+	}
+	
+
+	public void setQuestionCode(String questionCode) {
+		this.questionCode = questionCode;
+	}
+	
+	public String getQuestionCode() {
+		return this.questionCode;
+	}
+	
+
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+	
+	public String getDisplayType() {
+		return this.displayType;
+	}
+	
+
+	public void setTOrder(Integer tOrder) {
+		this.tOrder = tOrder;
+	}
+	
+	public Integer getTOrder() {
+		return this.tOrder;
+	}
+	
+
+	public void setInType(Integer inType) {
+		this.inType = inType;
+	}
+	
+	public Integer getInType() {
+		return this.inType;
+	}
+	
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+	
+	public Integer getGender() {
+		return this.gender;
+	}
+	
+
+	public void setMinAge(Integer minAge) {
+		this.minAge = minAge;
+	}
+	
+	public Integer getMinAge() {
+		return this.minAge;
+	}
+	
+
+	public void setMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+	}
+	
+	public Integer getMaxAge() {
+		return this.maxAge;
+	}
+	
+	
+	
+	
+
+}

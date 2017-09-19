@@ -1,0 +1,114 @@
+package com.alpha.self.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.Double;
+import java.lang.String;
+import java.lang.Integer;
+
+public class DiagnosisMainsympConcsymp{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 主症状编码
+     */
+	private String mainSympCode;
+
+	/**
+     * 疾病编码
+     */
+	private String diseaseCode;
+
+	/**
+     * 伴随症状编码
+     */
+	private String concSympCode;
+
+	/**
+     * 1正向特异性 -1反向特异性
+     */
+	private Integer sympSpec;
+
+	/**
+     * 权重
+     */
+	private Double rate;
+
+	/**
+     * 排序
+     */
+	private Integer tOrder;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setMainSympCode(String mainSympCode) {
+		this.mainSympCode = mainSympCode;
+	}
+	
+	public String getMainSympCode() {
+		return this.mainSympCode;
+	}
+	
+
+	public void setDiseaseCode(String diseaseCode) {
+		this.diseaseCode = diseaseCode;
+	}
+	
+	public String getDiseaseCode() {
+		return this.diseaseCode;
+	}
+	
+
+	public void setConcSympCode(String concSympCode) {
+		this.concSympCode = concSympCode;
+	}
+	
+	public String getConcSympCode() {
+		return this.concSympCode;
+	}
+	
+
+	public void setSympSpec(Integer sympSpec) {
+		this.sympSpec = sympSpec;
+	}
+	
+	public Integer getSympSpec() {
+		return this.sympSpec;
+	}
+	
+
+	public void setRate(Double rate) {
+		this.rate = rate;
+	}
+	
+	public Double getRate() {
+		return this.rate;
+	}
+	
+
+	public void setTOrder(Integer tOrder) {
+		this.tOrder = tOrder;
+	}
+	
+	public Integer getTOrder() {
+		return this.tOrder;
+	}
+	
+	
+	
+	
+
+}

@@ -1,0 +1,36 @@
+package com.alpha.self.diagnosis.processor;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
+import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
+import com.alpha.self.diagnosis.pojo.BasicAnswer;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.service.BasicAnswerService;
+
+@BasicAnswerProcessor
+@Component
+public class NormalAnswerProcessor extends AbstractBasicAnswerProcessor {
+	
+	private static final String QUESTION_CODE = "1002,1003,1004,1005";
+	
+	@Resource
+	private BasicAnswerService basicAnswerService;
+
+	@Override
+	protected List<BasicAnswerVo> queryAnswers(BasicQuestion question) {
+		List<BasicAnswer> answerList = basicAnswerService.findByQuestionCode(question.getQuestionCode());
+		return answerList.stream().map(BasicAnswerVo::new).collect(Collectors.toList());
+	}
+
+	@Override
+	protected String setQuestionCode() {
+		return QUESTION_CODE;
+	}
+
+}

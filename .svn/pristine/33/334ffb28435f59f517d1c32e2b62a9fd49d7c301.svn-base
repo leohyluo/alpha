@@ -1,0 +1,47 @@
+package com.alpha.self.diagnosis.processor;
+
+import static java.util.stream.Collectors.toList;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
+import com.alpha.commons.enums.BasicQuestionType;
+import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisPastmedicalHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisSubpastmedicalHistory;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+
+@BasicAnswerProcessor
+@Component
+public class PastmedicalHistoryProcessor extends AbstractBasicAnswerProcessor {
+	
+	@Resource
+	private DiagnosisPastmedicalHistoryService diagnosisPastmedicalHistoryService;
+	
+	private static final String QUESTION_CODE = BasicQuestionType.PAST_MEDICAL_HISTORY.getValue();
+
+	@Override
+	protected List<IAnswerVo> queryAnswers(BasicQuestion question, UserInfo userInfo) {
+		Map<String, Object> param = userInfo.toBasicMap();
+		List<DiagnosisPastmedicalHistory> list = diagnosisPastmedicalHistoryService.queryPastmedicalHistory(param);
+		List<DiagnosisSubpastmedicalHistory> subList = diagnosisPastmedicalHistoryService.querySubPastmedicalHistory(param);
+		List<IAnswerVo> answervoList = list.stream().map(BasicAnswerVo::new).collect(toList());
+		List<BasicAnswerVo> subAnswervoList = subList.stream().map(BasicAnswerVo::new).collect(toList());
+		answervoList.addAll(subAnswervoList);
+		return answervoList;
+	}
+	
+	@Override
+	protected String setQuestionCode() {
+		return QUESTION_CODE;
+	}
+
+}

@@ -1,0 +1,16 @@
+package com.alpha.commons.core.service;
+
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Created by xc.xiong on 2017/9/5.
+ */
+public interface SysSequenceService {
+    /**
+     * 获取序号
+     *
+     * @param sequenceKey
+     * @return
+     */
+    Integer getNextSequence(String sequenceKey);
+}

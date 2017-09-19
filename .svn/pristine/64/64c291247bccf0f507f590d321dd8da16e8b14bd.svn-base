@@ -1,0 +1,22 @@
+package com.alpha.self.diagnosis.service.impl;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.alpha.self.diagnosis.mapper.BasicQuestionMapper;
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.service.BasicQuestionService;
+
+@Service
+public class BasicQuestionServiceImpl implements BasicQuestionService {
+	
+	@Resource
+	private BasicQuestionMapper mapper;
+
+	@Override
+	public BasicQuestion find(BasicQuestion question) {
+		return mapper.find(question);
+	}
+
+}

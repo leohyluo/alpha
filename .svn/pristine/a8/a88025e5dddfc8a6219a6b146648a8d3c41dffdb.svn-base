@@ -1,0 +1,12 @@
+package com.alpha.self.diagnosis.dao;
+
+import com.alpha.commons.core.dao.IBaseDao;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
+
+/**
+ * Created by xc.xiong on 2017/9/5.
+ */
+public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAnswer, Long> {
+
+
+}

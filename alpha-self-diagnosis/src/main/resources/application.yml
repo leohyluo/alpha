@@ -2,8 +2,8 @@ spring:
   application:
     name: alpha-self-diagnosis
   profiles:
-    active: dev  
+    active: core
 server:
   port: 19092
-
-              
+logging:
+  config: classpath:logback-diagnosis.xml

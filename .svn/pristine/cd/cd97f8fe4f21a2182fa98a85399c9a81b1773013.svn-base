@@ -1,0 +1,8 @@
+package com.alpha.self.diagnosis.mapper;
+
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+
+public interface BasicQuestionMapper {
+
+	BasicQuestion find(BasicQuestion question);
+}

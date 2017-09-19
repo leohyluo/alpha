@@ -1,0 +1,184 @@
+package com.alpha.server.rpc.diagnosis.pojo;
+
+import java.lang.Long;
+import java.lang.Boolean;
+import java.lang.String;
+import java.lang.Integer;
+
+public class DiagnosisDisease{
+
+
+
+	/**
+     * id
+     */
+	private Long id;
+
+	/**
+     * 疾病编码
+     */
+	private String diseaseCode;
+
+	/**
+     * 疾病名称
+     */
+	private String diseaseName;
+
+	/**
+     * 通俗化名称
+     */
+	private String popuName;
+
+	/**
+     * 性别
+     */
+	private Integer gender;
+
+	/**
+     * 最小年龄
+     */
+	private Integer minAge;
+
+	/**
+     * 最大年龄
+     */
+	private Integer maxAge;
+
+	/**
+     * 是否常见病
+     */
+	private Boolean isCommon;
+
+	/**
+     * 是否危重病
+     */
+	private Boolean isGrave;
+
+	/**
+     * 疾病定义
+     */
+	private String definition;
+
+	/**
+     * 拼音助记符
+     */
+	private String symbol;
+
+	/**
+     * 特殊时期
+     */
+	private Integer specialPeriod;
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setDiseaseCode(String diseaseCode) {
+		this.diseaseCode = diseaseCode;
+	}
+	
+	public String getDiseaseCode() {
+		return this.diseaseCode;
+	}
+	
+
+	public void setDiseaseName(String diseaseName) {
+		this.diseaseName = diseaseName;
+	}
+	
+	public String getDiseaseName() {
+		return this.diseaseName;
+	}
+	
+
+	public void setPopuName(String popuName) {
+		this.popuName = popuName;
+	}
+	
+	public String getPopuName() {
+		return this.popuName;
+	}
+	
+
+	public void setGender(Integer gender) {
+		this.gender = gender;
+	}
+	
+	public Integer getGender() {
+		return this.gender;
+	}
+	
+
+	public void setMinAge(Integer minAge) {
+		this.minAge = minAge;
+	}
+	
+	public Integer getMinAge() {
+		return this.minAge;
+	}
+	
+
+	public void setMaxAge(Integer maxAge) {
+		this.maxAge = maxAge;
+	}
+	
+	public Integer getMaxAge() {
+		return this.maxAge;
+	}
+	
+
+	public void setIsCommon(Boolean isCommon) {
+		this.isCommon = isCommon;
+	}
+	
+	public Boolean getIsCommon() {
+		return this.isCommon;
+	}
+	
+
+	public void setIsGrave(Boolean isGrave) {
+		this.isGrave = isGrave;
+	}
+	
+	public Boolean getIsGrave() {
+		return this.isGrave;
+	}
+	
+
+	public void setDefinition(String definition) {
+		this.definition = definition;
+	}
+	
+	public String getDefinition() {
+		return this.definition;
+	}
+	
+
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
+	}
+	
+	public String getSymbol() {
+		return this.symbol;
+	}
+	
+
+	public void setSpecialPeriod(Integer specialPeriod) {
+		this.specialPeriod = specialPeriod;
+	}
+	
+	public Integer getSpecialPeriod() {
+		return this.specialPeriod;
+	}
+	
+	
+	
+	
+
+}

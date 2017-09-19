@@ -1,0 +1,12 @@
+package com.alpha.user.mapper;
+
+import java.util.List;
+
+import com.alpha.server.rpc.user.pojo.UserInfo;
+
+public interface UserInfoMapper {
+
+	List<UserInfo> queryUserInfo();
+
+	UserInfo getUserInfoByExternalUserId(String externalUserId,int inType);
+}

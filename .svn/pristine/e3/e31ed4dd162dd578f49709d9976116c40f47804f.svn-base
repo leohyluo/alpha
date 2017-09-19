@@ -1,0 +1,58 @@
+package com.alpha.self.diagnosis.pojo.vo;
+
+import org.springframework.beans.BeanUtils;
+
+import com.alpha.server.rpc.diagnosis.pojo.BasicAnswer;
+import com.alpha.server.rpc.user.pojo.UserMember;
+
+public class BasicAnswerVo {
+
+	
+	/**
+     * 答案编码
+     */
+	private String answerCode;
+
+	/**
+     * 问题内容
+     */
+	private String content;
+
+	private String userId;
+	
+	public BasicAnswerVo(BasicAnswer basicAnswer) {
+		BeanUtils.copyProperties(basicAnswer, this);
+	}
+	
+	public BasicAnswerVo(UserMember userMember) {
+		this.answerCode = null;
+		this.content = userMember.getMemberName();
+		this.userId = userMember.getUserId().toString();
+	}
+
+	public String getAnswerCode() {
+		return answerCode;
+	}
+
+	public void setAnswerCode(String answerCode) {
+		this.answerCode = answerCode;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	
+}

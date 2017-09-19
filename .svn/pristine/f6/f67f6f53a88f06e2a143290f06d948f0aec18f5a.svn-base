@@ -1,0 +1,92 @@
+package com.alpha.server.rpc.user.pojo;
+
+import java.lang.Long;
+import java.lang.String;
+import java.util.Date;
+
+public class UserMember{
+
+
+
+	/**
+     * 
+     */
+	private Long id;
+
+	/**
+     * 用户的userId
+     */
+	private Long userId;
+
+	/**
+     * 用户下成员的userId
+     */
+	private Long memberId;
+
+	/**
+     * 成员的姓名
+     */
+	private String memberName;
+
+	/**
+     * 建立关系时间
+     */
+	private Date createTime;
+
+	public UserMember() {}
+	
+	public UserMember(Long userId, Long memberId, String memberName) {
+		this.userId = userId;
+		this.memberId = memberId;
+		this.memberName = memberName;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
+	public Long getId() {
+		return this.id;
+	}
+	
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public Long getUserId() {
+		return this.userId;
+	}
+	
+
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
+	}
+	
+	public Long getMemberId() {
+		return this.memberId;
+	}
+	
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	
+	public String getMemberName() {
+		return this.memberName;
+	}
+	
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	
+	public Date getCreateTime() {
+		return this.createTime;
+	}
+	
+	
+	
+	
+
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.alpha.user.mapper.UserInfoMapper">
+
+
+    <!-- 根据条件查询其它-->
+    <select id="queryUserInfo" resultType="com.alpha.user.pojo.UserInfo">
+
+			SELECT * from user_info
+       
+    </select>
+
+
+</mapper>

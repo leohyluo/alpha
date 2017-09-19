@@ -1,0 +1,8 @@
+package com.alpha.self.diagnosis.service;
+
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+
+public interface BasicQuestionService {
+
+	BasicQuestion find(BasicQuestion question);
+}

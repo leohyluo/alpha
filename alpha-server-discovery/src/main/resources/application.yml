@@ -9,8 +9,6 @@ spring:
 server:
   port: 19081
 eureka:
-  instance:
-    hostname: peer1
   client:
     register-with-eureka: false #是否将自已注册为客户端
     fetch-registry: false
@@ -25,8 +23,6 @@ spring:
 server:
   port: 19082
 eureka:
-  instance:
-    hostname: peer2
   client:
     #register-with-eureka: false
     #fetch-registry: false
@@ -34,4 +30,4 @@ eureka:
       defaultZone: http://peer1:19081/eureka/
   server:
     enable-self-preservation: false #关闭自我保护模式,默认为开启
-    eviction-interval-timer-in-ms: 5000 #扫描失效服务的时间间隔,默认60秒    
+    eviction-interval-timer-in-ms: 5000 #扫描失效服务的时间间隔,默认60秒

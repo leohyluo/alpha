@@ -1,0 +1,10 @@
+package com.alpha.user.mapper;
+
+import java.util.List;
+
+import com.alpha.user.pojo.UserInfo;
+
+public interface UserInfoMapper {
+
+	List<UserInfo> queryUserInfo();
+}

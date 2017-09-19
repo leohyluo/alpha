@@ -1,0 +1,38 @@
+package com.alpha.self.diagnosis.processor;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import com.alpha.self.diagnosis.pojo.BasicQuestion;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+
+public abstract class AbstractBasicAnswerProcessor {
+	
+	private static Map<String, AbstractBasicAnswerProcessor> processorMap;
+	
+	static {
+		processorMap = new HashMap<>();
+	}
+	
+	public List<BasicAnswerVo> process(BasicQuestion question) {
+		/*String questionCode = question.getQuestionCode();
+		AbstractBasicAnswerProcessor processor = processorMap.get(questionCode);
+		List<BasicAnswerVo> answervoList = null;
+		if(processor != null) {
+			answervoList = processor.queryAnswers(question);
+		}*/
+		List<BasicAnswerVo> answervoList = queryAnswers(question);
+		return Optional.ofNullable(answervoList).orElseGet(ArrayList::new);
+	} 
+	
+	protected void register(AbstractBasicAnswerProcessor obj) {
+		processorMap.put(setQuestionCode(), obj);
+	}
+	
+	protected abstract String setQuestionCode();
+	
+	protected abstract List<BasicAnswerVo> queryAnswers(BasicQuestion question);
+}

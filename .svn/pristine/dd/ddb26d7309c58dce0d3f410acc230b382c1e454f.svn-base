@@ -1,0 +1,17 @@
+package com.alpha.self.diagnosis.service;
+
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+
+/**
+ * Created by xc.xiong on 2017/9/11.
+ */
+public interface SymptomMainService {
+
+    /**
+     * 生成主症状问题
+     * 获取主症状数据
+     *
+     * @return
+     */
+    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId);
+}

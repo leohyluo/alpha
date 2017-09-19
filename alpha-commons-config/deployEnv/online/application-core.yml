@@ -1,0 +1,57 @@
+#注册中心配置  
+service:  
+  register:
+    center:
+      ip: 127.0.0.1
+      hostname: peer1
+      port: 19081
+    center2: 
+      ip: 127.0.0.1
+      hostname: peer2
+      port: 19082
+eureka:
+  client:
+    serviceUrl: 
+      defaultZone: http://${service.register.center.hostname}:${service.register.center.port}/eureka/
+    registry-fetch-interval-seconds: 5 #拉取服务注册信息时间间隔,默认为30秒
+  instance: 
+    lease-renewal-interval-in-seconds: 5 #心跳时间,默认为30秒
+    lease-expiration-duration-in-seconds: 10 #若eureka server在这时间内没收到心跳则移除该instance,默认为90秒    
+hystrix: 
+  command: 
+    default: 
+      execution: 
+        isolation: 
+          thread: 
+            timeoutInMilliseconds: 5000             
+#数据库配置
+db: 
+  host: 192.168.29.28
+  port: 3306
+  name: dr_alpha
+#数据源配置  
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: root
+    password: 
+    url: jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true
+    druid: 
+      filter-class-names: stat 
+      filters: stat,config
+      #初始化连接大小
+      initial-size: 8
+      #最小空闲连接数
+      min-idle: 5
+      #最大连接数
+      max-active: 10
+      #查询超时时间
+      query-timeout: 6000
+      #事务查询超时时间
+      transaction-query-timeout: 6000
+      #关闭空闲连接超时时间
+      remove-abandoned-timeout: 1800  
+#mybatis配置
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath:mapper/*.xml,classpath:user/mapper/*.xml,classpath:core/mapper/*.xml

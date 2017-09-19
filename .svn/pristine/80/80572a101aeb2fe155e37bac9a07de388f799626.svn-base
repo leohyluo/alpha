@@ -1,0 +1,41 @@
+package com.alpha.user.service.impl;
+
+import com.alpha.commons.core.service.SysSequenceService;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.mapper.UserInfoMapper;
+import com.alpha.user.service.UserInfoService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Date;
+
+@Service
+public class UserInfoServiceImpl implements UserInfoService {
+
+	@Resource
+	private UserInfoMapper userInfoMapper;
+	@Resource
+	private SysSequenceService sysSequenceService;
+
+	/**
+	 * 根据第三方用户编号，渠道编号获取用户信息
+	 * 如果没有用户信息，则创建一个新的用户
+	 * @param externalUserId
+	 * @param inType
+	 * @return
+	 */
+	public UserInfo getUserInfo(String externalUserId,int inType){
+		UserInfo userInfo = userInfoMapper.getUserInfoByExternalUserId(externalUserId, inType);
+		if(userInfo==null){
+			userInfo = new UserInfo();
+			userInfo.setUserId(sysSequenceService.getNextSequence("user_seq").longValue());
+			userInfo.setExternalUserId(externalUserId);
+			userInfo.setInType(inType);
+			userInfo.setCreateTime(new Date());
+			userInfo.setLastUpdateTime(new Date());
+		}
+		return userInfo;
+	}
+
+
+}
