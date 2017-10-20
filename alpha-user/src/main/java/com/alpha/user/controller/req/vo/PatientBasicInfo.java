@@ -2,27 +2,27 @@ package com.alpha.user.controller.req.vo;
 
 public class PatientBasicInfo {
 
-	//用户对象
-	private PatientInfo userInfo;
-	
-	//渠道标识
-	private int inType;
+    //用户对象
+    private PatientInfo userInfo;
 
-	public PatientInfo getUserInfo() {
-		return userInfo;
-	}
+    //渠道标识
+    private int inType;
 
-	public void setUserInfo(PatientInfo userInfo) {
-		this.userInfo = userInfo;
-	}
+    public PatientInfo getUserInfo() {
+        return userInfo;
+    }
 
-	public int getInType() {
-		return inType;
-	}
+    public void setUserInfo(PatientInfo userInfo) {
+        this.userInfo = userInfo;
+    }
 
-	public void setInType(int inType) {
-		this.inType = inType;
-	}
-	
-	
+    public int getInType() {
+        return inType;
+    }
+
+    public void setInType(int inType) {
+        this.inType = inType;
+    }
+
+
 }

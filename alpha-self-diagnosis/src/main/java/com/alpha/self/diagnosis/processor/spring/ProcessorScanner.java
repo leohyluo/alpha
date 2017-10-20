@@ -1,9 +1,6 @@
 package com.alpha.self.diagnosis.processor.spring;
 
-import com.alpha.commons.core.framework.SpringContextHolder;
 import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
-import com.alpha.self.diagnosis.processor.AbstractBasicAnswerProcessor;
-import com.alpha.self.diagnosis.processor.BasicAnswerProcessorAdaptor;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,19 +15,15 @@ import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.type.AnnotationMetadata;
-
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.Assert;
 
-
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -71,18 +64,18 @@ public final class ProcessorScanner extends ClassPathBeanDefinitionScanner {
         }
         return convert(candidates);
     }*/
-    
+
     @Override
     public Set<BeanDefinitionHolder> doScan(String... basePackages) {
         Set<BeanDefinition> candidates = openKeyScan(basePackages[0]);
         Set<BeanDefinitionHolder> holderSet = convert(candidates);
         List<String> processorNames = new ArrayList<>();
-        for(BeanDefinitionHolder item : holderSet) {
-        	processorNames.add(item.getBeanName());
-        	System.out.println(item.getBeanName());
+        for (BeanDefinitionHolder item : holderSet) {
+            processorNames.add(item.getBeanName());
+            System.out.println(item.getBeanName());
         }
         //初始化基础问题处理器
-        BasicAnswerProcessorAdaptor.initial(processorNames);
+        //BasicAnswerProcessorAdaptor.initial(processorNames);
         return holderSet;
     }
 

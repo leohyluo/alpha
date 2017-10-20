@@ -1,18 +1,7 @@
-#注册中心配置  
-service:  
-  register:
-    center:
-      ip: 127.0.0.1
-      hostname: peer1
-      port: 19081
-    center2: 
-      ip: 127.0.0.1
-      hostname: peer2
-      port: 19082
 eureka:
   client:
     serviceUrl: 
-      defaultZone: http://${service.register.center.ip}:${service.register.center.port}/eureka/
+      defaultZone: http://localhost:19081/eureka/
     registry-fetch-interval-seconds: 5 #拉取服务注册信息时间间隔,默认为30秒
   instance: 
     lease-renewal-interval-in-seconds: 5 #心跳时间,默认为30秒
@@ -29,12 +18,13 @@ db:
   host: 192.168.29.28
   port: 3306
   name: dr_alpha
-#数据源配置  
+  public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ6WnLaLR2ek5fKVGINyQ6yDHGVzD/IGua1s7glOflionj4Nt4QejEorNpk+1cnRm6wUP7ZLMz0A9G7lbR6eOtMCAwEAAQ==
+#数据源配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     username: dsol
-    password: eHS44s
+    password: Ev2ayJRneWdjW1UaYrMYpEWzd2tF3kgVYX269wwP/nXnhIHDG3fBkiIqF7IZ6o5FEPGUbwrq4Jxe5gUseHiq0Q==
     url: jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true
     druid:
       filter-class-names: stat

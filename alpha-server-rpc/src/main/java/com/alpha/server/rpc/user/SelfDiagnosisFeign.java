@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(name = "alpha-self-diagnosis", fallbackFactory = SelfDiagnosisFallbackFactory.class)
 public interface SelfDiagnosisFeign {
 
-	@RequestMapping(value = "/main/test")
-	public String getUserInfo();
+    @RequestMapping(value = "/main/test")
+    public String getUserInfo();
 
 }

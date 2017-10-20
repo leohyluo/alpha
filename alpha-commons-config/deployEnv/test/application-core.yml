@@ -29,12 +29,13 @@ db:
   host: 192.168.29.24
   port: 3306
   name: dr_alpha
+  public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIeMfolobgSenbQUUeSDQ/jvyjjJnBvu+v96HjaQma55SuDPMQxVI3GrtDcWmtKyj6RxvrPntQfblqWhCTn1p+kCAwEAAQ==
 #数据源配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     username: dsol
-    password: GHdss972
+    password: Uzlg0wrBVfXZFr/oFL5Y7PtG9S2y1YpXI8XyNeieB3zo1+lqptK5CMMMvj5zM/GQ6nXTc+zx9QYijY045mo+jQ==
     url: jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true
     druid:
       filter-class-names: stat

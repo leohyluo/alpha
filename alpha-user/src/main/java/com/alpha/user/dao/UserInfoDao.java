@@ -2,11 +2,10 @@ package com.alpha.user.dao;
 
 import com.alpha.commons.core.dao.IBaseDao;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-
-import org.springframework.stereotype.Component;
 
 /**
  * Created by xc.xiong on 2017/9/5.
@@ -22,8 +21,8 @@ public interface UserInfoDao extends IBaseDao<UserInfo, Long> {
      * @return
      */
     UserInfo getUserInfoByExternalUserId(String externalUserId, int inType);
-    
+
     UserInfo queryByUserId(Long userId);
-    
+
     List<UserInfo> query(Map<String, Object> map);
 }

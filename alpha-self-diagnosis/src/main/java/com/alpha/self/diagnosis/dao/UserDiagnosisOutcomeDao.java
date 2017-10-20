@@ -1,7 +1,7 @@
 package com.alpha.self.diagnosis.dao;
 
 import com.alpha.commons.core.dao.IBaseDao;
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisOutcome;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 
 import java.util.List;
 
@@ -10,5 +10,20 @@ import java.util.List;
  */
 public interface UserDiagnosisOutcomeDao extends IBaseDao<UserDiagnosisOutcome, Long> {
 
+    /**
+     * 查询问题
+     *
+     * @param diagnosisId
+     * @return
+     */
+    List<UserDiagnosisOutcome> listTop5UserDiagnosisOutcome(Long diagnosisId);
 
+
+    /**
+     * 查询诊断结果
+     *
+     * @param diagnosisId
+     * @return
+     */
+    List<UserDiagnosisOutcome> listUserDiagnosisOutcome(Long diagnosisId, String diseaseCode);
 }

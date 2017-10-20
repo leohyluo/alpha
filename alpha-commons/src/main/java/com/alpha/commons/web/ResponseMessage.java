@@ -12,7 +12,7 @@ public class ResponseMessage implements Serializable {
 
 	public static final long serialVersionUID = -2297332672297066370L;
 	protected int code;
-	protected Object data;
+	protected Object data="";
 	protected String msg;
 
 	public ResponseMessage() { 

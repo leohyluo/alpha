@@ -1,10 +1,8 @@
 package com.alpha.commons.core.sql;
 
 
-
 import com.alpha.commons.core.sql.enums.SQLConditionType;
 import com.alpha.commons.core.sql.enums.SQLOrderType;
-import javafx.scene.control.Tab;
 
 import javax.persistence.Table;
 import java.util.ArrayList;

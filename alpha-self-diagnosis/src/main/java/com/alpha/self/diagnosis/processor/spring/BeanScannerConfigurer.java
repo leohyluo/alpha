@@ -10,8 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
-import com.alpha.commons.core.framework.SpringContextHolder;
-
 /**
  * Created by vic on 2017/7/11.
  */
@@ -21,16 +19,16 @@ public class BeanScannerConfigurer implements BeanFactoryPostProcessor, Applicat
     private ApplicationContext applicationContext;
 
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    	//获取spring上下文，初始化全局SpringContextHolder
-		SpringContextHolder.setApplicationContext(applicationContext);
+        //获取spring上下文，初始化全局SpringContextHolder
+        //SpringContextHolder.setApplicationContext(applicationContext);
         this.applicationContext = applicationContext;
     }
 
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        s_logger.info("初始化OpenSerivce 服务配置");
+        s_logger.info("初始化 BasicAnswerProcessor  服务配置");
         ProcessorScanner scanner = new ProcessorScanner((BeanDefinitionRegistry) beanFactory);
         scanner.setResourceLoader(applicationContext);
         scanner.scan("com.alpha.self.diagnosis.processor.**");
-        s_logger.info("初始化OpenSerivce完成");
+        s_logger.info("初始化 BasicAnswerProcessor 完成");
     }
 }

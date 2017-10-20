@@ -1,404 +1,446 @@
-
 package com.alpha.server.rpc.diagnosis.pojo;
-
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.lang.Long;
-import java.lang.Double;
-import java.lang.String;
-import java.lang.Integer;
 import java.util.Date;
+
 @Entity
 @Table(name = "diagnosis_question_answer")
-public class DiagnosisQuestionAnswer implements Serializable{
-
-	private static final long serialVersionUID = 982534919320049029L;
-
-	/**
-	 * id
-	 */
-	@Column(name = "id")
-	@Id
-	private Long id;
-
-	/**
-	 * 问题编码
-	 */
-	@Column(name = "question_code")
-	private String questionCode;
-	/**
-	 * 问题权重
-	 */
-	@Column(name = "question_weight")
-	private Double questionWeight;
-
-	/**
-	 * 答案编码
-	 */
-	@Column(name = "answer_code")
-	private String answerCode;
-
-	/**
-	 * 答案内容
-	 */
-	@Transient
-	@Column(name = "content")
-	private String content;
-
-	/**
-	 * 答案描述
-	 */
-	@Transient
-	@Column(name = "popu_content")
-	private String popuContent;
-
-	/**
-	 * 性别
-	 */
-	@Transient
-	@Column(name = "gender")
-	private Integer gender;
-
-	/**
-	 * 最小年龄
-	 */
-	@Transient
-	@Column(name = "min_age")
-	private Double minAge;
-
-	/**
-	 * 最大年龄
-	 */
-	@Transient
-	@Column(name = "max_age")
-	private Double maxAge;
-
-	/**
-	 * 疾病编码
-	 */
-	@Column(name = "disease_code")
-	private String diseaseCode;
-
-	/**
-	 * 1正向特异性,-1反向特异性，0无
-	 */
-	@Column(name = "answer_spec")
-	private Integer answerSpec;
-
-	/**
-	 * 权重
-	 */
-	@Column(name = "weight")
-	private Double weight;
-
-	/**
-	 * 顺序
-	 */
-	@Column(name = "default_order")
-	private Integer defaultOrder;
-
-	/**
-	 * 下一个问题id
-	 */
-	@Column(name = "next_question_id")
-	private String nextQuestionId;
-
-	/**
-	 * 答案权重，计算后的值
-	 */
-	@Transient
-	private Double weightValue;
-
-	/**
-	 *
-	 */
-	@Column(name = "incre_flag")
-	private String increFlag;
-
-	/**
-	 *
-	 */
-	@Column(name = "opera_flag")
-	private String operaFlag;
-
-	/**
-	 *
-	 */
-	@Column(name = "operate_type")
-	private String operateType;
-
-	/**
-	 *
-	 */
-	@Column(name = "data_version")
-	private Integer dataVersion;
-
-	/**
-	 *
-	 */
-	@Column(name = "version_evolution")
-	private String versionEvolution;
-
-	/**
-	 * 来源
-	 */
-	@Column(name = "source_")
-	private String source;
-
-	/**
-	 *
-	 */
-	@Column(name = "version_")
-	private String version;
-
-	/**
-	 *
-	 */
-	@Column(name = "creator")
-	private String creator;
-
-	/**
-	 *
-	 */
-	@Column(name = "create_time")
-	private Date createTime;
+public class DiagnosisQuestionAnswer implements Serializable {
+
+    private static final long serialVersionUID = 982534919320049029L;
+
+    /**
+     * id
+     */
+    @Column(name = "id")
+    @Id
+    private Long id;
+
+    /**
+     * 问题编码
+     */
+    @Column(name = "question_code")
+    private String questionCode;
+    /**
+     * 问题权重
+     */
+    @Column(name = "question_weight")
+    private Double questionWeight;
+
+    /**
+     * 答案编码
+     */
+    @Column(name = "answer_code")
+    private String answerCode;
+
+    /**
+     * 答案范围值的最小值
+     */
+    @Column(name = "min_value")
+    private Double minValue;
+
+    /**
+     * 答案范围值的最大值
+     */
+    @Column(name = "max_value")
+    private Double maxValue;
+
+    /**
+     * 答案内容
+     */
+    @Transient
+    @Column(name = "content")
+    private String content;
+
+    /**
+     * 答案描述
+     */
+    @Transient
+    @Column(name = "popu_content")
+    private String popuContent;
+
+    /**
+     * 性别
+     */
+    @Transient
+    @Column(name = "gender")
+    private Integer gender;
+
+    /**
+     * 最小年龄
+     */
+    @Transient
+    @Column(name = "min_age")
+    private Double minAge;
+
+    /**
+     * 最大年龄
+     */
+    @Transient
+    @Column(name = "max_age")
+    private Double maxAge;
+
+    /**
+     * 疾病编码
+     */
+    @Column(name = "disease_code")
+    private String diseaseCode;
+
+    /**
+     * 1正向特异性,-1反向特异性，0无
+     */
+    @Column(name = "answer_spec")
+    private Integer answerSpec;
+
+    /**
+     * 权重
+     */
+    @Column(name = "weight")
+    private Double weight;
+
+    /**
+     * 顺序
+     */
+    @Column(name = "default_order")
+    private Integer defaultOrder;
+
+    /**
+     * 下一个问题id
+     */
+    @Column(name = "next_question_id")
+    private String nextQuestionId;
+
+    /**
+     * 答案权重，计算后的值
+     */
+    @Transient
+    private Double weightValue;
+
+    /**
+     *
+     */
+    @Column(name = "incre_flag")
+    private String increFlag;
+
+    /**
+     *
+     */
+    @Column(name = "opera_flag")
+    private String operaFlag;
+
+    /**
+     *
+     */
+    @Column(name = "operate_type")
+    private String operateType;
+
+    /**
+     *
+     */
+    @Column(name = "data_version")
+    private Integer dataVersion;
+
+    /**
+     *
+     */
+    @Column(name = "version_evolution")
+    private String versionEvolution;
+
+    /**
+     * 来源
+     */
+    @Column(name = "source_")
+    private String source;
+
+    /**
+     *
+     */
+    @Column(name = "version_")
+    private String version;
+
+    /**
+     *
+     */
+    @Column(name = "creator")
+    private String creator;
+
+    /**
+     *
+     */
+    @Column(name = "create_time")
+    private Date createTime;
+
+    /**
+     *
+     */
+    @Column(name = "reviewer")
+    private String reviewer;
+
+    /**
+     *
+     */
+    @Column(name = "review_time")
+    private Date reviewTime;
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	/**
-	 *
-	 */
-	@Column(name = "reviewer")
-	private String reviewer;
-
-	/**
-	 *
-	 */
-	@Column(name = "review_time")
-	private Date reviewTime;
+    public void setQuestionCode(String questionCode) {
+        this.questionCode = questionCode;
+    }
 
+    public String getQuestionCode() {
+        return this.questionCode;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
-	public Long getId() {
-		return this.id;
-	}
+    public void setAnswerCode(String answerCode) {
+        this.answerCode = answerCode;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public String getAnswerCode() {
+        return this.answerCode;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
 
-	public void setQuestionCode(String questionCode) {
-		this.questionCode = questionCode;
-	}
+    public void setDiseaseCode(String diseaseCode) {
+        this.diseaseCode = diseaseCode;
+    }
 
-	public String getQuestionCode() {
-		return this.questionCode;
-	}
+    public String getDiseaseCode() {
+        return this.diseaseCode;
+    }
 
+    public String getPopuContent() {
+        return popuContent;
+    }
 
-	public void setAnswerCode(String answerCode) {
-		this.answerCode = answerCode;
-	}
+    public void setPopuContent(String popuContent) {
+        this.popuContent = popuContent;
+    }
 
-	public String getAnswerCode() {
-		return this.answerCode;
-	}
+    public void setAnswerSpec(Integer answerSpec) {
+        this.answerSpec = answerSpec;
+    }
 
+    public Integer getAnswerSpec() {
+        return this.answerSpec;
+    }
 
-	public void setDiseaseCode(String diseaseCode) {
-		this.diseaseCode = diseaseCode;
-	}
 
-	public String getDiseaseCode() {
-		return this.diseaseCode;
-	}
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
 
-	public String getPopuContent() {
-		return popuContent;
-	}
+    public Double getWeight() {
+        return this.weight;
+    }
 
-	public void setPopuContent(String popuContent) {
-		this.popuContent = popuContent;
-	}
 
-	public void setAnswerSpec(Integer answerSpec) {
-		this.answerSpec = answerSpec;
-	}
+    public void setDefaultOrder(Integer defaultOrder) {
+        this.defaultOrder = defaultOrder;
+    }
 
-	public Integer getAnswerSpec() {
-		return this.answerSpec;
-	}
+    public Integer getDefaultOrder() {
+        return this.defaultOrder;
+    }
 
 
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
+    public void setNextQuestionId(String nextQuestionId) {
+        this.nextQuestionId = nextQuestionId;
+    }
 
-	public Double getWeight() {
-		return this.weight;
-	}
+    public String getNextQuestionId() {
+        return this.nextQuestionId;
+    }
 
 
-	public void setDefaultOrder(Integer defaultOrder) {
-		this.defaultOrder = defaultOrder;
-	}
+    public void setIncreFlag(String increFlag) {
+        this.increFlag = increFlag;
+    }
 
-	public Integer getDefaultOrder() {
-		return this.defaultOrder;
-	}
+    public String getIncreFlag() {
+        return this.increFlag;
+    }
 
 
-	public void setNextQuestionId(String nextQuestionId) {
-		this.nextQuestionId = nextQuestionId;
-	}
+    public void setOperaFlag(String operaFlag) {
+        this.operaFlag = operaFlag;
+    }
 
-	public String getNextQuestionId() {
-		return this.nextQuestionId;
-	}
+    public String getOperaFlag() {
+        return this.operaFlag;
+    }
 
 
-	public void setIncreFlag(String increFlag) {
-		this.increFlag = increFlag;
-	}
+    public void setOperateType(String operateType) {
+        this.operateType = operateType;
+    }
 
-	public String getIncreFlag() {
-		return this.increFlag;
-	}
+    public String getOperateType() {
+        return this.operateType;
+    }
 
 
-	public void setOperaFlag(String operaFlag) {
-		this.operaFlag = operaFlag;
-	}
+    public void setDataVersion(Integer dataVersion) {
+        this.dataVersion = dataVersion;
+    }
 
-	public String getOperaFlag() {
-		return this.operaFlag;
-	}
+    public Integer getDataVersion() {
+        return this.dataVersion;
+    }
 
 
-	public void setOperateType(String operateType) {
-		this.operateType = operateType;
-	}
+    public void setVersionEvolution(String versionEvolution) {
+        this.versionEvolution = versionEvolution;
+    }
 
-	public String getOperateType() {
-		return this.operateType;
-	}
+    public String getVersionEvolution() {
+        return this.versionEvolution;
+    }
 
 
-	public void setDataVersion(Integer dataVersion) {
-		this.dataVersion = dataVersion;
-	}
+    public void setSource(String source) {
+        this.source = source;
+    }
 
-	public Integer getDataVersion() {
-		return this.dataVersion;
-	}
+    public String getSource() {
+        return this.source;
+    }
 
 
-	public void setVersionEvolution(String versionEvolution) {
-		this.versionEvolution = versionEvolution;
-	}
+    public void setVersion(String version) {
+        this.version = version;
+    }
 
-	public String getVersionEvolution() {
-		return this.versionEvolution;
-	}
+    public String getVersion() {
+        return this.version;
+    }
 
 
-	public void setSource(String source) {
-		this.source = source;
-	}
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
 
-	public String getSource() {
-		return this.source;
-	}
+    public String getCreator() {
+        return this.creator;
+    }
 
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
-	public String getVersion() {
-		return this.version;
-	}
+    public Date getCreateTime() {
+        return this.createTime;
+    }
 
 
-	public void setCreator(String creator) {
-		this.creator = creator;
-	}
+    public void setReviewer(String reviewer) {
+        this.reviewer = reviewer;
+    }
 
-	public String getCreator() {
-		return this.creator;
-	}
+    public String getReviewer() {
+        return this.reviewer;
+    }
 
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public void setReviewTime(Date reviewTime) {
+        this.reviewTime = reviewTime;
+    }
 
-	public Date getCreateTime() {
-		return this.createTime;
-	}
+    public Date getReviewTime() {
+        return this.reviewTime;
+    }
 
+    public Integer getGender() {
+        return gender;
+    }
 
-	public void setReviewer(String reviewer) {
-		this.reviewer = reviewer;
-	}
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
 
-	public String getReviewer() {
-		return this.reviewer;
-	}
+    public Double getMinAge() {
+        return minAge;
+    }
 
+    public void setMinAge(Double minAge) {
+        this.minAge = minAge;
+    }
 
-	public void setReviewTime(Date reviewTime) {
-		this.reviewTime = reviewTime;
-	}
+    public Double getMaxAge() {
+        return maxAge;
+    }
 
-	public Date getReviewTime() {
-		return this.reviewTime;
-	}
+    public void setMaxAge(Double maxAge) {
+        this.maxAge = maxAge;
+    }
 
-	public Integer getGender() {
-		return gender;
-	}
+    public Double getQuestionWeight() {
+        return questionWeight;
+    }
 
-	public void setGender(Integer gender) {
-		this.gender = gender;
-	}
+    public void setQuestionWeight(Double questionWeight) {
+        this.questionWeight = questionWeight;
+    }
 
-	public Double getMinAge() {
-		return minAge;
-	}
+    public Double getWeightValue() {
+        return weightValue;
+    }
 
-	public void setMinAge(Double minAge) {
-		this.minAge = minAge;
-	}
+    public void setWeightValue(Double weightValue) {
+        this.weightValue = weightValue;
+    }
 
-	public Double getMaxAge() {
-		return maxAge;
-	}
+    public Double getMinValue() {
+        return minValue;
+    }
 
-	public void setMaxAge(Double maxAge) {
-		this.maxAge = maxAge;
-	}
+    public void setMinValue(Double minValue) {
+        this.minValue = minValue;
+    }
 
-	public Double getQuestionWeight() {
-		return questionWeight;
-	}
+    public Double getMaxValue() {
+        return maxValue;
+    }
 
-	public void setQuestionWeight(Double questionWeight) {
-		this.questionWeight = questionWeight;
-	}
+    public void setMaxValue(Double maxValue) {
+        this.maxValue = maxValue;
+    }
 
-	public Double getWeightValue() {
-		return weightValue;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DiagnosisQuestionAnswer)) return false;
 
-	public void setWeightValue(Double weightValue) {
-		this.weightValue = weightValue;
-	}
+        DiagnosisQuestionAnswer answer = (DiagnosisQuestionAnswer) o;
+
+        if (!questionCode.equals(answer.questionCode)) return false;
+        if (!answerCode.equals(answer.answerCode)) return false;
+        return diseaseCode.equals(answer.diseaseCode);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = questionCode.hashCode();
+        result = 31 * result + answerCode.hashCode();
+        result = 31 * result + diseaseCode.hashCode();
+        return result;
+    }
 }

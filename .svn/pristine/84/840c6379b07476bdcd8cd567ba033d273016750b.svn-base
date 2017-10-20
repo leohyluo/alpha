@@ -1,8 +1,0 @@
-package com.alpha.self.diagnosis.service;
-
-import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
-
-public interface DiagnosisService {
-
-	BasicQuestionVo start(Long userId, Integer inType);
-}

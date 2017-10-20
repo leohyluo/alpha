@@ -1,0 +1,562 @@
+2017-10-18 09:03:51,602 INFO [org.springframework.boot.SpringApplication:597] The following profiles are active: core
+2017-10-18 09:03:51,653 INFO [org.springframework.context.support.AbstractApplicationContext:583] Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4b1c0397: startup date [Wed Oct 18 09:03:51 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:03:54,539 INFO [org.springframework.cloud.context.scope.GenericScope:263] BeanFactory id=93ea8e31-797c-3bde-a984-b3bfc135cce8
+2017-10-18 09:03:54,591 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:28] 初始化 BasicAnswerProcessor  服务配置
+2017-10-18 09:03:54,606 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'allergicHistoryAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]]
+2017-10-18 09:03:54,607 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'birthProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]]
+2017-10-18 09:03:54,608 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'liverRenalProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]]
+2017-10-18 09:03:54,608 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'normalAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]]
+2017-10-18 09:03:54,609 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'pastmedicalHistoryProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]]
+2017-10-18 09:03:54,610 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'weightProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]]
+2017-10-18 09:03:54,611 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:32] 初始化 BasicAnswerProcessor 完成
+2017-10-18 09:03:54,752 INFO [org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor:155] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2017-10-18 09:03:54,845 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'com.alpha.server.rpc.user.SelfDiagnosisFeign' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:03:55,099 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$420f6d66] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:03:55,535 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$5e297063] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:03:56,625 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:89] Tomcat initialized with port(s): 19092 (http)
+2017-10-18 09:03:56,645 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting service [Tomcat]
+2017-10-18 09:03:56,647 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting Servlet Engine: Apache Tomcat/8.5.20
+2017-10-18 09:03:56,900 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring embedded WebApplicationContext
+2017-10-18 09:03:56,901 INFO [org.springframework.boot.context.embedded.EmbeddedWebApplicationContext:276] Root WebApplicationContext: initialization completed in 5248 ms
+2017-10-18 09:03:57,572 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'dispatcherServlet' to [/]
+2017-10-18 09:03:57,576 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'com.alpha.commons.config.servlet.DruidStatViewServlet' to [/druid/*]
+2017-10-18 09:03:57,586 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'characterEncodingFilter' to: [/*]
+2017-10-18 09:03:57,587 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2017-10-18 09:03:57,588 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2017-10-18 09:03:57,588 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'requestContextFilter' to: [/*]
+2017-10-18 09:03:57,588 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'com.alpha.commons.config.filter.CorsFilter' to urls: [/*]
+2017-10-18 09:03:57,589 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'druidWebStatFilter' to urls: [/*]
+2017-10-18 09:03:57,627 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:27] DiagnosisContextListener contextInitialized starting...
+2017-10-18 09:03:57,633 INFO [com.alpha.self.diagnosis.processor.BasicAnswerProcessorAdaptor:154] 6 processor will be register.
+2017-10-18 09:03:58,000 INFO [com.alpha.commons.config.DruidConfiguration$Druid:66] DruidConfiguration init completed................
+2017-10-18 09:04:00,849 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:34] DiagnosisContextListener contextInitialized completed
+2017-10-18 09:04:03,039 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:04:03,040 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:04:03,051 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:04:03,051 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:04:03,751 INFO [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter:534] Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4b1c0397: startup date [Wed Oct 18 09:03:51 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:04:03,969 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/pastmedicalHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.pastmedicalHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:04:03,972 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/allergicHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.allergicHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:04:03,972 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/concsymp],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.diagnosisStart(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:04:03,973 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/weight/{userId}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.weightSearch(java.lang.Long)
+2017-10-18 09:04:03,979 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.getOutcome(java.lang.Long)
+2017-10-18 09:04:03,980 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/medicine/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisMedicineNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:04:03,981 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/showResult],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.showDiagnosisResult(java.lang.Long,java.lang.Long)
+2017-10-18 09:04:03,981 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/queryBasicQuestion],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.queryBasicQuestion(com.alpha.user.controller.req.vo.PatientInfo)
+2017-10-18 09:04:03,982 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/start],methods=[POST],consumes=[application/json || application/x-www-form-urlencoded]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisStart(java.lang.Long,java.lang.Integer)
+2017-10-18 09:04:03,983 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/basic/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:04:03,983 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/confirm],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.confirmOutcome(java.lang.Long,java.lang.String)
+2017-10-18 09:04:03,984 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/diseaseHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diseaseHistory(com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo)
+2017-10-18 09:04:03,989 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/info],methods=[GET]}" onto public java.lang.String com.alpha.self.diagnosis.controller.MainController.test()
+2017-10-18 09:04:03,990 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(java.lang.Integer)
+2017-10-18 09:04:03,991 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question2],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo,java.lang.String)
+2017-10-18 09:04:03,992 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/getMedicalRecord],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.getMedicalRecord()
+2017-10-18 09:04:03,997 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.treatScheme(java.lang.String,java.lang.String)
+2017-10-18 09:04:03,998 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/diseaseList],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.diseaseList(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:04:04,001 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/feedback/put],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.FeedBackController.authorization(com.alpha.server.rpc.user.pojo.UserFeedback)
+2017-10-18 09:04:04,004 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/query/{cardNo}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.query(java.lang.String)
+2017-10-18 09:04:04,004 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/auth],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.authorization(java.lang.String,java.lang.Integer,java.lang.Integer)
+2017-10-18 09:04:04,005 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/save],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.saveUserInfo(com.alpha.user.pojo.vo.UserInfoRequestVo)
+2017-10-18 09:04:04,009 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2017-10-18 09:04:04,010 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2017-10-18 09:04:04,200 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:04:04,202 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:04:04,254 INFO [org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver:273] Detected @ExceptionHandler methods in controllerEnhancerment
+2017-10-18 09:04:04,359 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:04:06,979 INFO [org.springframework.jmx.export.MBeanExporter:431] Registering beans for JMX exposure on startup
+2017-10-18 09:04:06,982 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'dataSource' has been autodetected for JMX exposure
+2017-10-18 09:04:06,999 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'environmentManager' has been autodetected for JMX exposure
+2017-10-18 09:04:07,002 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2017-10-18 09:04:07,004 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'refreshScope' has been autodetected for JMX exposure
+2017-10-18 09:04:07,009 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2017-10-18 09:04:07,038 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2017-10-18 09:04:07,069 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=4b1c0397,type=ConfigurationPropertiesRebinder]
+2017-10-18 09:04:07,088 INFO [org.springframework.jmx.export.MBeanExporter:671] Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2017-10-18 09:04:07,696 INFO [org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup:343] Starting beans in phase 0
+2017-10-18 09:04:07,715 INFO [org.springframework.cloud.netflix.eureka.InstanceInfoFactory:70] Setting initial instance status as: STARTING
+2017-10-18 09:04:07,852 INFO [com.netflix.discovery.DiscoveryClient:344] Initializing Eureka in region us-east-1
+2017-10-18 09:04:08,584 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:70] Using JSON encoding codec LegacyJacksonJson
+2017-10-18 09:04:08,585 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:71] Using JSON decoding codec LegacyJacksonJson
+2017-10-18 09:04:08,832 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:80] Using XML encoding codec XStreamXml
+2017-10-18 09:04:08,832 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:81] Using XML decoding codec XStreamXml
+2017-10-18 09:04:09,940 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:04:10,145 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:10,146 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:10,147 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:10,147 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:10,148 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:10,148 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: true
+2017-10-18 09:04:10,149 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:10,429 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:04:10,432 INFO [com.netflix.discovery.DiscoveryClient:1244] Starting heartbeat executor: renew interval is: 5
+2017-10-18 09:04:10,438 INFO [com.netflix.discovery.InstanceInfoReplicator:59] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2017-10-18 09:04:10,447 INFO [com.netflix.discovery.DiscoveryClient:425] Discovery Client initialized at timestamp 1508288650447 with initial instances count: 0
+2017-10-18 09:04:10,631 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaServiceRegistry:40] Registering application alpha-self-diagnosis with eureka with status UP
+2017-10-18 09:04:10,633 INFO [com.netflix.discovery.DiscoveryClient$3:1279] Saw local status change event StatusChangeEvent [timestamp=1508288650633, current=UP, previous=STARTING]
+2017-10-18 09:04:10,639 INFO [com.netflix.discovery.DiscoveryClient:795] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092: registering service...
+2017-10-18 09:04:10,829 INFO [com.netflix.discovery.DiscoveryClient:804] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092 - registration status: 204
+2017-10-18 09:04:10,855 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:201] Tomcat started on port(s): 19092 (http)
+2017-10-18 09:04:10,857 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaAutoServiceRegistration:117] Updating port to 19092
+2017-10-18 09:04:10,867 INFO [org.springframework.boot.StartupInfoLogger:57] Started AlphaApplication in 21.896 seconds (JVM running for 22.718)
+2017-10-18 09:04:15,433 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:15,445 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:15,446 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:15,446 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:15,446 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:15,446 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:04:15,446 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:15,452 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:04:20,456 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:20,458 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:20,458 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:20,458 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:20,458 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:20,459 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:04:20,460 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:20,465 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:04:25,469 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:25,469 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:25,470 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:25,470 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:25,470 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:25,470 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:04:25,470 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:25,476 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:04:30,478 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:30,479 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:30,480 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:30,480 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:30,481 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:30,481 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:04:30,481 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:30,486 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:04:35,491 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:04:35,491 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:04:35,493 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:04:35,493 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:04:35,493 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:04:35,493 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:04:35,493 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:04:35,544 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:05:30,324 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017-10-18 09:05:30,325 INFO [org.springframework.web.servlet.FrameworkServlet:489] FrameworkServlet 'dispatcherServlet': initialization started
+2017-10-18 09:05:30,390 INFO [org.springframework.web.servlet.FrameworkServlet:508] FrameworkServlet 'dispatcherServlet': initialization completed in 65 ms
+2017-10-18 09:06:13,445 INFO [org.springframework.boot.SpringApplication:597] The following profiles are active: core
+2017-10-18 09:06:13,492 INFO [org.springframework.context.support.AbstractApplicationContext:583] Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6ad5923a: startup date [Wed Oct 18 09:06:13 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:06:15,415 INFO [org.springframework.cloud.context.scope.GenericScope:263] BeanFactory id=93ea8e31-797c-3bde-a984-b3bfc135cce8
+2017-10-18 09:06:15,473 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:28] 初始化 BasicAnswerProcessor  服务配置
+2017-10-18 09:06:15,485 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'allergicHistoryAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]]
+2017-10-18 09:06:15,487 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'birthProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]]
+2017-10-18 09:06:15,488 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'liverRenalProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]]
+2017-10-18 09:06:15,489 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'normalAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]]
+2017-10-18 09:06:15,490 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'pastmedicalHistoryProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]]
+2017-10-18 09:06:15,491 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'weightProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]]
+2017-10-18 09:06:15,492 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:32] 初始化 BasicAnswerProcessor 完成
+2017-10-18 09:06:15,643 INFO [org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor:155] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2017-10-18 09:06:15,770 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'com.alpha.server.rpc.user.SelfDiagnosisFeign' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:06:16,062 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$420f6d66] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:06:16,480 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$5e297063] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:06:17,625 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:89] Tomcat initialized with port(s): 19092 (http)
+2017-10-18 09:06:17,652 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting service [Tomcat]
+2017-10-18 09:06:17,654 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting Servlet Engine: Apache Tomcat/8.5.20
+2017-10-18 09:06:17,945 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring embedded WebApplicationContext
+2017-10-18 09:06:17,946 INFO [org.springframework.boot.context.embedded.EmbeddedWebApplicationContext:276] Root WebApplicationContext: initialization completed in 4454 ms
+2017-10-18 09:06:18,710 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'dispatcherServlet' to [/]
+2017-10-18 09:06:18,713 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'com.alpha.commons.config.servlet.DruidStatViewServlet' to [/druid/*]
+2017-10-18 09:06:18,725 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'characterEncodingFilter' to: [/*]
+2017-10-18 09:06:18,726 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2017-10-18 09:06:18,726 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2017-10-18 09:06:18,727 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'requestContextFilter' to: [/*]
+2017-10-18 09:06:18,727 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'com.alpha.commons.config.filter.CorsFilter' to urls: [/*]
+2017-10-18 09:06:18,727 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'druidWebStatFilter' to urls: [/*]
+2017-10-18 09:06:18,775 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:27] DiagnosisContextListener contextInitialized starting...
+2017-10-18 09:06:18,783 INFO [com.alpha.self.diagnosis.processor.BasicAnswerProcessorAdaptor:154] 6 processor will be register.
+2017-10-18 09:06:19,377 INFO [com.alpha.commons.config.DruidConfiguration$Druid:66] DruidConfiguration init completed................
+2017-10-18 09:06:22,670 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:34] DiagnosisContextListener contextInitialized completed
+2017-10-18 09:06:25,373 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:06:25,374 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:06:25,386 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:06:25,387 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:06:26,248 INFO [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter:534] Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6ad5923a: startup date [Wed Oct 18 09:06:13 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:06:26,494 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/pastmedicalHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.pastmedicalHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:06:26,496 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/allergicHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.allergicHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:06:26,497 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/concsymp],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.diagnosisStart(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:06:26,498 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/weight/{userId}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.weightSearch(java.lang.Long)
+2017-10-18 09:06:26,506 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.getOutcome(java.lang.Long)
+2017-10-18 09:06:26,507 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/medicine/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisMedicineNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:06:26,508 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/showResult],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.showDiagnosisResult(com.alpha.self.diagnosis.pojo.vo.BasicRequestVo)
+2017-10-18 09:06:26,509 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/queryBasicQuestion],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.queryBasicQuestion(com.alpha.user.controller.req.vo.PatientInfo)
+2017-10-18 09:06:26,511 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/start],methods=[POST],consumes=[application/json || application/x-www-form-urlencoded]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisStart(java.lang.Long,java.lang.Integer)
+2017-10-18 09:06:26,512 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/basic/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:06:26,513 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/confirm],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.confirmOutcome(java.lang.Long,java.lang.String)
+2017-10-18 09:06:26,514 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/diseaseHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diseaseHistory(com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo)
+2017-10-18 09:06:26,522 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/info],methods=[GET]}" onto public java.lang.String com.alpha.self.diagnosis.controller.MainController.test()
+2017-10-18 09:06:26,523 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(java.lang.Integer)
+2017-10-18 09:06:26,524 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question2],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo,java.lang.String)
+2017-10-18 09:06:26,525 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/getMedicalRecord],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.getMedicalRecord()
+2017-10-18 09:06:26,531 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/diseaseList],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.diseaseList(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:06:26,532 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.treatScheme(java.lang.String,java.lang.String)
+2017-10-18 09:06:26,536 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/feedback/put],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.FeedBackController.authorization(com.alpha.server.rpc.user.pojo.UserFeedback)
+2017-10-18 09:06:26,539 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/query/{cardNo}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.query(java.lang.String)
+2017-10-18 09:06:26,540 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/auth],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.authorization(java.lang.String,java.lang.Integer,java.lang.Integer)
+2017-10-18 09:06:26,541 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/save],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.saveUserInfo(com.alpha.user.pojo.vo.UserInfoRequestVo)
+2017-10-18 09:06:26,546 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2017-10-18 09:06:26,547 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2017-10-18 09:06:26,786 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:06:26,787 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:06:26,836 INFO [org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver:273] Detected @ExceptionHandler methods in controllerEnhancerment
+2017-10-18 09:06:26,953 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:06:29,973 INFO [org.springframework.jmx.export.MBeanExporter:431] Registering beans for JMX exposure on startup
+2017-10-18 09:06:29,977 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'dataSource' has been autodetected for JMX exposure
+2017-10-18 09:06:29,993 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'environmentManager' has been autodetected for JMX exposure
+2017-10-18 09:06:29,996 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2017-10-18 09:06:30,000 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'refreshScope' has been autodetected for JMX exposure
+2017-10-18 09:06:30,006 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2017-10-18 09:06:30,037 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2017-10-18 09:06:30,078 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=6ad5923a,type=ConfigurationPropertiesRebinder]
+2017-10-18 09:06:30,096 INFO [org.springframework.jmx.export.MBeanExporter:671] Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2017-10-18 09:06:30,400 INFO [org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup:343] Starting beans in phase 0
+2017-10-18 09:06:30,422 INFO [org.springframework.cloud.netflix.eureka.InstanceInfoFactory:70] Setting initial instance status as: STARTING
+2017-10-18 09:06:30,654 INFO [com.netflix.discovery.DiscoveryClient:344] Initializing Eureka in region us-east-1
+2017-10-18 09:06:31,425 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:70] Using JSON encoding codec LegacyJacksonJson
+2017-10-18 09:06:31,426 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:71] Using JSON decoding codec LegacyJacksonJson
+2017-10-18 09:06:31,724 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:80] Using XML encoding codec XStreamXml
+2017-10-18 09:06:31,725 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:81] Using XML decoding codec XStreamXml
+2017-10-18 09:06:32,976 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:06:33,220 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:33,221 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:33,222 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:33,222 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:33,223 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:33,223 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: true
+2017-10-18 09:06:33,224 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:33,528 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:06:33,532 INFO [com.netflix.discovery.DiscoveryClient:1244] Starting heartbeat executor: renew interval is: 5
+2017-10-18 09:06:33,545 INFO [com.netflix.discovery.InstanceInfoReplicator:59] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2017-10-18 09:06:33,558 INFO [com.netflix.discovery.DiscoveryClient:425] Discovery Client initialized at timestamp 1508288793558 with initial instances count: 0
+2017-10-18 09:06:33,787 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaServiceRegistry:40] Registering application alpha-self-diagnosis with eureka with status UP
+2017-10-18 09:06:33,789 INFO [com.netflix.discovery.DiscoveryClient$3:1279] Saw local status change event StatusChangeEvent [timestamp=1508288793789, current=UP, previous=STARTING]
+2017-10-18 09:06:33,794 INFO [com.netflix.discovery.DiscoveryClient:795] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092: registering service...
+2017-10-18 09:06:33,982 INFO [com.netflix.discovery.DiscoveryClient:804] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092 - registration status: 204
+2017-10-18 09:06:34,099 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:201] Tomcat started on port(s): 19092 (http)
+2017-10-18 09:06:34,103 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaAutoServiceRegistration:117] Updating port to 19092
+2017-10-18 09:06:34,135 INFO [org.springframework.boot.StartupInfoLogger:57] Started AlphaApplication in 23.141 seconds (JVM running for 23.783)
+2017-10-18 09:06:38,544 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:38,545 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:38,545 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:38,545 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:38,546 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:38,546 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:06:38,546 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:38,559 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:06:43,562 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:43,562 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:43,563 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:43,563 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:43,563 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:43,564 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:06:43,564 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:43,578 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:06:48,579 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:48,579 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:48,579 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:48,579 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:48,580 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:48,580 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:06:48,580 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:48,583 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:06:53,586 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:53,586 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:53,586 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:53,587 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:53,587 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:53,587 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:06:53,587 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:53,595 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:06:58,596 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:06:58,596 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:06:58,596 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:06:58,600 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:06:58,600 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:06:58,601 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:06:58,601 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:06:58,604 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:07:03,607 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:07:03,607 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:07:03,608 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:07:03,608 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:07:03,608 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:07:03,608 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: false
+2017-10-18 09:07:03,608 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:07:03,658 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:10:04,748 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017-10-18 09:10:04,749 INFO [org.springframework.web.servlet.FrameworkServlet:489] FrameworkServlet 'dispatcherServlet': initialization started
+2017-10-18 09:10:04,807 INFO [org.springframework.web.servlet.FrameworkServlet:508] FrameworkServlet 'dispatcherServlet': initialization completed in 58 ms
+2017-10-18 09:10:05,150 INFO [com.alibaba.druid.pool.DruidDataSource:715] {dataSource-1} inited
+2017-10-18 09:10:05,709 ERROR [org.apache.juli.logging.DirectJDKLog:181] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
+java.lang.NullPointerException: null
+	at java.lang.String.concat(String.java:2027)
+	at com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo.<init>(DiagnosisResultVo.java:69)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl.showDiagnosisResult(DiagnosisServiceImpl.java:231)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl$$FastClassBySpringCGLIB$$d817ae37.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:738)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:99)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:282)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:96)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:673)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl$$EnhancerBySpringCGLIB$$dbd22cd6.showDiagnosisResult(<generated>)
+	at com.alpha.self.diagnosis.controller.DiagnosisController.showDiagnosisResult(DiagnosisController.java:192)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alpha.commons.config.filter.CorsFilter.doFilterInternal(CorsFilter.java:30)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:108)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1457)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+2017-10-18 09:11:33,234 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:11:34,313 ERROR [org.apache.juli.logging.DirectJDKLog:181] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
+java.lang.NullPointerException: null
+	at java.lang.String.concat(String.java:2027)
+	at com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo.<init>(DiagnosisResultVo.java:69)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl.showDiagnosisResult(DiagnosisServiceImpl.java:231)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl$$FastClassBySpringCGLIB$$d817ae37.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:738)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:157)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:99)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:282)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:96)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:179)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:673)
+	at com.alpha.self.diagnosis.service.impl.DiagnosisServiceImpl$$EnhancerBySpringCGLIB$$dbd22cd6.showDiagnosisResult(<generated>)
+	at com.alpha.self.diagnosis.controller.DiagnosisController.showDiagnosisResult(DiagnosisController.java:192)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:133)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:97)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:827)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:738)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:85)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:967)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:901)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:872)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:661)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:846)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:742)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:231)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alibaba.druid.support.http.WebStatFilter.doFilter(WebStatFilter.java:123)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at com.alpha.commons.config.filter.CorsFilter.doFilterInternal(CorsFilter.java:30)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:99)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:108)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.HiddenHttpMethodFilter.doFilterInternal(HiddenHttpMethodFilter.java:81)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:197)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:107)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:193)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:166)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:198)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:96)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:478)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:140)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:80)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:87)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:342)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:799)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:868)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1457)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+2017-10-18 09:16:33,242 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:21:33,250 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:26:33,256 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:31:33,263 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:35:08,481 INFO [org.springframework.boot.SpringApplication:597] The following profiles are active: core
+2017-10-18 09:35:08,526 INFO [org.springframework.context.support.AbstractApplicationContext:583] Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4565a70a: startup date [Wed Oct 18 09:35:08 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:35:10,279 INFO [org.springframework.cloud.context.scope.GenericScope:263] BeanFactory id=93ea8e31-797c-3bde-a984-b3bfc135cce8
+2017-10-18 09:35:10,333 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:28] 初始化 BasicAnswerProcessor  服务配置
+2017-10-18 09:35:10,346 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'allergicHistoryAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.AllergicHistoryAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\AllergicHistoryAnswerProcessor.class]]
+2017-10-18 09:35:10,347 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'birthProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.BirthProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\BirthProcessor.class]]
+2017-10-18 09:35:10,348 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'liverRenalProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.LiverRenalProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\LiverRenalProcessor.class]]
+2017-10-18 09:35:10,349 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'normalAnswerProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.NormalAnswerProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\NormalAnswerProcessor.class]]
+2017-10-18 09:35:10,350 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'pastmedicalHistoryProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.PastmedicalHistoryProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\PastmedicalHistoryProcessor.class]]
+2017-10-18 09:35:10,351 INFO [org.springframework.beans.factory.support.DefaultListableBeanFactory:828] Overriding bean definition for bean 'weightProcessor' with a different definition: replacing [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]] with [Generic bean: class [com.alpha.self.diagnosis.processor.WeightProcessor]; scope=singleton; abstract=false; lazyInit=false; autowireMode=0; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=null; factoryMethodName=null; initMethodName=null; destroyMethodName=null; defined in file [F:\iebm\workspace\alpha\alpha\alpha-self-diagnosis\target\classes\com\alpha\self\diagnosis\processor\WeightProcessor.class]]
+2017-10-18 09:35:10,353 INFO [com.alpha.self.diagnosis.processor.spring.BeanScannerConfigurer:32] 初始化 BasicAnswerProcessor 完成
+2017-10-18 09:35:10,473 INFO [org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor:155] JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+2017-10-18 09:35:10,561 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'com.alpha.server.rpc.user.SelfDiagnosisFeign' of type [org.springframework.cloud.netflix.feign.FeignClientFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:35:10,857 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$6de465df] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:35:11,157 INFO [org.springframework.context.support.PostProcessorRegistrationDelegate$BeanPostProcessorChecker:325] Bean 'org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$89fe68dc] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2017-10-18 09:35:11,980 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:89] Tomcat initialized with port(s): 19092 (http)
+2017-10-18 09:35:12,003 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting service [Tomcat]
+2017-10-18 09:35:12,005 INFO [org.apache.juli.logging.DirectJDKLog:179] Starting Servlet Engine: Apache Tomcat/8.5.20
+2017-10-18 09:35:12,226 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring embedded WebApplicationContext
+2017-10-18 09:35:12,226 INFO [org.springframework.boot.context.embedded.EmbeddedWebApplicationContext:276] Root WebApplicationContext: initialization completed in 3700 ms
+2017-10-18 09:35:12,867 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'dispatcherServlet' to [/]
+2017-10-18 09:35:12,870 INFO [org.springframework.boot.web.servlet.ServletRegistrationBean:190] Mapping servlet: 'com.alpha.commons.config.servlet.DruidStatViewServlet' to [/druid/*]
+2017-10-18 09:35:12,880 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'characterEncodingFilter' to: [/*]
+2017-10-18 09:35:12,881 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+2017-10-18 09:35:12,883 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'httpPutFormContentFilter' to: [/*]
+2017-10-18 09:35:12,883 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:258] Mapping filter: 'requestContextFilter' to: [/*]
+2017-10-18 09:35:12,883 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'com.alpha.commons.config.filter.CorsFilter' to urls: [/*]
+2017-10-18 09:35:12,884 INFO [org.springframework.boot.web.servlet.AbstractFilterRegistrationBean:271] Mapping filter: 'druidWebStatFilter' to urls: [/*]
+2017-10-18 09:35:12,918 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:27] DiagnosisContextListener contextInitialized starting...
+2017-10-18 09:35:12,924 INFO [com.alpha.self.diagnosis.processor.BasicAnswerProcessorAdaptor:154] 6 processor will be register.
+2017-10-18 09:35:13,313 INFO [com.alpha.commons.config.DruidConfiguration$Druid:66] DruidConfiguration init completed................
+2017-10-18 09:35:15,562 INFO [com.alpha.self.diagnosis.listener.DiagnosisContextListener:34] DiagnosisContextListener contextInitialized completed
+2017-10-18 09:35:17,398 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:35:17,399 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:35:17,410 WARN [com.netflix.config.sources.URLConfigurationSource:121] No URLs will be polled as dynamic configuration sources.
+2017-10-18 09:35:17,411 INFO [com.netflix.config.sources.URLConfigurationSource:122] To enable URLs as dynamic configuration sources, define System property archaius.configurationSource.additionalUrls or make config.properties available on classpath.
+2017-10-18 09:35:17,979 INFO [org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter:534] Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@4565a70a: startup date [Wed Oct 18 09:35:08 CST 2017]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@34129c78
+2017-10-18 09:35:18,137 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/concsymp],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.diagnosisStart(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:35:18,139 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/weight/{userId}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.weightSearch(java.lang.Long)
+2017-10-18 09:35:18,139 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/pastmedicalHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.pastmedicalHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:35:18,140 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/data/search/allergicHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DataSearchController.allergicHistorySearch(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:35:18,146 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.getOutcome(java.lang.Long)
+2017-10-18 09:35:18,146 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/start],methods=[POST],consumes=[application/json || application/x-www-form-urlencoded]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisStart(java.lang.Long,java.lang.Integer)
+2017-10-18 09:35:18,147 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/basic/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:35:18,147 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/outcome/confirm],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.confirmOutcome(java.lang.Long,java.lang.String)
+2017-10-18 09:35:18,148 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/diseaseHistory],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diseaseHistory(com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo)
+2017-10-18 09:35:18,149 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/medicine/next],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.diagnosisMedicineNext(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo)
+2017-10-18 09:35:18,149 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/showResult],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.showDiagnosisResult(com.alpha.self.diagnosis.pojo.vo.BasicRequestVo)
+2017-10-18 09:35:18,150 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/diagnosis/queryBasicQuestion],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.DiagnosisController.queryBasicQuestion(com.alpha.user.controller.req.vo.PatientInfo)
+2017-10-18 09:35:18,155 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/info],methods=[GET]}" onto public java.lang.String com.alpha.self.diagnosis.controller.MainController.test()
+2017-10-18 09:35:18,156 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(java.lang.Integer)
+2017-10-18 09:35:18,157 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/test/question2],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.medicineQuestion(com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo,java.lang.String)
+2017-10-18 09:35:18,157 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/getMedicalRecord],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.MainController.getMedicalRecord()
+2017-10-18 09:35:18,161 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/diseaseList],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.diseaseList(com.alpha.self.diagnosis.pojo.vo.SearchRequestVo)
+2017-10-18 09:35:18,162 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/treatscheme/get],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.self.diagnosis.controller.TreatSchemeController.treatScheme(java.lang.String,java.lang.String)
+2017-10-18 09:35:18,164 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/feedback/put],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.FeedBackController.authorization(com.alpha.server.rpc.user.pojo.UserFeedback)
+2017-10-18 09:35:18,166 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/query/{cardNo}],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.query(java.lang.String)
+2017-10-18 09:35:18,167 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/auth],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.authorization(java.lang.String,java.lang.Integer,java.lang.Integer)
+2017-10-18 09:35:18,167 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/user/save],methods=[POST]}" onto public com.alpha.commons.web.ResponseMessage com.alpha.user.controller.UserController.saveUserInfo(com.alpha.user.pojo.vo.UserInfoRequestVo)
+2017-10-18 09:35:18,170 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+2017-10-18 09:35:18,171 INFO [org.springframework.web.servlet.handler.AbstractHandlerMethodMapping$MappingRegistry:543] Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+2017-10-18 09:35:18,317 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:35:18,318 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:35:18,359 INFO [org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver:273] Detected @ExceptionHandler methods in controllerEnhancerment
+2017-10-18 09:35:18,443 INFO [org.springframework.web.servlet.handler.AbstractUrlHandlerMapping:362] Mapped URL path [/**/favicon.ico] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+2017-10-18 09:35:20,388 INFO [org.springframework.jmx.export.MBeanExporter:431] Registering beans for JMX exposure on startup
+2017-10-18 09:35:20,391 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'dataSource' has been autodetected for JMX exposure
+2017-10-18 09:35:20,407 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'environmentManager' has been autodetected for JMX exposure
+2017-10-18 09:35:20,409 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'configurationPropertiesRebinder' has been autodetected for JMX exposure
+2017-10-18 09:35:20,411 INFO [org.springframework.jmx.export.MBeanExporter:916] Bean with name 'refreshScope' has been autodetected for JMX exposure
+2017-10-18 09:35:20,417 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'environmentManager': registering with JMX server as MBean [org.springframework.cloud.context.environment:name=environmentManager,type=EnvironmentManager]
+2017-10-18 09:35:20,436 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'refreshScope': registering with JMX server as MBean [org.springframework.cloud.context.scope.refresh:name=refreshScope,type=RefreshScope]
+2017-10-18 09:35:20,466 INFO [org.springframework.jmx.export.MBeanExporter:678] Located managed bean 'configurationPropertiesRebinder': registering with JMX server as MBean [org.springframework.cloud.context.properties:name=configurationPropertiesRebinder,context=4565a70a,type=ConfigurationPropertiesRebinder]
+2017-10-18 09:35:20,479 INFO [org.springframework.jmx.export.MBeanExporter:671] Located MBean 'dataSource': registering with JMX server as MBean [com.alibaba.druid.pool:name=dataSource,type=DruidDataSource]
+2017-10-18 09:35:20,686 INFO [org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup:343] Starting beans in phase 0
+2017-10-18 09:35:20,703 INFO [org.springframework.cloud.netflix.eureka.InstanceInfoFactory:70] Setting initial instance status as: STARTING
+2017-10-18 09:35:20,828 INFO [com.netflix.discovery.DiscoveryClient:344] Initializing Eureka in region us-east-1
+2017-10-18 09:35:21,329 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:70] Using JSON encoding codec LegacyJacksonJson
+2017-10-18 09:35:21,330 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:71] Using JSON decoding codec LegacyJacksonJson
+2017-10-18 09:35:21,508 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:80] Using XML encoding codec XStreamXml
+2017-10-18 09:35:21,509 INFO [com.netflix.discovery.provider.DiscoveryJerseyProvider:81] Using XML decoding codec XStreamXml
+2017-10-18 09:35:22,290 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:35:22,413 INFO [com.netflix.discovery.DiscoveryClient:920] Disable delta property : false
+2017-10-18 09:35:22,414 INFO [com.netflix.discovery.DiscoveryClient:921] Single vip registry refresh property : null
+2017-10-18 09:35:22,414 INFO [com.netflix.discovery.DiscoveryClient:922] Force full registry fetch : false
+2017-10-18 09:35:22,414 INFO [com.netflix.discovery.DiscoveryClient:923] Application is null : false
+2017-10-18 09:35:22,414 INFO [com.netflix.discovery.DiscoveryClient:924] Registered Applications size is zero : true
+2017-10-18 09:35:22,415 INFO [com.netflix.discovery.DiscoveryClient:926] Application version is -1: true
+2017-10-18 09:35:22,415 INFO [com.netflix.discovery.DiscoveryClient:1009] Getting all instance registry info from the eureka server
+2017-10-18 09:35:22,610 INFO [com.netflix.discovery.DiscoveryClient:1018] The response status is 200
+2017-10-18 09:35:22,613 INFO [com.netflix.discovery.DiscoveryClient:1244] Starting heartbeat executor: renew interval is: 5
+2017-10-18 09:35:22,617 INFO [com.netflix.discovery.InstanceInfoReplicator:59] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2017-10-18 09:35:22,622 INFO [com.netflix.discovery.DiscoveryClient:425] Discovery Client initialized at timestamp 1508290522622 with initial instances count: 1
+2017-10-18 09:35:22,738 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaServiceRegistry:40] Registering application alpha-self-diagnosis with eureka with status UP
+2017-10-18 09:35:22,738 INFO [com.netflix.discovery.DiscoveryClient$3:1279] Saw local status change event StatusChangeEvent [timestamp=1508290522738, current=UP, previous=STARTING]
+2017-10-18 09:35:22,742 INFO [com.netflix.discovery.DiscoveryClient:795] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092: registering service...
+2017-10-18 09:35:22,803 INFO [com.netflix.discovery.DiscoveryClient:804] DiscoveryClient_ALPHA-SELF-DIAGNOSIS/PC-20160606PUVI:alpha-self-diagnosis:19092 - registration status: 204
+2017-10-18 09:35:22,960 INFO [org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer:201] Tomcat started on port(s): 19092 (http)
+2017-10-18 09:35:22,963 INFO [org.springframework.cloud.netflix.eureka.serviceregistry.EurekaAutoServiceRegistration:117] Updating port to 19092
+2017-10-18 09:35:22,974 INFO [org.springframework.boot.StartupInfoLogger:57] Started AlphaApplication in 16.905 seconds (JVM running for 17.73)
+2017-10-18 09:35:45,944 INFO [org.apache.juli.logging.DirectJDKLog:179] Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017-10-18 09:35:45,944 INFO [org.springframework.web.servlet.FrameworkServlet:489] FrameworkServlet 'dispatcherServlet': initialization started
+2017-10-18 09:35:46,001 INFO [org.springframework.web.servlet.FrameworkServlet:508] FrameworkServlet 'dispatcherServlet': initialization completed in 57 ms
+2017-10-18 09:35:46,449 INFO [com.alibaba.druid.pool.DruidDataSource:715] {dataSource-1} inited
+2017-10-18 09:40:22,425 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:45:22,432 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:50:22,439 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-18 09:55:22,445 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration

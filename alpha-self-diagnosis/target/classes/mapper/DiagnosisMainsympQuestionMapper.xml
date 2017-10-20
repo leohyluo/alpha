@@ -26,18 +26,22 @@
 
     <!-- 查询主症状下的未回答问题 -->
     <select id="queryUntreatedQuestion" resultType="DataRecord" parameterType="HashMap">
-      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC
+      select * from diagnosis_mainsymp_question where is_show>0 and main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC
+    </select>
+    <!-- 查询主症状下的所有自动计算问题 -->
+    <select id="queryAutoQuestion" resultType="DataRecord" parameterType="HashMap">
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and is_show=0
     </select>
 
     <!--查询下一个问题 -->
     <select id="getDiagnosisMainsympQuestion" resultMap="diagnosisMainsympQuestion" parameterType="HashMap">
-      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC limit 1
+      select * from diagnosis_mainsymp_question where is_show>0 and  main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC limit 1
     </select>
 
     <!--查询单个问题 -->
     <select id="getQuestionByCode" resultType="DataRecord" parameterType="HashMap">
       select dmq.id,dmq.question_code,dmq.main_symp_code,dmq.title,dmq.popu_title,dmq.gender,dmq.min_age,dmq.max_age,dmq.default_order,dmq.question_type,dms.symp_name,dms.popu_name
-      from diagnosis_mainsymp_question dmq left join diagnosis_main_symptoms dms on(dms.symp_code=dmq.main_symp_code)
+      from diagnosis_mainsymp_question dmq INNER join diagnosis_main_symptoms dms on(dms.symp_code=dmq.main_symp_code)
       where dmq.question_code=#{questionCode}
     </select>
     <!--查询多个问题 -->
@@ -50,7 +54,7 @@
     <!--查询疾病下每个问题对应的答案总数量 -->
     <select id="queryAnswerCount" resultType="DataRecord" parameterType="HashMap">
       select dmq.*,dqa.disease_code,count(dqa.answer_code) answer_total from  diagnosis_mainsymp_question dmq
-        left join diagnosis_question_answer dqa on(dmq.question_code=dqa.question_code)
+        INNER join diagnosis_question_answer dqa on(dmq.question_code=dqa.question_code)
         where dmq.main_symp_code= #{mainSympCode}
         group by dqa.question_code,dqa.disease_code
         order by answer_total desc

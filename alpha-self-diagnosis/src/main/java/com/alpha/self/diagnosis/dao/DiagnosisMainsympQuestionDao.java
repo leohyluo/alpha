@@ -28,6 +28,14 @@ public interface DiagnosisMainsympQuestionDao extends IBaseDao<DiagnosisMainsymp
     List<DiagnosisMainsympQuestion> listNextAllQuestion(String mainSympCode, int defaultOrder);
 
     /**
+     * 查询主症状的自动计算问题
+     *
+     * @param mainSympCode
+     * @return
+     */
+    List<DiagnosisMainsympQuestion> listAutoQuestion(String mainSympCode);
+
+    /**
      * 查询主症状的下一个问题
      *
      * @param mainSympCode

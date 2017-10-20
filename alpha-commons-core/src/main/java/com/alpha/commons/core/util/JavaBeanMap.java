@@ -1,8 +1,7 @@
 package com.alpha.commons.core.util;
 
-import com.alpha.commons.core.sql.dto.JavaBean;
 import org.apache.commons.beanutils.PropertyUtilsBean;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,39 +41,53 @@ public class JavaBeanMap {
     }
 
     // map 转成成 Javabean
-    public static void convertMap2JavaBean(Map map, Object obj) {
+    public static <T> Object convertMap2JavaBean(Map map, Class clz) {
+        if (map == null)
+            return null;
         try {
             //拿到所有属性
-            Class clz = obj.getClass();
+            Object object = clz.newInstance();
             Field[] fs = clz.getDeclaredFields();
             for (Field f : fs) {
                 try {
+                    Column column = f.getAnnotation(Column.class);
                     String propertyname = f.getName();
-                    if (map.containsKey(propertyname)) {
+                    String key = f.getName();
+                    if (column != null) {
+                        key = column.name();
+                    }
+                    if (map.containsKey(key)) {
                         String methodname = "set" + propertyname.substring(0, 1).toUpperCase() + propertyname.substring(1);
                         //拿到 set 方法
-                        Method mset = obj.getClass().getDeclaredMethod(methodname, f.getType());
+                        Method mset = object.getClass().getDeclaredMethod(methodname, f.getType());
                         //String getmethodname="get"+propertyname.substring(0,1).toUpperCase()+propertyname.substring(1);
                         // 拿到 get 方法
                         //Method mget=obj.getClass().getDeclaredMethod(getmethodname);
                         //拿到 map 中的值
-                        Object value = map.get(propertyname);
-                        Long temp = null;
-                        if (value != null && value.getClass() == Integer.class) {
-                            Integer re = (Integer) value;
-                            temp = Long.valueOf(re + "");
-                            mset.invoke(obj, temp);
-                        } else {
-                            mset.invoke(obj, value);
+                        Object value = map.get(key);
+                        Object temp = null;
+                        if (value != null && f.getType() == Integer.class) {
+                            temp = Integer.valueOf(value + "");
+                            mset.invoke(object, temp);
+                        } else if (value != null && f.getType() == Long.class) {
+                            temp = Long.valueOf(value + "");
+                            mset.invoke(object, temp);
+                        } else if (value != null) {
+//                                LOGGER.info("{},{},{}", value, f.getType(), mset.getName());
+                            Class ty = f.getType();
+                            value = ty.cast(value);
+                            mset.invoke(object, value);
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            return object;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     /**
@@ -82,7 +95,7 @@ public class JavaBeanMap {
      * @param
      */
     public static List convertListToJavaBean(List arrayList, Class clz) {
-        if(arrayList==null||arrayList.size()==0)
+        if (arrayList == null || arrayList.size() == 0)
             return arrayList;
         List list = new ArrayList();
         for (Object objTemp : arrayList) {
@@ -136,7 +149,7 @@ public class JavaBeanMap {
 
     // map 转成成 Javabean
     public static void convertMapToJavaBean(Map map, Object object) {
-        if(map==null)
+        if (map == null)
             return;
         try {
             //拿到所有属性

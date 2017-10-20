@@ -1,5 +1,6 @@
 package com.alpha.commons.config;
 
+import com.alibaba.druid.filter.Filter;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -20,6 +21,10 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 @Configuration
 public class DruidConfiguration {
@@ -34,6 +39,9 @@ public class DruidConfiguration {
 	
 	@Value("${db.name}")
 	private String dbName;
+
+	@Value("${db.public-key}")
+	private String publicKey;
 	
 	//@Value("${db.encrypt.flag}")
 	private String encryptFlag;
@@ -43,30 +51,18 @@ public class DruidConfiguration {
 	class Druid extends DruidConfiguration {
 		
 		@Bean(name = "dataSource")
-		@ConfigurationProperties("spring.datasource.druid")
-		public DruidDataSource dataSource(DataSourceProperties properties) {
-			
-			if("1".equals(encryptFlag)) {
-				/*properties.setUsername(properties.getUsername());
-				properties.setPassword(properties.getPassword());
-				
-				StringBuffer sb = new StringBuffer("jdbc:mysql://");
-				sb.append(Encrypt.dCode(ip.getBytes())).append(":").append(port).append("/")
-				.append(Encrypt.dCode(dbName.getBytes()))
-				.append("?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true");
-				
-				String url = sb.toString();
-				properties.setUrl(url);
-				*/
-			}
-			
+//		@ConfigurationProperties("spring.datasource.druid")
+		public DruidDataSource dataSource(DataSourceProperties properties) throws SQLException {
 			DruidDataSource druidDataSource = (DruidDataSource) properties.initializeDataSourceBuilder().type(DruidDataSource.class).build();
+			druidDataSource.setFilters("config");
+			druidDataSource.addConnectionProperty("config.decrypt", "true");
+			druidDataSource.addConnectionProperty("config.decrypt.key", publicKey);
+			druidDataSource.addFilters("com.alibaba.druid.filter.stat.StatFilter");
 			DatabaseDriver databaseDriver = DatabaseDriver.fromJdbcUrl(properties.determineUrl());
 			String validationQuery = databaseDriver.getValidationQuery();
 			if(validationQuery != null) {
 				druidDataSource.setValidationQuery(validationQuery);
 			}
-			System.out.println("DruidConfiguration init completed................");
 			logger.info("DruidConfiguration init completed................");
 			return druidDataSource;
 		}

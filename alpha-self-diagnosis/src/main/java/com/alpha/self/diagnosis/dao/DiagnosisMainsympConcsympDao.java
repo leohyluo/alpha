@@ -4,7 +4,6 @@ import com.alpha.commons.core.dao.IBaseDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -13,12 +12,20 @@ import java.util.List;
 public interface DiagnosisMainsympConcsympDao extends IBaseDao<DiagnosisMainsympConcsymp, Long> {
 
     /**
-     * 查询伴随症状
+     * 查询伴随症状，疾病关系
      *
      * @param mainSympCode
      * @return
      */
     List<DiagnosisMainsympConcsymp> listDiagnosisMainsympConcsymp(String mainSympCode);
+
+    /**
+     * 查询伴随症状
+     *
+     * @param mainSympCode
+     * @return
+     */
+    List<DiagnosisMainsympConcsymp> listConcsymp(String mainSympCode);
 
     /**
      * 查询伴随症状

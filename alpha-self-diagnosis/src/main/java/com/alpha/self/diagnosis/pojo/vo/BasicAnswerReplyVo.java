@@ -2,52 +2,52 @@ package com.alpha.self.diagnosis.pojo.vo;
 
 public class BasicAnswerReplyVo {
 
-	
-	/**
+
+    /**
      * 答案编码
      */
-	private String answerCode;
+    private String answerCode;
 
-	/**
+    /**
      * 问题内容
      */
-	private String content;
-	
-	private String answerValue;
-	
-	private String answerTitle;
+    private String content;
 
-	public String getAnswerCode() {
-		return answerCode;
-	}
+    private String answerValue;
 
-	public void setAnswerCode(String answerCode) {
-		this.answerCode = answerCode;
-	}
+    private String answerTitle;
 
-	public String getContent() {
-		return content;
-	}
+    public String getAnswerCode() {
+        return answerCode;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setAnswerCode(String answerCode) {
+        this.answerCode = answerCode;
+    }
 
-	public String getAnswerValue() {
-		return answerValue;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setAnswerValue(String answerValue) {
-		this.answerValue = answerValue;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public String getAnswerTitle() {
-		return answerTitle;
-	}
+    public String getAnswerValue() {
+        return answerValue;
+    }
 
-	public void setAnswerTitle(String answerTitle) {
-		this.answerTitle = answerTitle;
-	}
+    public void setAnswerValue(String answerValue) {
+        this.answerValue = answerValue;
+    }
 
-	
+    public String getAnswerTitle() {
+        return answerTitle;
+    }
+
+    public void setAnswerTitle(String answerTitle) {
+        this.answerTitle = answerTitle;
+    }
+
+
 }

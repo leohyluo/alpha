@@ -1,7 +1,6 @@
 package com.alpha.self.diagnosis.dao.impl;
 
 import com.alpha.commons.core.dao.impl.BaseDao;
-import com.alpha.commons.core.sql.SQLQuery;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
 import com.alpha.self.diagnosis.dao.DiagnosisQuestionAnswerDao;
@@ -37,12 +36,12 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
     /**
      * 根据问题编号查询所有的答案
      *
-     * @param questionCode
+     * @param questionCodes
      * @return
      */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode) {
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes) {
         Map<String, Object> params = new HashMap<>();
-        params.put("questionCode", questionCode);
+        params.put("questionCodes", questionCodes);
         List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryDiagnosisQuestionAnswer", params);
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
@@ -81,6 +80,7 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
     }
+
     /**
      * 根据答案编号查询答案
      *

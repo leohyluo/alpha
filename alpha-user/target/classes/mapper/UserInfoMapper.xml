@@ -29,7 +29,8 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
         <result column="in_type" jdbcType="TINYINT" property="inType" />
-
+		<result column="department" jdbcType="VARCHAR" property="department" />
+        <result column="cure_time" jdbcType="TIMESTAMP" property="cureTime" />
     </resultMap>
 
     <!-- 根据条件查询用户信息-->
@@ -39,26 +40,28 @@
 
     <!-- 根据条件查询用户信息-->
     <select id="getUserInfoByExternalUserId" resultMap="userInfo" parameterType="HashMap">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time
         from user_info where external_user_id=#{externalUserId} and in_type=#{inType} LIMIT 1
     </select>
     
     <!-- 根据条件查询用户信息-->
     <select id="queryByUserId" resultMap="userInfo" parameterType="java.lang.Long">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time
         from user_info where user_id=#{userId}
     </select>
     
     <!-- 根据条件查询用户信息-->
-    <select id="find" resultMap="userInfo" parameterType="HashMap">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type
-        from user_info
+    <select id="find" resultType="DataRecord" parameterType="HashMap">
+        SELECT * from user_info
         <where>
         	<if test="userName != null">
-        		user_name = #{userName}
+        		and user_name = #{userName}
         	</if>
         	<if test="userId != null">
-        		user_id = #{userId}
+        		and user_id = #{userId}
+        	</if>
+        	<if test="idcard != null">
+        		and idcard = #{idcard}
         	</if>
         </where>
     </select>

@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: alpha-self-diagnosis
-  profiles:
-    active: local  
-server:
-  port: 19092
-

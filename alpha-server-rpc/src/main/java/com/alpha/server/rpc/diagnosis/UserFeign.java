@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(name = "alpha-user", fallbackFactory = SelfDiagnosisFallbackFactory.class)
 public interface UserFeign {
 
-	@RequestMapping(value = "/user/auth")
-	public String Authorization();
+    @RequestMapping(value = "/user/auth")
+    public String Authorization();
 
-	@RequestMapping(value = "/user/get")
-	public UserInfo getUserInfo();
+    @RequestMapping(value = "/user/get")
+    public UserInfo getUserInfo();
 
 }

@@ -2,9 +2,11 @@ package com.alpha.self.diagnosis.utils;
 
 import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisOutcome;
-import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -13,37 +15,44 @@ import java.util.*;
  */
 public class MedicineSortUtil {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(MedicineSortUtil.class);
 
     /**
      * 计算答案权重，并排序
      *
      * @param dqAnswers
      */
-    public static LinkedHashSet<IAnswerVo> sortAnswer(List<DiagnosisQuestionAnswer> dqAnswers) {
-
+    public static LinkedHashSet<IAnswerVo> sortAnswer(List<DiagnosisQuestionAnswer> dqAnswers, List<UserDiagnosisOutcome> userDiagnosisOutcomes) {
+        userDiagnosisOutcomes = MedicineSortUtil.specUserDiagnosisOutcome(userDiagnosisOutcomes);//根据特异性重新计算权重
+        MedicineSortUtil.sortUserDiagnosisOutcome(userDiagnosisOutcomes);//疾病排序
+        UserDiagnosisOutcome udo = null;
+        if (userDiagnosisOutcomes != null && userDiagnosisOutcomes.size() > 0) {
+            udo = userDiagnosisOutcomes.get(0);
+            LOGGER.info("首选疾病：{}", udo.getDiseaseName());
+        }
         //计算问题权重
         //          1、查询类型为101的 的所有问题
         //2、取出所有的特异性疾病，分为三组，正、空、反
         //3、每组进行权重计算，问题权重+答案权重，正向排序；
         //4、过滤重复，返回答案
-
         //分特异性 正、空、反
         TreeMap<Integer, Set<DiagnosisQuestionAnswer>> answerSpecMap = new TreeMap<>();
-        Set<String> questionCodes = new HashSet<>();
         for (DiagnosisQuestionAnswer dqa : dqAnswers) {
             Set<DiagnosisQuestionAnswer> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<>() : answerSpecMap.get(dqa.getAnswerSpec());
             specSet.add(dqa);
             answerSpecMap.put(dqa.getAnswerSpec(), specSet);
-            questionCodes.add(dqa.getQuestionCode());
         }
         //排序
         answerSpecMap = MedicineSortUtil.sortAnswerSpecMap(answerSpecMap);
-
         //计算权重
         for (Map.Entry<Integer, Set<DiagnosisQuestionAnswer>> entry : answerSpecMap.entrySet()) {
             Set<DiagnosisQuestionAnswer> dqAnswerSet = entry.getValue();
             for (DiagnosisQuestionAnswer dqAnswer : dqAnswerSet) {
-                dqAnswer.setWeightValue(dqAnswer.getQuestionWeight() * dqAnswer.getWeight());
+                if (udo != null && dqAnswer.getDiseaseCode().equals(udo.getDiseaseCode())) {
+                    dqAnswer.setWeightValue(dqAnswer.getWeight() + 10000);//首选疾病权重
+                } else {
+                    dqAnswer.setWeightValue(dqAnswer.getWeight());
+                }
             }
             //答案排序
             dqAnswerSet = MedicineSortUtil.sortAnswer(dqAnswerSet);
@@ -113,6 +122,62 @@ public class MedicineSortUtil {
     }
 
     /**
+     * 伴随症状排序
+     *
+     * @param dmcs
+     * @return
+     */
+    public static void sortDiagnosisMainsympConcsymp(List<DiagnosisMainsympConcsymp> dmcs) {
+        Collections.sort(dmcs, new Comparator<DiagnosisMainsympConcsymp>() {
+            @Override
+            public int compare(DiagnosisMainsympConcsymp o1, DiagnosisMainsympConcsymp o2) {
+                return (int) ((o2.getSimilarity() - o1.getSimilarity()) * 100);
+            }
+        });
+    }
+
+    /**
+     * 重新计算权重
+     *
+     * @param userDiagnosisOutcomes
+     */
+    public static List<UserDiagnosisOutcome> specUserDiagnosisOutcome(List<UserDiagnosisOutcome> userDiagnosisOutcomes) {
+        sortUserDiagnosisOutcome(userDiagnosisOutcomes);
+        TreeMap<Integer, List<UserDiagnosisOutcome>> udoMap = new TreeMap<>();
+        for (UserDiagnosisOutcome udo : userDiagnosisOutcomes) {
+            List<UserDiagnosisOutcome> udos = udoMap.get(udo.getAnswerSpec()) == null ? new ArrayList<>() : udoMap.get(udo.getAnswerSpec());
+            udos.add(udo);
+            udoMap.put(udo.getAnswerSpec(), udos);
+        }
+        //排序
+        TreeMap<Integer, List<UserDiagnosisOutcome>> sortMap = new TreeMap<>(new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o1 - o2;
+            }
+        });
+        sortMap.putAll(udoMap);
+        List<UserDiagnosisOutcome> udos = new ArrayList<>();
+        Iterator iterator = sortMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry entry1 = (Map.Entry) iterator.next();
+            List<UserDiagnosisOutcome> val1 = (List<UserDiagnosisOutcome>) entry1.getValue();
+            udos.addAll(val1);
+            while (iterator.hasNext()) {
+                Map.Entry entry2 = (Map.Entry) iterator.next();
+                List<UserDiagnosisOutcome> val2 = (List<UserDiagnosisOutcome>) entry2.getValue();
+                for (UserDiagnosisOutcome udo : val2) {
+                    udo.setWeight(udo.getWeight() + val1.get(0).getWeight());
+                }
+                udos.addAll(val2);
+            }
+        }
+        return udos;
+    }
+
+    /**
+     * 根据权重排序
+     *
      * @param userDiagnosisOutcomes
      */
     public static void sortUserDiagnosisOutcome(List<UserDiagnosisOutcome> userDiagnosisOutcomes) {
@@ -129,21 +194,19 @@ public class MedicineSortUtil {
         });
     }
 
-    public static void sortMedicineQuestionVoByAnswerWeight(List<MedicineQuestionVo> questionVos) {
-        Collections.sort(questionVos, new Comparator<MedicineQuestionVo>() {
-            @Override
-            public int compare(MedicineQuestionVo o1, MedicineQuestionVo o2) {
-                return (int) (o2.getAnswerWeight() - o2.getAnswerWeight());
+    public static Double sortDouble(Double... similarity) {
+        Double temp = 0d;
+        int size = similarity.length;
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - 1 - i; j++) {
+                //交换两数位置
+                if (similarity[j] < similarity[j + 1]) {
+                    temp = similarity[j];
+                    similarity[j] = similarity[j + 1];
+                    similarity[j + 1] = temp;
+                }
             }
-        });
-    }
-
-    public static void sortMedicineQuestionVoByQuestionWeight(List<MedicineQuestionVo> questionVos) {
-        Collections.sort(questionVos, new Comparator<MedicineQuestionVo>() {
-            @Override
-            public int compare(MedicineQuestionVo o1, MedicineQuestionVo o2) {
-                return (int) (o2.getQuestionWeight() - o2.getQuestionWeight());
-            }
-        });
+        }
+        return similarity[0];
     }
 }

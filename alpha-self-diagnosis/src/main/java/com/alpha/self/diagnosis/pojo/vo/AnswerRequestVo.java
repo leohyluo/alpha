@@ -2,7 +2,7 @@ package com.alpha.self.diagnosis.pojo.vo;
 
 import java.io.Serializable;
 
-public class AnswerRequestVo implements Serializable,IAnswerVo {
+public class AnswerRequestVo implements Serializable, IAnswerVo {
 
 
     private static final long serialVersionUID = 2075278352245483563L;
@@ -17,8 +17,6 @@ public class AnswerRequestVo implements Serializable,IAnswerVo {
      * 问题内容  answerValue
      */
     private String answerTitle;
-
-
 
 
     public AnswerRequestVo() {

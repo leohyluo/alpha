@@ -1,0 +1,33 @@
+2017-10-19 08:00:30,028 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:05:30,036 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:10:30,042 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:15:30,048 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:20:30,054 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:25:30,061 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:30:30,067 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:35:30,073 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:40:30,080 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:42:16,923 INFO [com.alpha.user.service.impl.UserInfoServiceImpl:209] third user is {"gender":2,"idcard":"440921187903124785","birth":"1982-06-28","userName":"赵华华","department":"小儿消化内科","inType":"1","cureTime":"2017-10-19 08:42:16"}
+2017-10-19 08:42:19,414 INFO [com.alpha.user.controller.UserController:43] 为用户授权，获取用户信息，渠道编号: 1 ,{"userId":1012,"externalUserId":"1012","userName":"赵华华","birth":"1982-06-28","gender":2,"department":"小儿消化内科","cureTime":"2017-10-12","idcard":"440921187903124785","phoneNumber":"13432584132","inType":0,"age":"35岁","specialPeriod":"2","pastmedicalHistory":[{"answerValue":"1002","answerTitle":"心律失常病史"},{"answerValue":"1003","answerTitle":"高血压病史"}],"allergicHistory":[{"answerValue":"1002","answerTitle":"心律失常病史"},{"answerValue":"1003","answerTitle":"高血压病史"}],"fertilityType":"1","gestationalAge":"1","feedType":"1","weight":"9.6","otherHospital":null,"otherHospitalCureTime":null,"otherHospitalUseDrug":null,"otherHospitalEffect":null,"otherHospitalDiagnosis":null,"isFirst":"1"}
+2017-10-19 08:42:19,432 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1012 1
+2017-10-19 08:42:19,436 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:45:30,086 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:47:26,818 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1012 1
+2017-10-19 08:47:26,822 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:47:30,671 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1012 1
+2017-10-19 08:47:30,675 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:50:30,092 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:53:01,271 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1980 1
+2017-10-19 08:53:01,276 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:53:07,969 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1980 1
+2017-10-19 08:53:07,973 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:53:17,285 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1980 1
+2017-10-19 08:53:17,289 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:53:21,875 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1980 1
+2017-10-19 08:53:21,878 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:54:59,036 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1012 1
+2017-10-19 08:54:59,043 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:55:20,122 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:75] 生成问诊编号,为导诊做准备: 1012 1
+2017-10-19 08:55:20,127 INFO [com.alpha.self.diagnosis.service.impl.BasicAnswerServiceImpl:23] findByQuestionCode.questionCode is 1000
+2017-10-19 08:55:30,099 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-10-19 08:56:29,126 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:127] 循环获取下一个问题: {"diagnosisId":3436,"inType":1,"userId":"1012"}

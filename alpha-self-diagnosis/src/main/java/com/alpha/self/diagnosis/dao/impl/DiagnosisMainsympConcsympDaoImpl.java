@@ -9,7 +9,10 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xc.xiong on 2017/9/5.
@@ -29,7 +32,7 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
     }
 
     /**
-     * 查询伴随症状
+     * 查询主症状下，疾病的伴随症状
      *
      * @param mainSympCode
      * @return
@@ -38,6 +41,20 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
         Map<String, Object> params = new HashMap<>();
         params.put("mainSympCode", mainSympCode);
         List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.queryDiagnosisMainsympConcsymp", params);
+        List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
+        return dmcs;
+    }
+
+    /**
+     * 查询伴随症状
+     *
+     * @param mainSympCode
+     * @return
+     */
+    public List<DiagnosisMainsympConcsymp> listConcsymp(String mainSympCode) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.queryConcsymp", params);
         List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
         return dmcs;
     }

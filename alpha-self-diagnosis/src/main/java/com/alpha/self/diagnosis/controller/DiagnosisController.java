@@ -1,37 +1,43 @@
 package com.alpha.self.diagnosis.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.alpha.commons.enums.DiseaseType;
+import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
-import com.alpha.self.diagnosis.pojo.vo.AnalysisRequestVo;
-import com.alpha.self.diagnosis.pojo.vo.AnswerRequestVo;
+import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionWithSearchVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicRequestVo;
+import com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo;
 import com.alpha.self.diagnosis.pojo.vo.DiagnosisStartReqeustVo;
+import com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
-import com.alpha.self.diagnosis.pojo.vo.SearchRequestVo;
 import com.alpha.self.diagnosis.service.BasicQuestionService;
+import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
 import com.alpha.self.diagnosis.service.DiagnosisService;
 import com.alpha.self.diagnosis.service.MedicineQuestionService;
-import com.alpha.self.diagnosis.service.SymptomMainService;
+import com.alpha.self.diagnosis.service.UserDiagnosisOutcomeService;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.controller.req.vo.PatientInfo;
 import com.alpha.user.service.UserInfoService;
 
 /**
@@ -51,20 +57,25 @@ public class DiagnosisController {
     @Resource
     private MedicineQuestionService medicineQuestionService;
     @Resource
-    private SymptomMainService symptomMainService;
-    @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserDiagnosisOutcomeService userDiagnosisOutcomeService;
+    @Resource
+    private DiagnosisPastmedicalHistoryService diagnosisPastmedicalHistoryService;
 
     /**
      * 开始问诊，生成问诊编号
      *
      * @return diagnosisId  唯一诊断编号
      */
-    @PostMapping("/start")
-    public ResponseMessage diagnosisStart(@RequestBody DiagnosisStartReqeustVo vo) {
-    	Long userId = vo.getUserId();
-    	Integer inType = vo.getInType();
+    @RequestMapping(value = "/start", method = RequestMethod.POST, consumes = {"application/json", "application/x-www-form-urlencoded"})
+    public ResponseMessage diagnosisStart(DiagnosisStartReqeustVo vo) {
+        Long userId = vo.getUserId();
+        Integer inType = vo.getInType();
         LOGGER.info("生成问诊编号,为导诊做准备: {} {}", userId, inType);
+        if(userId == null) {
+        	return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        }
         BasicQuestionVo firstQuestion = diagnosisService.start(userId, inType);
         return WebUtils.buildSuccessResponseMessage(firstQuestion);
     }
@@ -73,140 +84,182 @@ public class DiagnosisController {
      * 循环获取下一个问题
      * 接受答案信息
      * 如果没有问题编号，从第一个开始
+     *
      * @return diagnosisId  唯一诊断编号
      */
     @PostMapping("/basic/next")
-    public ResponseMessage diagnosisNext(@RequestBody QuestionRequestVo questionVo) {
-    	
-        LOGGER.info("循环获取下一个问题: {}",  JSON.toJSONString(questionVo));
-		if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())) {
-			return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
-		}
+    public ResponseMessage diagnosisNext(QuestionRequestVo questionVo) {
+
+        LOGGER.info("循环获取下一个问题: {}", JSON.toJSONString(questionVo));
+        if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())) {
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        }
         UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(questionVo.getUserId()));
-        if (userInfo==null) {
+        if (userInfo == null) {
             return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
         }
         try {
             IQuestionVo result = null;
-			if (questionVo.getType() == null || questionVo.getType() < 100) {
-				result = basicQuestionService.next(questionVo);
-			} else {
-				result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
-			}
-            LOGGER.info("循环获取下一个问题: 结果{}", JSON.toJSONString(result));
+            if (questionVo.getType() == null || questionVo.getType() < 99) {
+                result = basicQuestionService.next(questionVo);
+            } else if (questionVo.getType() == QuestionEnum.主症状语义分析.getValue()) {
+                result = medicineQuestionService.nextAnalysisByBaidu(questionVo.getDiagnosisId(), questionVo, userInfo);
+            } else {
+                result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            }
             return WebUtils.buildSuccessResponseMessage(result);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return WebUtils.buildResponseMessage(ResponseStatus.EXCEPTION);
-		}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WebUtils.buildResponseMessage(ResponseStatus.EXCEPTION);
+        }
     }
 
-    @PostMapping("/pastmedicalHistory/search")
-    public ResponseMessage pastmedicalHistorySearch(@RequestBody SearchRequestVo diseasevo) {
-    	List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(diseasevo, DiseaseType.PASTMEDICALHISTORY);
-    	return WebUtils.buildSuccessResponseMessage(answerList);
+    /**
+     * 循环获取下一个问题
+     * 接受答案信息
+     * 如果没有问题编号，从第一个开始
+     *
+     * @return diagnosisId  唯一诊断编号
+     */
+    @PostMapping("/medicine/next")
+    public ResponseMessage diagnosisMedicineNext(QuestionRequestVo questionVo) {
+
+        LOGGER.info("循环获取下一个问题: {}", JSON.toJSONString(questionVo));
+        if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())) {
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        }
+        UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(questionVo.getUserId()));
+        if (userInfo == null) {
+            return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+        }
+        try {
+            if (StringUtils.isEmpty(questionVo.getQuestionCode())) {
+                BasicQuestionVo basicQuestionVo = basicQuestionService.getMainSymptomsQuestion(questionVo.getDiagnosisId(), userInfo);
+                return WebUtils.buildSuccessResponseMessage(basicQuestionVo);
+            }
+            IQuestionVo result;
+            if (questionVo.getType() == QuestionEnum.主症状语义分析.getValue()) {
+                result = medicineQuestionService.nextAnalysisByBaidu(questionVo.getDiagnosisId(), questionVo, userInfo);
+            } else {
+                result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            }
+            return WebUtils.buildSuccessResponseMessage(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return WebUtils.buildResponseMessage(ResponseStatus.EXCEPTION);
+        }
+    }
+
+    /**
+     * 获取诊断结果
+     *
+     * @param diagnosisId
+     * @return
+     */
+    @PostMapping("/outcome/get")
+    public ResponseMessage getOutcome(Long diagnosisId) {
+        try {
+            LOGGER.info("获取诊断结果: {}", diagnosisId);
+            if (diagnosisId == null) {
+                return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+            }
+            List<UserDiagnosisOutcome> udos = userDiagnosisOutcomeService.listTop5UserDiagnosisOutcome(diagnosisId);
+            if (udos != null && udos.size() > 0) {
+                return new ResponseMessage(udos, ResponseStatus.SUCCESS);
+            } else {
+                return new ResponseMessage(ResponseStatus.NULL_DIAGNOSIS);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return WebUtils.buildResponseMessage(ResponseStatus.EXCEPTION);
+    }
+
+    /**
+     * 确认诊断结果
+     *
+     * @param diagnosisId
+     * @return
+     */
+    @PostMapping("/outcome/confirm")
+    public ResponseMessage confirmOutcome(Long diagnosisId, String diseaseCode) {
+        try {
+            LOGGER.info("确认诊断结果: {}", diagnosisId, diseaseCode);
+            if (diagnosisId == null || StringUtils.isEmpty(diseaseCode)) {
+                return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+            }
+            userDiagnosisOutcomeService.confirmODiagnosisOutcome(diagnosisId, diseaseCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return WebUtils.buildResponseMessage(ResponseStatus.SUCCESS);
+    }
+
+    /**
+     * 问诊结束后展示就诊信息
+     *
+     * @param basicRequestVo
+     * @return
+     */
+    @PostMapping("/showResult")
+    public ResponseMessage showDiagnosisResult(@RequestBody BasicRequestVo basicRequestVo) {
+        Long userId = basicRequestVo.getUserId();
+        Long diagnosisId = basicRequestVo.getDiagnosisId();
+        if (userId == null || diagnosisId == null) {
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        }
+        DiagnosisResultVo diagnosisResult = diagnosisService.showDiagnosisResult(userId, diagnosisId);
+        return WebUtils.buildSuccessResponseMessage(diagnosisResult);
     }
     
-    @PostMapping("/allergicHistory/search")
-    public ResponseMessage allergicHistorySearch(@RequestBody SearchRequestVo diseasevo) {
-    	List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(diseasevo, DiseaseType.ALLERGICHISTORY);
-    	return WebUtils.buildSuccessResponseMessage(answerList);
+    /**
+     * 查看用户病历-对接页面
+     * @return
+     */
+    @PostMapping("/queryMedicalRecord4His/{idcard}")
+    public ResponseMessage queryMedicalRecord4His(@PathVariable String idcard) {
+    	ResponseMessage result = null;
+    	try {
+    		DiagnosisResultVo diagnosisResult = diagnosisService.showDiagnosisResult(idcard);
+    		result = WebUtils.buildSuccessResponseMessage(diagnosisResult);
+		} catch (ServiceException e) {
+			if(e.getResultEnum() == ResponseStatus.USER_NOT_FOUND) {
+				result = WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+			} else if (e.getResultEnum() == ResponseStatus.BASIC_RECORD_NOTFOUND) {
+				result = WebUtils.buildResponseMessage(ResponseStatus.BASIC_RECORD_NOTFOUND);
+			}
+		}
+    	return result;
     }
 
-    @PostMapping("/test/question/{index}")
-    public ResponseMessage medicineQuestion(Integer index) {
-        try {
-            QuestionRequestVo questionVo = new QuestionRequestVo();
-            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-            Long diagnosisId = 1000L;
-            BasicQuestionVo question = new BasicQuestionVo();
-            AnswerRequestVo bav = new AnswerRequestVo();
-            List<AnswerRequestVo> bavs = new ArrayList<>();
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUserId(10003L);
-            userInfo.setGender(1);
-            userInfo.setBirth(formatDate.parse("1990-01-04"));
-            switch (index) {
-                case 1:
-                    question = symptomMainService.getMainSymptomsQuestion(1000L,userInfo);
-                    break;
-                case 2:
-                    questionVo.setDiagnosisId(diagnosisId);
-                    questionVo.setDisplayType("radio");
-                    questionVo.setQuestionTitle("【xxx】的基本情况我已经清楚了解，现在告诉我最不舒服的是什么，我将调动全身的每一个细胞进行运算！");
-                    questionVo.setQuestionCode("9999");
-                    questionVo.setType(6);
-                    bav.setAnswerTitle("腹泻");
-                    bav.setContent("2");
-                    bavs.add(bav);
-                    questionVo.setAnswers(bavs);
-
-
-                    question = medicineQuestionService.saveAnswerGetQuestion(diagnosisId, questionVo, userInfo);
-                    break;
-                case 3:
-                    questionVo.setDiagnosisId(diagnosisId);
-                    questionVo.setDisplayType("radio");
-                    questionVo.setQuestionTitle("大便性状！");
-                    questionVo.setQuestionCode("2841");
-                    questionVo.setType(7);
-
-                    bav.setAnswerTitle("洗肉水样便*");
-                    bav.setContent("2");
-                    bavs.add(bav);
-                    questionVo.setAnswers(bavs);
-
-                    userInfo.setGender(1);
-                    userInfo.setBirth(formatDate.parse("1990-01-04"));
-                    question = medicineQuestionService.saveAnswerGetQuestion(diagnosisId, questionVo, userInfo);
-                    break;
-                case 4:
-                    questionVo.setDiagnosisId(diagnosisId);
-                    questionVo.setDisplayType("radio");
-                    questionVo.setQuestionTitle("致病相关因素！");
-                    questionVo.setQuestionCode("2846");
-                    questionVo.setType(7);
-
-                    bav.setAnswerTitle("过劳*");
-                    bav.setContent("11975");
-                    bavs.add(bav);
-                    questionVo.setAnswers(bavs);
-
-                    userInfo.setGender(1);
-                    userInfo.setBirth(formatDate.parse("1990-01-04"));
-                    question = medicineQuestionService.saveAnswerGetQuestion(diagnosisId, questionVo, userInfo);
-                    break;
-                default:
-                    question = medicineQuestionService.saveAnswerGetQuestion(diagnosisId, questionVo, userInfo);
-                    break;
-
-            }
-            return new ResponseMessage(question);
-        } catch (Exception e) {
-            e.printStackTrace();
+    /**
+     * 疾病史(既往史、过敏史)
+     *
+     * @return
+     */
+    @PostMapping("/diseaseHistory")
+    public ResponseMessage diseaseHistory(@RequestBody DiseaseHistoryRequestVo vo) {
+        Long userId = vo.getUserId();
+        Long diagnosisId = vo.getDiagnosisId();
+        Integer historyType = vo.getHistoryType();
+        if (userId == null || diagnosisId == null || historyType == null) {
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
-        return new ResponseMessage(ResponseStatus.EXCEPTION);
+        IQuestionVo questionVo = diagnosisPastmedicalHistoryService.queryDiseaseHistory(userId, diagnosisId, historyType);
+        BasicQuestionWithSearchVo resultVo = (BasicQuestionWithSearchVo) questionVo;
+        List<IAnswerVo> answerList = resultVo.getAnswers();
+        return WebUtils.buildSuccessResponseMessage(answerList);
     }
-    @PostMapping("/test/question2")
-    public ResponseMessage medicineQuestion(QuestionRequestVo questionVo, String userId) {
-        try {
-            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd");
-            UserInfo userInfo = new UserInfo();
-            userInfo.setGender(1);
-            userInfo.setBirth(formatDate.parse("1990-01-04"));
-            BasicQuestionVo question = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
-            return new ResponseMessage(question);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return new ResponseMessage(ResponseStatus.EXCEPTION);
-    }
-
-    @PostMapping("/mainsymtoms/input")
-    public ResponseMessage lexicalAnalysis(@RequestBody AnalysisRequestVo vo) {
-//    	IQuestionVo questionVo = diagnosisService.lexicalAnalysis(vo);
-//    	return WebUtils.buildSuccessResponseMessage(questionVo);
-        return null;
+    
+    @PostMapping("/queryBasicQuestion")
+    public ResponseMessage queryBasicQuestion(@RequestBody PatientInfo patientInfo) {
+    	String birth = patientInfo.getBirth();
+    	int gender = patientInfo.getGender();
+    	if(StringUtils.isEmpty(birth)) {
+    		return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+    	}
+    	Map<String, String> result = basicQuestionService.queryByBirthOrGender(birth, gender);
+    	return WebUtils.buildSuccessResponseMessage(result);
     }
 
 }

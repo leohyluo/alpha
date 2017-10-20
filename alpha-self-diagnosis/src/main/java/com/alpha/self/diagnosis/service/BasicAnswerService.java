@@ -1,10 +1,10 @@
 package com.alpha.self.diagnosis.service;
 
-import java.util.List;
-
 import com.alpha.self.diagnosis.pojo.BasicAnswer;
+
+import java.util.List;
 
 public interface BasicAnswerService {
 
-	List<BasicAnswer> findByQuestionCode(String questionCode);
+    List<BasicAnswer> findByQuestionCode(String questionCode);
 }

@@ -110,7 +110,7 @@ public class SQLBatchInsert {
                 try {
                     Field field = clz.getDeclaredField(columnName);
                     Column column = field.getAnnotation(Column.class);
-                    if(column!=null)
+                    if (column != null)
                         columnName = column.name();
                     Annotation aId = field.getAnnotation(Id.class);
                     if (aId != null) {//如果是主键，则跳过

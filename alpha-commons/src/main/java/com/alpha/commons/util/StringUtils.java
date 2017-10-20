@@ -16,6 +16,7 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.UUID;
 
+
 /**
  * 
  * @author 字符串帮助类
@@ -688,4 +689,13 @@ public final class StringUtils {
     		return null;
     	return str;
     }
+    
+    public static boolean isEmpty(List<String> params) {
+		return params.stream().anyMatch(StringUtils::isEmpty);
+	}
+	
+	public static boolean isEmpty(String... params) {
+		List<String> paramList = Arrays.asList(params);
+		return isEmpty(paramList);
+	}
 }

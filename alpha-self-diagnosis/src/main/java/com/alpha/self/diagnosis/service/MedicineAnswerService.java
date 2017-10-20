@@ -24,7 +24,7 @@ public interface MedicineAnswerService {
      *
      * @param questionVo
      */
-    void saveDiagnosisAnswer(BasicQuestionVo questionVo);
+    void saveDiagnosisAnswer(BasicQuestionVo questionVo, UserInfo userInfo);
 
     /**
      * 获取所有的答案，并过来年龄，性别
@@ -35,6 +35,14 @@ public interface MedicineAnswerService {
      */
     List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, UserInfo userInfo);
 
+    /**
+     * 获取所有的答案，并过滤年龄，性别
+     *
+     * @param questionCodes
+     * @param userInfo
+     * @return
+     */
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, UserInfo userInfo);
 
     /**
      * 根据答案查询所有的答案，计算特异性

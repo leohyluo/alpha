@@ -4,13 +4,11 @@ import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
 import com.alpha.self.diagnosis.dao.UserDiagnosisDetailDao;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisDetail;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +42,7 @@ public class UserDiagnosisDetailDaoImpl extends BaseDao<UserDiagnosisDetail, Lon
         Map<String, Object> params = new HashMap<>();
         params.put("diagnosisId", diagnosisId);
         params.put("questionCode", questionCode);
-        DataRecord data = super.selectForDataRecord("com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisDetail.getByQuestionCode", params);
+        DataRecord data = super.selectForDataRecord("com.alpha.server.rpc.user.pojo.UserDiagnosisDetail.getByQuestionCode", params);
         if (data == null)
             return null;
         UserDiagnosisDetail udd = new UserDiagnosisDetail();
@@ -62,12 +60,10 @@ public class UserDiagnosisDetailDaoImpl extends BaseDao<UserDiagnosisDetail, Lon
 
         Map<String, Object> params = new HashMap<>();
         params.put("diagnosisId", diagnosisId);
-        List<DataRecord> datas  = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisDetail.queryByDiagnosisId", params);
-        List<UserDiagnosisDetail> udds = new ArrayList<>();
-        udds = JavaBeanMap.convertListToJavaBean(datas, UserDiagnosisDetail.class);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.user.pojo.UserDiagnosisDetail.queryByDiagnosisId", params);
+        List<UserDiagnosisDetail> udds = JavaBeanMap.convertListToJavaBean(datas, UserDiagnosisDetail.class);
         return udds;
     }
-
 
 
 }

@@ -1,23 +1,19 @@
 package com.alpha.commons.core.dao.impl;
 
-import com.alpha.commons.core.util.JavaBeanMap;
-import com.google.gson.Gson;
 import com.alpha.commons.core.dao.IBaseDao;
 import com.alpha.commons.core.mapper.IBaseMapper;
 import com.alpha.commons.core.sql.*;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.sql.dto.JavaBean;
 import com.alpha.commons.core.sql.enums.SQLConditionType;
+import com.alpha.commons.core.util.JavaBeanMap;
+import com.google.gson.Gson;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 
-import javax.annotation.Resource;
-import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +50,12 @@ public abstract class BaseDao<T, K> extends SqlSessionTemplate implements IBaseD
 
     public Long insert(T entity) {
         return insert(entity, false);
+    }
+
+    public void insert(List<T> entitys) {
+        for (T entity : entitys) {
+            insert(entity, false);
+        }
     }
 
     /**
@@ -111,7 +113,7 @@ public abstract class BaseDao<T, K> extends SqlSessionTemplate implements IBaseD
             try {
                 Object value = JavaBean.getValue(field, entity);
                 if (value != null) {
-                    String columnName=bean.getColumnsName().get(field);
+                    String columnName = bean.getColumnsName().get(field);
                     setFields.put(columnName, JavaBean.getValue(field, entity));
                 }
             } catch (Exception e) {
@@ -169,7 +171,7 @@ public abstract class BaseDao<T, K> extends SqlSessionTemplate implements IBaseD
         Gson gs = new Gson();
         Gson clzGs = new Gson();
         List<T> result = new ArrayList<T>();
-        result=JavaBeanMap.convertListToJavaBean(list, getClz());
+        result = JavaBeanMap.convertListToJavaBean(list, getClz());
 //        for (DataRecord dataRecord : list) {
 //            String jsonData = gs.toJson(dataRecord);
 //            T t = clzGs.fromJson(jsonData, getClz());
@@ -257,7 +259,7 @@ public abstract class BaseDao<T, K> extends SqlSessionTemplate implements IBaseD
         List<DataRecord> list = this.getMapper(type).select(params);
         Gson clzGs = new Gson();
         List<T> result = new ArrayList<T>();
-        result=JavaBeanMap.convertListToJavaBean(list, getClz());
+        result = JavaBeanMap.convertListToJavaBean(list, getClz());
 //        for (DataRecord dataRecord : list) {
 //            String jsonData = gs.toJson(dataRecord);
 //            T t = clzGs.fromJson(jsonData, getClz());

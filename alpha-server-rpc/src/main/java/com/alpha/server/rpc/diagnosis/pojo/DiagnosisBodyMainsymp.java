@@ -1,56 +1,49 @@
 package com.alpha.server.rpc.diagnosis.pojo;
 
-import java.lang.Long;
-import java.lang.String;
-
-public class DiagnosisBodyMainsymp{
+public class DiagnosisBodyMainsymp {
 
 
-
-	/**
+    /**
      * id
      */
-	private Long id;
+    private Long id;
 
-	/**
+    /**
      * 主症状编码
      */
-	private String mainSympCode;
+    private String mainSympCode;
 
-	/**
+    /**
      * 部位编码
      */
-	private String bodyCode;
+    private String bodyCode;
 
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	public Long getId() {
-		return this.id;
-	}
-	
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setMainSympCode(String mainSympCode) {
-		this.mainSympCode = mainSympCode;
-	}
-	
-	public String getMainSympCode() {
-		return this.mainSympCode;
-	}
-	
+    public Long getId() {
+        return this.id;
+    }
 
-	public void setBodyCode(String bodyCode) {
-		this.bodyCode = bodyCode;
-	}
-	
-	public String getBodyCode() {
-		return this.bodyCode;
-	}
-	
-	
-	
-	
+
+    public void setMainSympCode(String mainSympCode) {
+        this.mainSympCode = mainSympCode;
+    }
+
+    public String getMainSympCode() {
+        return this.mainSympCode;
+    }
+
+
+    public void setBodyCode(String bodyCode) {
+        this.bodyCode = bodyCode;
+    }
+
+    public String getBodyCode() {
+        return this.bodyCode;
+    }
+
 
 }

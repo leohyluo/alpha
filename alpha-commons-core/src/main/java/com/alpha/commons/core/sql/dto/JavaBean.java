@@ -27,7 +27,7 @@ public class JavaBean {
     private Class<?> clz;
 
     private List<String> fieldsName;
-    private Map<String,String> columnsName=new HashMap<String, String>();
+    private Map<String, String> columnsName = new HashMap<String, String>();
 
     private String pkName;
     private Class<?> pkType;
@@ -61,9 +61,9 @@ public class JavaBean {
             try {
                 Field field = clz.getDeclaredField(columnName);
                 Column column = field.getAnnotation(Column.class);
-                if(column!=null) {
+                if (column != null) {
                     columnsName.put(columnName, column.name());
-                }else{
+                } else {
                     columnsName.put(columnName, columnName);
                 }
                 Transient aTransient = field.getAnnotation(Transient.class);

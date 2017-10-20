@@ -1,14 +1,14 @@
 package com.alpha.self.diagnosis.pojo.vo;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
+import java.io.Serializable;
+import java.util.List;
+
 public class BasicQuestionWithSearchVo implements Serializable, IQuestionVo {
 
-	private static final String USER_CHAR = "{userName}";
+    private static final String USER_CHAR = "{userName}";
 
     private static final long serialVersionUID = 6688903127327118326L;
 
@@ -39,15 +39,15 @@ public class BasicQuestionWithSearchVo implements Serializable, IQuestionVo {
         this.questionCode = basicQuestion.getQuestionCode();
         this.questionTitle = basicQuestion.getTitle();
         this.answers = answers;
-        if(userInfo != null) {
+        if (userInfo != null) {
             this.userId = userInfo.getUserId().toString();
-            if(this.questionTitle.contains(USER_CHAR)) {
+            if (this.questionTitle.contains(USER_CHAR)) {
                 this.questionTitle = this.questionTitle.replace(USER_CHAR, userName);
             }
         }
     }
 
-   
+
     public Long getDiagnosisId() {
         return diagnosisId;
     }
@@ -113,14 +113,14 @@ public class BasicQuestionWithSearchVo implements Serializable, IQuestionVo {
     }
 
 
-	public String getSearchUrl() {
-		return searchUrl;
-	}
+    public String getSearchUrl() {
+        return searchUrl;
+    }
 
 
-	public void setSearchUrl(String searchUrl) {
-		this.searchUrl = searchUrl;
-	}
+    public void setSearchUrl(String searchUrl) {
+        this.searchUrl = searchUrl;
+    }
 
-    
+
 }

@@ -10,7 +10,7 @@ import com.alpha.self.diagnosis.pojo.vo.*;
 import com.alpha.self.diagnosis.service.MedicineAnswerService;
 import com.alpha.self.diagnosis.utils.ServiceUtil;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisDetail;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,25 +40,36 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
      */
     public void updateDiagnosisAnswer(QuestionRequestVo questionVo) {
         if (questionVo.getAnswers() == null || questionVo.getAnswers().size() == 0) {
-            throw new ServiceException(ResponseStatus.INVALID_VALUE, "没有找到对应的答案");
+            LOGGER.error("没有找到对应的答案");
+            return;
         }
         List<String> answerCodes = new ArrayList<>();
-        List<String> answerContents = new ArrayList<>();
+        Set<String> answerContents = new HashSet<>();
         for (AnswerRequestVo answerVo : questionVo.getAnswers()) {
             answerCodes.add(answerVo.getContent());
-//            answerContents.add(answerVo.getAnswerTitle());
+//            if(questionVo.getType()== QuestionEnum.主症状.getValue()){
+            answerContents.add(answerVo.getAnswerTitle());
+//            }
         }
         UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(questionVo.getDiagnosisId(), questionVo.getQuestionCode());
         if (udd == null) {
             throw new ServiceException(ResponseStatus.INVALID_VALUE, "没有找到提问记录");
         }
-        Map<Integer, Set<String>> answerSpecMap = this.mapAnswerSpec(questionVo.getQuestionCode(), answerCodes);
+//        Map<Integer, Set<String>> answerSpecMap = this.mapAnswerSpec(questionVo.getQuestionCode(), answerCodes);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionVo.getQuestionCode(), answerCodes);
+        Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
+        for (DiagnosisQuestionAnswer dqa : dqAnswers) {
+            Set<String> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dqa.getAnswerSpec());
+            specSet.add(dqa.getDiseaseCode());
+            answerSpecMap.put(dqa.getAnswerSpec(), specSet);
+//            answerContents.add(dqa.getContent());
+        }
         Set<String> forwardDiseaseCode = answerSpecMap.get(1) == null ? new HashSet<String>() : answerSpecMap.get(1);   //正向特异性
         Set<String> reverseDiseaseCode = answerSpecMap.get(-1) == null ? new HashSet<String>() : answerSpecMap.get(-1);   //反向特异性
         Set<String> nothingDiseaseCode = answerSpecMap.get(0) == null ? new HashSet<String>() : answerSpecMap.get(0); //无特异性
 //        udd.setAnswerCode(ServiceUtil.arrayConvertToString(answerCodes));
         udd.setAnswerCode(JSON.toJSONString(answerCodes));
-//        udd.setAnswerContent(ServiceUtil.arrayConvertToString(answerContents));
+        udd.setAnswerContent(ServiceUtil.arrayConvertToString(answerContents));
         udd.setAnswerJson(JSON.toJSONString(questionVo.getAnswers()));
         udd.setForwardDiseaseCode(JSON.toJSONString(forwardDiseaseCode));
         udd.setReverseDiseaseCode(JSON.toJSONString(reverseDiseaseCode));
@@ -69,12 +80,13 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         userDiagnosisDetailDao.update(udd);
     }
 
+
     /**
      * 保存问题答案
      *
      * @param questionVo
      */
-    public void saveDiagnosisAnswer(BasicQuestionVo questionVo) {
+    public void saveDiagnosisAnswer(BasicQuestionVo questionVo, UserInfo userInfo) {
         List<String> answerCodes = new ArrayList<>();
         List<String> answerContents = new ArrayList<>();
         for (IAnswerVo answerVo : questionVo.getAnswers()) {
@@ -84,10 +96,11 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         }
         UserDiagnosisDetail udd = new UserDiagnosisDetail();
         udd.setDiagnosisId(questionVo.getDiagnosisId());
-        udd.setMemberId(0L);
         udd.setUserId(0L);
+        udd.setMemberId(userInfo.getUserId());
         udd.setQuestionCode(questionVo.getQuestionCode());
-        udd.setAnswerCode(ServiceUtil.arrayConvertToString(answerCodes));
+        udd.setAnswerCode(JSON.toJSONString(answerCodes));
+        udd.setAnswerContent(JSON.toJSONString(answerContents));
         udd.setForwardDiseaseCode(JSON.toJSONString(new HashSet<>()));
         udd.setReverseDiseaseCode(JSON.toJSONString(new HashSet<>()));
         udd.setNothingDiseaseCode(JSON.toJSONString(new HashSet<>()));
@@ -98,7 +111,7 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
     }
 
     /**
-     * 获取所有的答案，并过来年龄，性别
+     * 获取所有的答案，并过滤年龄，性别
      *
      * @param questionCode
      * @param userInfo
@@ -106,10 +119,31 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
      */
     public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, UserInfo userInfo) {
         //查询答案
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCode);
+        ArrayList<String> questionCodes = new ArrayList<>();
+        questionCodes.add(questionCode);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes);
+        filterAnswer(dqAnswers, userInfo);
+        return dqAnswers;
+    }
+
+    /**
+     * 获取所有的答案，并过滤年龄，性别
+     *
+     * @param questionCodes
+     * @param userInfo
+     * @return
+     */
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, UserInfo userInfo) {
+        //查询答案
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes);
+        filterAnswer(dqAnswers, userInfo);
+        return dqAnswers;
+    }
+
+    public void filterAnswer(List<DiagnosisQuestionAnswer> dqAnswers, UserInfo userInfo) {
         for (Iterator iterator = dqAnswers.iterator(); iterator.hasNext(); ) {
             DiagnosisQuestionAnswer answer = (DiagnosisQuestionAnswer) iterator.next();
-            if (answer.getGender() != null && answer.getGender() != userInfo.getGender()) {
+            if (answer.getGender() != null && answer.getGender() > 0 && answer.getGender() != userInfo.getGender()) {
                 iterator.remove();
                 continue;//过滤性别
             }
@@ -119,7 +153,6 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
                 continue;//过滤年龄
             }
         }
-        return dqAnswers;
     }
 
     /**
@@ -148,7 +181,7 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         for (UserDiagnosisDetail udd : udds) {
             String forwardDiseaseCode = udd.getForwardDiseaseCode();
             if (StringUtils.isNotEmpty(forwardDiseaseCode)) {
-                List<String> codes =(List) JSON.parseArray(forwardDiseaseCode);
+                List<String> codes = (List) JSON.parseArray(forwardDiseaseCode);
                 if (codes != null && codes.size() > 0)
                     codeSet.addAll(codes);
             }
@@ -159,17 +192,18 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
     /**
      * 查询正向特异性的答案
      * 统计正向特异性最多的
+     *
      * @param dqAnswers
      * @param diagnosisId
      * @return
      */
-    public LinkedHashSet<IAnswerVo> getSpecAnswer(List<DiagnosisQuestionAnswer> dqAnswers,Long diagnosisId){
+    public LinkedHashSet<IAnswerVo> getSpecAnswer(List<DiagnosisQuestionAnswer> dqAnswers, Long diagnosisId) {
         Set<String> specCodeSet = listSpecCode(diagnosisId);
         LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();
-        if(specCodeSet==null||specCodeSet.size()==0)
+        if (specCodeSet == null || specCodeSet.size() == 0)
             return answerVos;
-        for(DiagnosisQuestionAnswer dqa:dqAnswers){
-            if(specCodeSet.contains(dqa.getDiseaseCode())) {
+        for (DiagnosisQuestionAnswer dqa : dqAnswers) {
+            if (specCodeSet.contains(dqa.getDiseaseCode())) {
                 BasicAnswerVo answerVo = new BasicAnswerVo(dqa);
                 answerVos.add(answerVo);
             }
@@ -179,11 +213,12 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
 
     /**
      * 所有疾病下的所有答案
+     *
      * @return
      */
-    public Map<String,List<DiagnosisQuestionAnswer>> mapAnswers(Collection<String> questionCodes, Collection<String> answerCodes){
+    public Map<String, List<DiagnosisQuestionAnswer>> mapAnswers(Collection<String> questionCodes, Collection<String> answerCodes) {
         Map<String, List<DiagnosisQuestionAnswer>> questionMap = new HashMap<>();
-        List<DiagnosisQuestionAnswer> dqAnswers=diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes, answerCodes);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes, answerCodes);
         for (DiagnosisQuestionAnswer dmq : dqAnswers) {
             List<DiagnosisQuestionAnswer> questions = questionMap.get(dmq.getDiseaseCode()) == null ? new ArrayList<>() : questionMap.get(dmq.getDiseaseCode());
             questions.add(dmq);

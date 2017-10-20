@@ -124,7 +124,7 @@ public class SQLInsert {
                     Field field = clz.getDeclaredField(columnName);
                     Annotation aId = field.getAnnotation(Id.class);
                     Column column = field.getAnnotation(Column.class);
-                    if(column!=null)
+                    if (column != null)
                         columnName = column.name();
                     if (aId != null) {//如果是主键，则跳过
                         pk = columnName;

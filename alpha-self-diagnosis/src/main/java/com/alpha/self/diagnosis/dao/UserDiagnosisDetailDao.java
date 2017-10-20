@@ -1,7 +1,7 @@
 package com.alpha.self.diagnosis.dao;
 
 import com.alpha.commons.core.dao.IBaseDao;
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisDetail;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 
 import java.util.List;
 

@@ -1,17 +1,22 @@
 package com.alpha.self.diagnosis.service.impl;
 
 import com.alpha.commons.util.DateUtils;
+import com.alpha.commons.util.FigureUtil;
+import com.alpha.commons.util.sim.Similarity;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
 import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.service.MedicineAnswerService;
+import com.alpha.self.diagnosis.service.MedicineDiagnosisService;
+import com.alpha.self.diagnosis.service.MedicineQuestionService;
 import com.alpha.self.diagnosis.service.SymptomAccompanyService;
 import com.alpha.self.diagnosis.utils.MedicineSortUtil;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,7 @@ import java.util.*;
 
 /**
  * Created by xc.xiong on 2017/9/11.
+ * 伴随症状
  */
 @Service
 public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
@@ -31,6 +37,10 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
     DiagnosisMainsympConcsympDao diagnosisMainsympConcsympDao;
     @Autowired
     MedicineAnswerService medicineAnswerService;
+    @Autowired
+    MedicineQuestionService medicineQuestionService;
+    @Autowired
+    MedicineDiagnosisService medicineDiagnosisService;
 
 
     /**
@@ -43,7 +53,30 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
         List<DiagnosisMainsympConcsymp> dmcs = diagnosisMainsympConcsympDao.listDiagnosisMainsympConcsymp(mainSympCode);
         for (Iterator iterator = dmcs.iterator(); iterator.hasNext(); ) {
             DiagnosisMainsympConcsymp answer = (DiagnosisMainsympConcsymp) iterator.next();
-            if (answer.getGender() != null && answer.getGender() != userInfo.getGender()) {
+            if (answer.getGender() != null && answer.getGender() > 0 && answer.getGender() != userInfo.getGender()) {
+                iterator.remove();
+                continue;//过滤性别
+            }
+            float age = DateUtils.getAge(userInfo.getBirth());
+            if ((answer.getMinAge() != null && answer.getMinAge() > age) || (answer.getMaxAge() != null && answer.getMaxAge() < age)) {
+                iterator.remove();
+                continue;//过滤年龄
+            }
+        }
+        return dmcs;
+    }
+
+    /**
+     * 查询主症状下所有的伴随症状名称，
+     *
+     * @param mainSympCode
+     * @return
+     */
+    public List<DiagnosisMainsympConcsymp> listConcsymp(String mainSympCode, UserInfo userInfo) {
+        List<DiagnosisMainsympConcsymp> dmcs = diagnosisMainsympConcsympDao.listConcsymp(mainSympCode);
+        for (Iterator iterator = dmcs.iterator(); iterator.hasNext(); ) {
+            DiagnosisMainsympConcsymp answer = (DiagnosisMainsympConcsymp) iterator.next();
+            if (answer.getGender() != null && answer.getGender() > 0 && answer.getGender() != userInfo.getGender()) {
                 iterator.remove();
                 continue;//过滤性别
             }
@@ -70,6 +103,7 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
         Set<String> specCodeSet = medicineAnswerService.listSpecCode(diagnosisId);//正向特异性疾病
         BasicQuestionVo questionVo = new BasicQuestionVo();
         questionVo.setQuestionTitle("除了" + sympName + "外,还出现哪些症状？");
+        questionVo.setTitle("除了" + sympName + "外,还出现哪些症状？");
         questionVo.setType(QuestionEnum.伴随症状.getValue());
         questionVo.setQuestionCode("1000");
         questionVo.setDiagnosisId(diagnosisId);
@@ -77,14 +111,10 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
         LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();//非正向特异性疾病下的伴随症状
         LinkedHashSet<IAnswerVo> answerSpecVos = new LinkedHashSet<>();//正向特异性疾病下的伴随症状
         for (DiagnosisMainsympConcsymp dmc : dmcs) {
-            BasicAnswerVo answer = new BasicAnswerVo();
-            answer.setAnswerValue(dmc.getConcSympCode());
-            answer.setAnswerValue(dmc.getConcSympCode());
-            answer.setAnswerTitle(dmc.getSympName());
-            answer.setDefaultOrder(dmc.getDefaultOrder());
-            if(specCodeSet.contains(dmc.getDiseaseCode())){
+            BasicAnswerVo answer = new BasicAnswerVo(dmc);
+            if (specCodeSet.contains(dmc.getDiseaseCode())) {
                 answerSpecVos.add(answer);
-            }else {
+            } else {
                 answerVos.add(answer);
             }
         }
@@ -102,26 +132,66 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
      * @param userInfo
      * @return
      */
-    public  LinkedHashSet<IAnswerVo>  getSymptomAccompanyAnswer(Long diagnosisId, String mainSympCode, UserInfo userInfo) {
+    public LinkedHashSet<IAnswerVo> getSymptomAccompanyAnswer(Long diagnosisId, String mainSympCode, UserInfo userInfo) {
         List<DiagnosisMainsympConcsymp> dmcs = this.listDiagnosisMainsympConcsymp(mainSympCode, userInfo);
         Set<String> specCodeSet = medicineAnswerService.listSpecCode(diagnosisId);//正向特异性疾病
         LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();//非正向特异性疾病下的伴随症状
         LinkedHashSet<IAnswerVo> answerSpecVos = new LinkedHashSet<>();//正向特异性疾病下的伴随症状
+        LinkedHashSet<IAnswerVo> answerDiseaseVos = new LinkedHashSet<>();//疾病下伴随症状
+        List<UserDiagnosisOutcome> userDiagnosisOutcomes = medicineDiagnosisService.diagnosisOutcome(diagnosisId, mainSympCode,userInfo);//计算疾病的权重
+        userDiagnosisOutcomes = MedicineSortUtil.specUserDiagnosisOutcome(userDiagnosisOutcomes);//根据特异性重新计算权重
+        MedicineSortUtil.sortUserDiagnosisOutcome(userDiagnosisOutcomes);//排序
+        UserDiagnosisOutcome udo = null;
+        if (userDiagnosisOutcomes != null && userDiagnosisOutcomes.size() > 0) {
+            udo = userDiagnosisOutcomes.get(0);
+            LOGGER.info("首选疾病：{}", udo.getDiseaseName());
+        }
         for (DiagnosisMainsympConcsymp dmc : dmcs) {
-            BasicAnswerVo answer = new BasicAnswerVo();
-            answer.setAnswerValue(dmc.getConcSympCode());
-            answer.setAnswerValue(dmc.getConcSympCode());
-            answer.setAnswerTitle(dmc.getSympName());
-            answer.setDefaultOrder(dmc.getDefaultOrder());
-            if(specCodeSet.contains(dmc.getDiseaseCode())){
+            BasicAnswerVo answer = new BasicAnswerVo(dmc);
+            if (specCodeSet.contains(dmc.getDiseaseCode())) {
                 answerSpecVos.add(answer);
-            }else {
+            } else if (udo != null && udo.getDiseaseCode().equals(dmc.getDiseaseCode())) {
+                answerDiseaseVos.add(answer);
+            } else {
                 answerVos.add(answer);
             }
         }
         List<IAnswerVo> answers = MedicineSortUtil.sortAnswerVo(answerSpecVos);
+        answers.addAll(MedicineSortUtil.sortAnswerVo(answerDiseaseVos));
         answers.addAll(MedicineSortUtil.sortAnswerVo(answerVos));
         return new LinkedHashSet<>(answers);
+    }
+
+    /**
+     * 生成伴随症状提问
+     *
+     * @param diagnosisId
+     * @param mainSympCode
+     * @param userInfo
+     * @return
+     */
+    public LinkedHashSet<IAnswerVo> listSymptomAccompany(Long diagnosisId, String mainSympCode, UserInfo userInfo, String keyword) {
+        List<DiagnosisMainsympConcsymp> dmcs = this.listConcsymp(mainSympCode, userInfo);
+        LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();
+        for (Iterator i = dmcs.iterator(); i.hasNext(); ) {
+            DiagnosisMainsympConcsymp dmc = (DiagnosisMainsympConcsymp) i.next();
+            Double sympNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSympName()).toUpperCase(), keyword.toUpperCase());
+            Double popuNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getPopuName()).toUpperCase(), keyword.toUpperCase());
+            Double symbolSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSymbol()).toUpperCase(), keyword.toUpperCase());
+            Double similarity = MedicineSortUtil.sortDouble(symbolSimilarity, popuNameSimilarity, sympNameSimilarity);
+            if (similarity == 0) {
+                i.remove();
+            } else {
+                dmc.setSimilarity(similarity);
+            }
+
+        }
+        MedicineSortUtil.sortDiagnosisMainsympConcsymp(dmcs);
+        for (DiagnosisMainsympConcsymp dmc : dmcs) {
+            BasicAnswerVo answer = new BasicAnswerVo(dmc);
+            answerVos.add(answer);
+        }
+        return answerVos;
     }
 
     /**
@@ -131,12 +201,12 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
      * @param concSympCodes
      * @return
      */
-    public Map<String, List<DiagnosisMainsympConcsymp>> mapDiagnosisMainsympConcsymp(String mainSympCode, Collection<String> concSympCodes){
+    public Map<String, List<DiagnosisMainsympConcsymp>> mapDiagnosisMainsympConcsymp(String mainSympCode, Collection<String> concSympCodes) {
         Map<String, List<DiagnosisMainsympConcsymp>> dmcsMap = new HashMap<>();
-        if(concSympCodes==null||concSympCodes.size()==0)
+        if (concSympCodes == null || concSympCodes.size() == 0)
             return dmcsMap;
         List<DiagnosisMainsympConcsymp> dmcs = diagnosisMainsympConcsympDao.listDiagnosisMainsympConcsymp(mainSympCode, concSympCodes);
-        for(DiagnosisMainsympConcsymp dmc:dmcs){
+        for (DiagnosisMainsympConcsymp dmc : dmcs) {
             List<DiagnosisMainsympConcsymp> dmcList = dmcsMap.get(dmc.getDiseaseCode()) == null ? new ArrayList<>() : dmcsMap.get(dmc.getDiseaseCode());
             dmcsMap.put(dmc.getDiseaseCode(), dmcList);
         }

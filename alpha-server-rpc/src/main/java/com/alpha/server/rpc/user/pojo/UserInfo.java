@@ -1,11 +1,10 @@
 package com.alpha.server.rpc.user.pojo;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
-
 import com.alpha.commons.enums.BasicQuestionType;
 import com.alpha.commons.enums.WomenSpecialPeriod;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  用户资料
+ * 用户资料
  */
 @Entity
 @Table(name = "user_info")
-public class UserInfo implements Serializable{
+public class UserInfo implements Serializable {
 
     private static final long serialVersionUID = -3267918083809259248L;
 
@@ -172,6 +171,18 @@ public class UserInfo implements Serializable{
     private String allergicHistoryText;
 
     /**
+     * 挂号科室
+     */
+    @Column(name = "department")
+    private String department;
+
+    /**
+     * 就诊日期
+     */
+    @Column(name = "cure_time")
+    private Date cureTime;
+
+    /**
      * 创建时间
      */
     @Column(name = "create_time")
@@ -187,7 +198,7 @@ public class UserInfo implements Serializable{
      * 用户 来源类型，h5=1
      */
     @Column(name = "in_type")
-    private int inType;
+    private Integer inType;
 
     /**
      *
@@ -219,7 +230,19 @@ public class UserInfo implements Serializable{
     @Column(name = "version_evolution")
     private String versionEvolution;
 
+    /**
+     * 既往史json字符串
+     */
+    /*@Column(name = "pastmedical_history")
+    private String pastmedicalHistory;
+    
+    */
 
+    /**
+     * 过敏史json字符串
+     *//*
+    @Column(name = "allergic_history")
+    private String allergicHistory;*/
     public void setId(Long id) {
         this.id = id;
     }
@@ -454,11 +477,11 @@ public class UserInfo implements Serializable{
     }
 
 
-    public void setInType(int inType) {
+    public void setInType(Integer inType) {
         this.inType = inType;
     }
 
-    public int getInType() {
+    public Integer getInType() {
         return this.inType;
     }
 
@@ -507,40 +530,56 @@ public class UserInfo implements Serializable{
         return this.versionEvolution;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public Date getCureTime() {
+        return cureTime;
+    }
+
+    public void setCureTime(Date cureTime) {
+        this.cureTime = cureTime;
+    }
+
     public Map<BasicQuestionType, Object> toMap() {
-    	Map<BasicQuestionType, Object> map = new HashMap<>();
-    	map.put(BasicQuestionType.BORN, this.birth);
-    	map.put(BasicQuestionType.BOY_OR_GIRL, this.gender);
-    	map.put(BasicQuestionType.MAN_OR_WOMAN, this.gender);
-    	Integer menstrualPeriod = null;
-    	Integer specialPeriod = null;
-    	if(StringUtils.isNotEmpty(this.specialPeriod) 
-    			&& Integer.parseInt(this.specialPeriod) == WomenSpecialPeriod.MENSTRUAL_PERIOD.getValue()) {
-    		menstrualPeriod = Integer.parseInt(this.specialPeriod);
-    	}
-    	if(StringUtils.isNotEmpty(this.specialPeriod)) {
-    		specialPeriod = Integer.parseInt(this.specialPeriod);
-    	}
-    	map.put(BasicQuestionType.MENSTRUAL_PERIOD, menstrualPeriod);
-    	map.put(BasicQuestionType.SPECIAL_PERIOD, specialPeriod);
-    	map.put(BasicQuestionType.PAST_MEDICAL_HISTORY, StringUtils.toObject(this.pastmedicalHistoryCode));
-    	map.put(BasicQuestionType.ALLERGIC_HISTORY, StringUtils.toObject(this.allergicHistoryCode));
-    	map.put(BasicQuestionType.FERTILITY_TYPE, StringUtils.toObject(this.fertilityType));
-    	map.put(BasicQuestionType.GESTATIONAL_AGE, StringUtils.toObject(this.gestationalAge));
-    	map.put(BasicQuestionType.FEED_TYPE, StringUtils.toObject(this.feedType));
-    	map.put(BasicQuestionType.HEIGHT, StringUtils.toObject(this.height));
-    	map.put(BasicQuestionType.WEIGHT, StringUtils.toObject(this.weight));
-    	map.put(BasicQuestionType.LIVER_RENAL, this.liverFunc);
-    	return map;
+        Map<BasicQuestionType, Object> map = new HashMap<>();
+        map.put(BasicQuestionType.BORN, this.birth);
+        map.put(BasicQuestionType.BOY_OR_GIRL, this.gender);
+        map.put(BasicQuestionType.MAN_OR_WOMAN, this.gender);
+        Integer menstrualPeriod = null;
+        Integer specialPeriod = null;
+        if (StringUtils.isNotEmpty(this.specialPeriod)
+                && Integer.parseInt(this.specialPeriod) == WomenSpecialPeriod.MENSTRUAL_PERIOD.getValue()) {
+            menstrualPeriod = Integer.parseInt(this.specialPeriod);
+        }
+        if (StringUtils.isNotEmpty(this.specialPeriod)) {
+            specialPeriod = Integer.parseInt(this.specialPeriod);
+        }
+        map.put(BasicQuestionType.MENSTRUAL_PERIOD, menstrualPeriod);
+        map.put(BasicQuestionType.SPECIAL_PERIOD, specialPeriod);
+        map.put(BasicQuestionType.PAST_MEDICAL_HISTORY, StringUtils.toObject(this.pastmedicalHistoryCode));
+        map.put(BasicQuestionType.ALLERGIC_HISTORY, StringUtils.toObject(this.allergicHistoryCode));
+        map.put(BasicQuestionType.FERTILITY_TYPE, StringUtils.toObject(this.fertilityType));
+        map.put(BasicQuestionType.GESTATIONAL_AGE, StringUtils.toObject(this.gestationalAge));
+        map.put(BasicQuestionType.FEED_TYPE, StringUtils.toObject(this.feedType));
+        map.put(BasicQuestionType.HEIGHT, StringUtils.toObject(this.height));
+        map.put(BasicQuestionType.WEIGHT, StringUtils.toObject(this.weight));
+        map.put(BasicQuestionType.LIVER_RENAL, this.liverFunc);
+        return map;
     }
 
     public Map<String, Object> toBasicMap() {
-    	Map<String, Object> map = new HashMap<>();
-    	map.put("gender", this.gender);
-    	if(this.birth != null) {
-    		map.put("age", DateUtils.getAge(this.birth));
-    	}
-    	map.put("specialPeriod", this.specialPeriod);
-    	return map;
+        Map<String, Object> map = new HashMap<>();
+        map.put("gender", this.gender);
+        if (this.birth != null) {
+            map.put("age", DateUtils.getAge(this.birth));
+        }
+        map.put("specialPeriod", this.specialPeriod);
+        return map;
     }
 }

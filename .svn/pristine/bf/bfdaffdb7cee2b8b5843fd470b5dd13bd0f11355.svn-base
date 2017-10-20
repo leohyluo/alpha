@@ -1,5 +1,0 @@
-package com.alpha.commons.mapper;
-
-public interface UserInfoMapper {
-
-}

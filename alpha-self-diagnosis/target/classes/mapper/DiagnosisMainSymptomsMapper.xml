@@ -29,6 +29,9 @@
 					#{item}
 				</foreach>
 			</if>
+			<if test="sympCode != null">
+				and symp_code = #{sympCode}
+			</if>
 		</where>
 	</select>
 </mapper>

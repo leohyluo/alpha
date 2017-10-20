@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
 <mapper namespace="com.alpha.user.mapper.UserBasicRecordMapper">
-	<resultMap id="BaseResultMap" type="com.alpha.server.rpc.diagnosis.pojo.UserBasicRecord">
+	<resultMap id="BaseResultMap" type="com.alpha.server.rpc.user.pojo.UserBasicRecord">
 	    <id column="id" jdbcType="BIGINT" property="id" />
 	    <result column="member_id" jdbcType="BIGINT" property="memberId" />
 	    <result column="user_id" jdbcType="BIGINT" property="userId" />
@@ -43,5 +43,43 @@
  				diagnosis_id = #{diagnosisId}
  			</if>
  		</where>
+ 	</select>
+ 	
+ 	<select id="findLast" resultType="DataRecord" parameterType="HashMap">
+ 		select * from user_basic_record
+ 		<where>
+ 			<if test="userId != null">
+ 				and user_id = #{userId}
+ 			</if>
+ 			<if test="presentIllnessHistory != null">
+ 				and char_length(present_illness_history) > 0
+ 			</if>
+ 			ORDER BY create_time desc
+ 		</where>
+ 		limit 0,1
+ 	</select>
+ 	
+ 	<select id="findByLastMonth" parameterType="HashMap" resultType="DataRecord">
+ 		<![CDATA[
+	 		SELECT * from user_basic_record
+			 WHERE DATE_SUB(CURDATE(),INTERVAL 1 MONTH) <= create_time
+			 and member_id = #{memberId}
+ 		]]>
+ 		<if test="pastmedicalHistoryCodeNotNull != null">
+	 		and pastmedical_history_code is not null
+ 		</if>
+ 		<if test="allergicHistoryCodeNotNull != null">
+ 			and allergic_history_code is not null
+ 		</if>
+ 		<if test="weightNotNull != null">
+ 			and weight is not null
+ 		</if>
+			 ORDER BY create_time desc
+ 	</select>
+ 	
+ 	<select id="findTemplateId" parameterType="HashMap" resultType="String">
+ 		SELECT template_id from diagnosis_main_symptoms where symp_code 
+		=
+		(SELECT symp_code from user_diagnosis_detail where diagnosis_id = #{diagnosisId} and char_length(symp_code) > 0 limit 0, 1)
  	</select>
 </mapper>

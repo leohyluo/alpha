@@ -14,10 +14,10 @@
 		select id,user_id,member_id,member_name,create_time from user_member
 		<where>
 			<if test="userId != null">
-				user_id = #{userId}
+				and user_id = #{userId}
 			</if>
 			<if test="memberName != null">
-				member_name = #{memberName}
+				and member_name = #{memberName}
 			</if>
 		</where>
 	</select>

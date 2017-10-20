@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: alpha-self-diagnosis
-  profiles:
-    active: core
-server:
-  port: 19092
-logging:
-  config: classpath:logback-diagnosis.xml

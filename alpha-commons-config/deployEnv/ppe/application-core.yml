@@ -2,17 +2,17 @@
 service:  
   register:
     center:
-      ip: 127.0.0.1
+      ip: 10.44.86.94
       hostname: peer1
       port: 19081
-    center2: 
-      ip: 127.0.0.1
+    center2:
+      ip: 10.44.86.94
       hostname: peer2
       port: 19082
 eureka:
   client:
-    serviceUrl: 
-      defaultZone: http://${service.register.center.hostname}:${service.register.center.port}/eureka/
+    serviceUrl:
+      defaultZone: http://${service.register.center.ip}:${service.register.center.port}/eureka/
     registry-fetch-interval-seconds: 5 #拉取服务注册信息时间间隔,默认为30秒
   instance: 
     lease-renewal-interval-in-seconds: 5 #心跳时间,默认为30秒
@@ -26,15 +26,16 @@ hystrix:
             timeoutInMilliseconds: 5000             
 #数据库配置
 db: 
-  host: 192.168.29.28
+  host: 10.44.86.94
   port: 3306
   name: dr_alpha
+  public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAKHOzUP6hAqnFHQ5eEINO2JdYPkxcecAgYwm9SPr5sOXU5V1Abw+OVSkVo51cLhDjI/JJb7udY2iwSOYq0mLmdsCAwEAAQ==
 #数据源配置  
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    username: root
-    password: 
+    username: zhys
+    password: bSINjdn9gD9fIKAbr/1rExgwZCL+Gi4ECeDbSgeBhQ6IZUjcZpO4T99pyg/85543PiSl1oAFgMUWEZqVIjkXuw==
     url: jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true
     druid: 
       filter-class-names: stat 

@@ -1,17 +1,18 @@
 package com.alpha.self.diagnosis.pojo.vo;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import java.io.Serializable;
+import java.util.List;
 
 public class BasicQuestionVo implements Serializable, IQuestionVo {
 
-	private static final String USER_CHAR = "{userName}";
+    private static final String USER_CHAR = "{userName}";
 
     private static final long serialVersionUID = 6688903127327118326L;
 
@@ -21,7 +22,12 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
 
     private String displayType;
 
+    private String searchUrl;
+
     private String questionTitle;
+
+    @JsonIgnore
+    private String title;
 
     private String sympCode;
 
@@ -34,24 +40,17 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
 
     private List<IAnswerVo> answers;
 
-    public BasicQuestionVo(Long diagnosisId, BasicQuestion basicQuestion, List<IAnswerVo> answers) {
-        this.diagnosisId = diagnosisId;
-        this.displayType = basicQuestion.getDisplayType();
-        this.questionCode = basicQuestion.getQuestionCode();
-        this.questionTitle = basicQuestion.getTitle();
-        this.answers = answers;
-        this.sympCode = sympCode;
-    }
 
     public BasicQuestionVo(Long diagnosisId, BasicQuestion basicQuestion, List<IAnswerVo> answers, UserInfo userInfo, String userName) {
         this.diagnosisId = diagnosisId;
         this.displayType = basicQuestion.getDisplayType();
         this.questionCode = basicQuestion.getQuestionCode();
         this.questionTitle = basicQuestion.getTitle();
+        this.title = basicQuestion.getTitle();
         this.answers = answers;
-        if(userInfo != null) {
+        if (userInfo != null) {
             this.userId = userInfo.getUserId().toString();
-            if(this.questionTitle.contains(USER_CHAR)) {
+            if (this.questionTitle.contains(USER_CHAR)) {
                 this.questionTitle = this.questionTitle.replace(USER_CHAR, userName);
             }
         }
@@ -59,6 +58,7 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
 
     public BasicQuestionVo() {
     }
+
     /**
      * 把医学问题转换成返回视图
      *
@@ -66,12 +66,18 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
      * @return
      */
     public BasicQuestionVo(DiagnosisMainsympQuestion question, Long diagnosisId, String sympCode) {
-        this.displayType = "radio";
+        if (question.getQuestionType() == QuestionEnum.伴随症状.getValue()) {
+            this.displayType = "checkbox_more_input_confirm";
+            this.searchUrl = "/data/search/concsymp";
+        } else {
+            this.displayType = "radio";
+        }
         this.diagnosisId = diagnosisId;
         this.questionCode = question.getQuestionCode();
         this.questionTitle = question.getPopuTitle();
+        this.title = question.getTitle();
         this.sympCode = sympCode;
-        this.type = QuestionEnum.医学问题.getValue();
+        this.type = question.getQuestionType();
     }
 
     /**
@@ -85,6 +91,7 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
         this.diagnosisId = diagnosisId;
         this.questionCode = question.getQuestionCode();
         this.questionTitle = question.getPopuTitle();
+        this.title = question.getPopuTitle();
         this.sympCode = sympCode;
         //答案转换
         List<IAnswerVo> answerVos = BasicAnswerVo.convertListMedicineAnswerVo(dqAnswers);
@@ -98,14 +105,16 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
      * @param question
      * @return
      */
-    public  BasicQuestionVo(DiagnosisMainsympQuestion question, Long diagnosisId) {
+    public BasicQuestionVo(DiagnosisMainsympQuestion question, Long diagnosisId) {
         BasicQuestionVo questionVo = new BasicQuestionVo();
         questionVo.setType(QuestionEnum.医学问题.ordinal());
         questionVo.setDiagnosisId(diagnosisId);
         questionVo.setQuestionCode(question.getQuestionCode());
         questionVo.setQuestionTitle(question.getPopuTitle());
+        questionVo.setTitle(question.getPopuTitle());
         questionVo.setDisplayType("radio");
     }
+
     public Long getDiagnosisId() {
         return diagnosisId;
     }
@@ -170,5 +179,19 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
         this.userId = userId;
     }
 
+    public String getSearchUrl() {
+        return searchUrl;
+    }
 
+    public void setSearchUrl(String searchUrl) {
+        this.searchUrl = searchUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

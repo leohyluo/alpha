@@ -4,9 +4,16 @@
 
 
     <select id="queryDiagnosisMainsympConcsymp" parameterType="HashMap" resultType="DataRecord">
-        select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,dcs.symp_name,dcs.popu_name,dcs.gender,dcs.min_age,dcs.max_age
-        from diagnosis_mainsymp_concsymp dmcs LEFT JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
+        select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
+        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age
+        from diagnosis_mainsymp_concsymp dmcs INNER JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
         where dmcs.main_symp_code=#{mainSympCode}
+    </select>
+    <select id="queryConcsymp" parameterType="HashMap" resultType="DataRecord">
+        select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
+        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age
+        from diagnosis_mainsymp_concsymp dmcs INNER JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
+        where dmcs.main_symp_code=#{mainSympCode} group by dmcs.conc_symp_code
     </select>
 
     <select id="queryByconcSympCodes" parameterType="HashMap" resultType="DataRecord">

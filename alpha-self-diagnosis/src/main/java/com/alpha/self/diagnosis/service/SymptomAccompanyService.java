@@ -52,4 +52,14 @@ public interface SymptomAccompanyService {
      */
     LinkedHashSet<IAnswerVo> getSymptomAccompanyAnswer(Long diagnosisId, String mainSympCode, UserInfo userInfo);
 
+    /**
+     * 生成伴随症状提问
+     *
+     * @param diagnosisId
+     * @param mainSympCode
+     * @param userInfo
+     * @return
+     */
+    LinkedHashSet<IAnswerVo> listSymptomAccompany(Long diagnosisId, String mainSympCode, UserInfo userInfo, String keyword);
+
 }

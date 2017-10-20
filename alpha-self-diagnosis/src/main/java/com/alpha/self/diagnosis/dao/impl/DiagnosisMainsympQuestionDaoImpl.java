@@ -2,7 +2,6 @@ package com.alpha.self.diagnosis.dao.impl;
 
 import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
-import com.alpha.commons.core.sql.dto.JavaBean;
 import com.alpha.commons.core.util.JavaBeanMap;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympQuestionDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
@@ -78,6 +77,21 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
     }
 
     /**
+     * 查询主症状的自动计算问题
+     *
+     * @param mainSympCode
+     * @return
+     */
+    public List<DiagnosisMainsympQuestion> listAutoQuestion(String mainSympCode) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.queryAutoQuestion", params);
+        List<DiagnosisMainsympQuestion> dmQuestions = new ArrayList<>();
+        dmQuestions = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympQuestion.class);
+        return dmQuestions;
+    }
+
+    /**
      * 查询主症状下所有疾病
      *
      * @param mainSympCode
@@ -107,18 +121,6 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
         return dmQuestions;
     }
 
-//    /**
-//     * 查询主症状的单个问题
-//     * @param mainSympCode
-//     * @return
-//     */
-//    public DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String mainSympCode,String questionCode){
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("mainSympCode", mainSympCode);
-//        params.put("questionCode", questionCode);
-//        DiagnosisMainsympQuestion dmQuestions = super.selectOne("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.getQuestionByCode", params);
-//        return dmQuestions;
-//    }
 
     /**
      * 查询主症状的单个问题
@@ -129,7 +131,7 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
     public DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String questionCode) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCode", questionCode);
-        DataRecord  dataRecord= super.selectOne("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.getQuestionByCode", params);
+        DataRecord dataRecord = super.selectOne("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.getQuestionByCode", params);
         if (dataRecord == null)
             return null;
         DiagnosisMainsympQuestion dmQuestions = new DiagnosisMainsympQuestion();

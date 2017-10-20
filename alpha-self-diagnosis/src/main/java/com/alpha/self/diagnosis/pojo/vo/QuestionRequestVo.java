@@ -3,7 +3,7 @@ package com.alpha.self.diagnosis.pojo.vo;
 import java.io.Serializable;
 import java.util.List;
 
-public class QuestionRequestVo implements Serializable{
+public class QuestionRequestVo implements Serializable {
 
     private static final long serialVersionUID = 5499892490163380991L;
 
@@ -19,7 +19,7 @@ public class QuestionRequestVo implements Serializable{
     private String sympCode;
 
     private Integer type;//问题类型
-    
+
     private Integer inType;
 
     /**
@@ -97,13 +97,13 @@ public class QuestionRequestVo implements Serializable{
         this.userId = userId;
     }
 
-	public Integer getInType() {
-		return inType;
-	}
+    public Integer getInType() {
+        return inType;
+    }
 
-	public void setInType(Integer inType) {
-		this.inType = inType;
-	}
+    public void setInType(Integer inType) {
+        this.inType = inType;
+    }
 
-    
+
 }

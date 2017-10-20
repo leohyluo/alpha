@@ -19,7 +19,7 @@ public enum ResponseStatus {
     /**
      * 用户不存在 30002, "User not found"
      */
-    USER_NOT_FOUND(202, "用户名不存在"),
+    USER_NOT_FOUND(202, "用户不存在"),
     /**
      * 无效的签名
      */
@@ -50,9 +50,9 @@ public enum ResponseStatus {
     ACCESS_TOKEN_NOT_EXISTS(210, "您的账号已在其他设备登录"),
 
     /**
-     * 座席信息不存在
+     * 无就诊记录
      */
-    SEAT_INFO_NOTFOUND(211, "座席信息不存在"),
+    BASIC_RECORD_NOTFOUND(211, "无就诊记录"),
     /**
      * 座席信息不存在
      */
@@ -106,7 +106,9 @@ public enum ResponseStatus {
     /**
      * 用户已存在 30022, "Existing user name"
      */
-    USER_EXISTED(30022, "用户已存在");
+    USER_EXISTED(30022, "用户已存在"),
+
+    NULL_DIAGNOSIS(20011, "没有找到对应的诊断结果");
 
 
     private final int code;

@@ -1,8 +1,5 @@
 package com.alpha.self.diagnosis.pojo.enums;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by xc.xiong on 2017/9/1.
  * 问题类型
@@ -15,11 +12,13 @@ public enum QuestionEnum {
     肝肾功能(24),
     姓名(26),
     体重(25),
+    主症状语义分析(99),
     主症状(100),
     医学问题(101),
     伴随症状(102),
-    诊断结果(200),
-    ;
+    年龄问题(103),
+    季节问题(104),
+    诊断结果(200);
 
     private Integer value;
 
@@ -37,5 +36,14 @@ public enum QuestionEnum {
 
     public void setValue(Integer value) {
         this.value = value;
+    }
+
+    public static QuestionEnum getQuestion(int type) {
+        QuestionEnum qs[] = QuestionEnum.values();
+        for (QuestionEnum q : qs) {
+            if (q.getValue() == type)
+                return q;
+        }
+        return null;
     }
 }

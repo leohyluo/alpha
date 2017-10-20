@@ -1,11 +1,12 @@
 package com.alpha.self.diagnosis.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xc.xiong on 2017/9/11.
@@ -18,9 +19,19 @@ public interface SymptomMainService {
      *
      * @return
      */
-    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId,UserInfo userInfo);
-    
-    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, List<DiagnosisMainSymptoms> list );
-    
+    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo,int inType);
+
+    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, List<DiagnosisMainSymptoms> list);
+
     public List<DiagnosisMainSymptoms> query(Map<String, Object> param);
+
+    /**
+     * 生成主症状问题
+     *
+     * @param diagnosisId
+     * @param userInfo
+     * @param mainList
+     * @return
+     */
+    IQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo, List<DiagnosisMainSymptoms> mainList,int inType);
 }

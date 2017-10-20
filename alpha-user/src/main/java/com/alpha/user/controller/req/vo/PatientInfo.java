@@ -2,148 +2,148 @@ package com.alpha.user.controller.req.vo;
 
 public class PatientInfo {
 
-	//用户唯一编号
-	private Long userId;
-	
-	//第三方用户唯一编号
-	private String externalUserId;
-	
-	//性别 男/女
-	private int gender;
-	
-	//用户姓名
-	private String userName;
-	
-	//出生日期，格式：2017-9-4 09:40:26
-	private String birth;
-	
-	//身高 cm
-	private String heigth;
-	
-	//体重 kg
-	private String weight;
-	
-	//特殊时期
-	private String specialPeriod;
-	
-	//产史
-	private String fertility;
-	
-	//喂养史
-	private String feed;
-	
-	//既往史
-	private String pastmedicalHistory;
-	
-	//过敏史
-	private String allergicHistory;
-	
-	//最后更新时间
-	private String lastUpdateTime;
+    //用户唯一编号
+    private Long userId;
 
-	public Long getUserId() {
-		return userId;
-	}
+    //第三方用户唯一编号
+    private String externalUserId;
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    //性别 男/女
+    private int gender;
 
-	public String getExternalUserId() {
-		return externalUserId;
-	}
+    //用户姓名
+    private String userName;
 
-	public void setExternalUserId(String externalUserId) {
-		this.externalUserId = externalUserId;
-	}
+    //出生日期，格式：2017-9-4 09:40:26
+    private String birth;
 
-	public int getGender() {
-		return gender;
-	}
+    //身高 cm
+    private String heigth;
 
-	public void setGender(int gender) {
-		this.gender = gender;
-	}
+    //体重 kg
+    private String weight;
 
-	public String getUserName() {
-		return userName;
-	}
+    //特殊时期
+    private String specialPeriod;
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    //产史
+    private String fertility;
 
-	public String getBirth() {
-		return birth;
-	}
+    //喂养史
+    private String feed;
 
-	public void setBirth(String birth) {
-		this.birth = birth;
-	}
+    //既往史
+    private String pastmedicalHistory;
 
-	public String getHeigth() {
-		return heigth;
-	}
+    //过敏史
+    private String allergicHistory;
 
-	public void setHeigth(String heigth) {
-		this.heigth = heigth;
-	}
+    //最后更新时间
+    private String lastUpdateTime;
 
-	public String getWeight() {
-		return weight;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public void setWeight(String weight) {
-		this.weight = weight;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	public String getSpecialPeriod() {
-		return specialPeriod;
-	}
+    public String getExternalUserId() {
+        return externalUserId;
+    }
 
-	public void setSpecialPeriod(String specialPeriod) {
-		this.specialPeriod = specialPeriod;
-	}
+    public void setExternalUserId(String externalUserId) {
+        this.externalUserId = externalUserId;
+    }
 
-	public String getFertility() {
-		return fertility;
-	}
+    public int getGender() {
+        return gender;
+    }
 
-	public void setFertility(String fertility) {
-		this.fertility = fertility;
-	}
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
 
-	public String getFeed() {
-		return feed;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setFeed(String feed) {
-		this.feed = feed;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public String getPastmedicalHistory() {
-		return pastmedicalHistory;
-	}
+    public String getBirth() {
+        return birth;
+    }
 
-	public void setPastmedicalHistory(String pastmedicalHistory) {
-		this.pastmedicalHistory = pastmedicalHistory;
-	}
+    public void setBirth(String birth) {
+        this.birth = birth;
+    }
 
-	public String getAllergicHistory() {
-		return allergicHistory;
-	}
+    public String getHeigth() {
+        return heigth;
+    }
 
-	public void setAllergicHistory(String allergicHistory) {
-		this.allergicHistory = allergicHistory;
-	}
+    public void setHeigth(String heigth) {
+        this.heigth = heigth;
+    }
 
-	public String getLastUpdateTime() {
-		return lastUpdateTime;
-	}
+    public String getWeight() {
+        return weight;
+    }
 
-	public void setLastUpdateTime(String lastUpdateTime) {
-		this.lastUpdateTime = lastUpdateTime;
-	}
-	
-	
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getSpecialPeriod() {
+        return specialPeriod;
+    }
+
+    public void setSpecialPeriod(String specialPeriod) {
+        this.specialPeriod = specialPeriod;
+    }
+
+    public String getFertility() {
+        return fertility;
+    }
+
+    public void setFertility(String fertility) {
+        this.fertility = fertility;
+    }
+
+    public String getFeed() {
+        return feed;
+    }
+
+    public void setFeed(String feed) {
+        this.feed = feed;
+    }
+
+    public String getPastmedicalHistory() {
+        return pastmedicalHistory;
+    }
+
+    public void setPastmedicalHistory(String pastmedicalHistory) {
+        this.pastmedicalHistory = pastmedicalHistory;
+    }
+
+    public String getAllergicHistory() {
+        return allergicHistory;
+    }
+
+    public void setAllergicHistory(String allergicHistory) {
+        this.allergicHistory = allergicHistory;
+    }
+
+    public String getLastUpdateTime() {
+        return lastUpdateTime;
+    }
+
+    public void setLastUpdateTime(String lastUpdateTime) {
+        this.lastUpdateTime = lastUpdateTime;
+    }
+
+
 }

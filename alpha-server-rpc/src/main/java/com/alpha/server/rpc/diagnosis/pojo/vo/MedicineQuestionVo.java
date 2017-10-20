@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by xc.xiong on 2017/9/13.
  */
-public class MedicineQuestionVo implements Serializable{
+public class MedicineQuestionVo implements Serializable {
 
     private static final long serialVersionUID = 2999142900060128282L;
 

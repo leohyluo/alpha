@@ -1,6 +1,6 @@
 package com.alpha.self.diagnosis.pojo.vo;
 
-import com.alpha.server.rpc.diagnosis.pojo.UserDiagnosisOutcome;
+import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class DiagnosisOutcomeVo implements Serializable, IAnswerVo {
     /**
      * 描述
      */
-    private String description ;
+    private String description;
     /**
      * 特异性属性
      */
@@ -45,7 +45,7 @@ public class DiagnosisOutcomeVo implements Serializable, IAnswerVo {
     /**
      * 发病概率
      */
-    private Double probability=0.5;
+    private Double probability = 0.5;
 
     /**
      * 计算出来的权重

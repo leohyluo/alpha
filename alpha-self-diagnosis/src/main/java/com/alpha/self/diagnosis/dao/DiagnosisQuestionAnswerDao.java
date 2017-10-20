@@ -15,10 +15,10 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
     /**
      * 根据问题编号查询所有的答案
      *
-     * @param questionCode
+     * @param questionCodes
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes);
 
 
     /**
@@ -45,7 +45,7 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @param answerCodes
      * @return
      */
-     List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, Collection<String> answerCodes);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, Collection<String> answerCodes);
 
     /**
      * 根据答案编号查询答案

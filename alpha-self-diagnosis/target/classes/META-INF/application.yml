@@ -3,7 +3,13 @@ spring:
     name: alpha-self-diagnosis
   profiles:
     active: core
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:19081/eureka/
+#  instance:
+#      status-page-url: http://doctorppe.zhyaoshi.com/info
 server:
   port: 19092
 logging:
-  config: classpath:logback-diagnosis.xml
+  config: classpath:classpath:logback.xml

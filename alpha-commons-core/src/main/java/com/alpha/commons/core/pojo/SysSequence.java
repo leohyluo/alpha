@@ -5,50 +5,50 @@ import java.io.Serializable;
 /**
  * 序号
  */
-public class SysSequence implements Serializable{
+public class SysSequence implements Serializable {
 
-	private static final long serialVersionUID = 8958027592169693968L;
-	/**
-	 *
-	 */
-	private Long id;
+    private static final long serialVersionUID = 8958027592169693968L;
+    /**
+     *
+     */
+    private Long id;
 
-	/**
+    /**
      * 序列名称
      */
-	private String sequenceKey;
-	/**
+    private String sequenceKey;
+    /**
      * 当前值
      */
-	private Long currentValue;
+    private Long currentValue;
 
-	/**
+    /**
      * 增量
      */
-	private Integer increment;
+    private Integer increment;
 
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getCurrentValue() {
-		return currentValue;
-	}
+    public Long getCurrentValue() {
+        return currentValue;
+    }
 
-	public void setCurrentValue(Long currentValue) {
-		this.currentValue = currentValue;
-	}
+    public void setCurrentValue(Long currentValue) {
+        this.currentValue = currentValue;
+    }
 
-	public Integer getIncrement() {
-		return increment;
-	}
+    public Integer getIncrement() {
+        return increment;
+    }
 
-	public void setIncrement(Integer increment) {
-		this.increment = increment;
-	}
+    public void setIncrement(Integer increment) {
+        this.increment = increment;
+    }
 }

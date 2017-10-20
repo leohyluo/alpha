@@ -5,13 +5,12 @@ import com.alpha.commons.core.sql.DataSet;
 import com.alpha.commons.core.sql.SQLQuery;
 import com.alpha.commons.core.sql.SQLUpdate;
 import com.alpha.commons.core.sql.dto.DataRecord;
-import org.mybatis.spring.SqlSessionTemplate;
 
 import java.util.List;
 import java.util.Map;
 
 
-public interface IBaseDao<T, K>  {
+public interface IBaseDao<T, K> {
 
     /**
      * 插入数据
@@ -25,6 +24,8 @@ public interface IBaseDao<T, K>  {
      * @param insertWithPK 插入时，是否插入主键，如果是数据库自动生成则设置成false. 默认为false
      */
     Long insert(T entity, Boolean insertWithPK);
+
+    void insert(List<T> entitys);
 
     /**
      * 批量插入
