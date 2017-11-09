@@ -82,6 +82,12 @@ public class UserBasicRecord {
      */
     @Column(name = "weight")
     private String weight;
+    
+    /**
+     * 月经期
+     */
+    @Column(name = "menstrual_period")
+    private String menstrualPeriod;
 
     /**
      * 女性特殊时期（月经期、备孕中、妊娠期、哺乳期、无）
@@ -130,6 +136,18 @@ public class UserBasicRecord {
      */
     @Column(name = "allergic_history_text")
     private String allergicHistoryText;
+    
+    /**
+     * 手术史编码
+     */
+    @Column(name = "operation_code")
+    private String operationCode;
+    
+    /**
+     * operation_text
+     */
+    @Column(name = "operation_text")
+    private String operationText;
 
     /**
      * 是否到其它医院就诊
@@ -225,7 +243,7 @@ public class UserBasicRecord {
     @Column(name = "incre_flag")
     private String increFlag;
 
-    /**
+	/**
      * 同步-操作时间
      */
     @Column(name = "opera_flag")
@@ -633,5 +651,27 @@ public class UserBasicRecord {
         this.presentIllnessHistoryHospital = presentIllnessHistoryHospital;
     }
 
+	public String getOperationCode() {
+		return operationCode;
+	}
+
+	public void setOperationCode(String operationCode) {
+		this.operationCode = operationCode;
+	}
+
+	public String getOperationText() {
+		return operationText;
+	}
+
+	public void setOperationText(String operationText) {
+		this.operationText = operationText;
+	}
+    public String getMenstrualPeriod() {
+		return menstrualPeriod;
+	}
+
+	public void setMenstrualPeriod(String menstrualPeriod) {
+		this.menstrualPeriod = menstrualPeriod;
+	}
 
 }

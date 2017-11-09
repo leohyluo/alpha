@@ -18,6 +18,7 @@
         <result column="renal_func" jdbcType="INTEGER" property="renalFunc" />
         <result column="height" jdbcType="VARCHAR" property="height" />
         <result column="weight" jdbcType="VARCHAR" property="weight" />
+        <result column="menstrual_period" jdbcType="VARCHAR" property="menstrualPeriod" />
         <result column="special_period" jdbcType="VARCHAR" property="specialPeriod" />
         <result column="fertility_type" jdbcType="VARCHAR" property="fertilityType" />
         <result column="gestational_age" jdbcType="VARCHAR" property="gestationalAge" />
@@ -26,6 +27,8 @@
         <result column="pastmedical_history_text" jdbcType="VARCHAR" property="pastmedicalHistoryText" />
         <result column="allergic_history_code" jdbcType="VARCHAR" property="allergicHistoryCode" />
         <result column="allergic_history_text" jdbcType="VARCHAR" property="allergicHistoryText" />
+        <result column="operation_code" jdbcType="VARCHAR" property="operationCode" />
+        <result column="operation_text" jdbcType="VARCHAR" property="operationText" />
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
         <result column="in_type" jdbcType="TINYINT" property="inType" />
@@ -35,18 +38,18 @@
 
     <!-- 根据条件查询用户信息-->
     <select id="queryUserInfo" resultMap="userInfo" parameterType="HashMap">
-			SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type from user_info
+			SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,operation_code,operation_text,menstrual_period from user_info
     </select>
 
     <!-- 根据条件查询用户信息-->
     <select id="getUserInfoByExternalUserId" resultMap="userInfo" parameterType="HashMap">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period
         from user_info where external_user_id=#{externalUserId} and in_type=#{inType} LIMIT 1
     </select>
     
     <!-- 根据条件查询用户信息-->
     <select id="queryByUserId" resultMap="userInfo" parameterType="java.lang.Long">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period
         from user_info where user_id=#{userId}
     </select>
     

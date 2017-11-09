@@ -1,5 +1,7 @@
 package com.alpha.self.diagnosis.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alpha.commons.util.StringUtils;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
@@ -41,6 +43,9 @@ public class TreatSchemeController {
     @PostMapping("/diseaseList")
     public ResponseMessage diseaseList(@RequestBody SearchRequestVo vo) {
         String diseaseName = vo.getKeyword();
+        if(StringUtils.isEmpty(diseaseName)) {
+        	return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        }
         List<DiseaseVo> diseaseList = diagnosisDiseaseService.findByDiseaseName(diseaseName);
         return WebUtils.buildSuccessResponseMessage(diseaseList);
     }
@@ -54,17 +59,17 @@ public class TreatSchemeController {
      * @return
      */
     @PostMapping(value = "/get")
-    public ResponseMessage treatScheme(String userId, String diseaseCode) {
+    public ResponseMessage treatScheme(SearchRequestVo vo) {
         try {
-            LOGGER.info("治疗方案搜索: {} {}", userId, diseaseCode);
-            if (diseaseCode == null || userId == null) {
-                return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+            LOGGER.info("治疗方案搜索: {}", JSON.toJSON(vo));
+            if (vo == null||vo.getDiseaseCode()==null ) {
+                return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
             }
-            UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(userId));
-            if (userInfo == null) {
-                return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
-            }
-            TreatSchemeVo treatSchemeVo = treatSchemeService.getTreatScheme(diseaseCode);
+//            UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(userId));
+//            if (userInfo == null) {
+//                return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+//            }
+            TreatSchemeVo treatSchemeVo = treatSchemeService.getTreatScheme(vo.getDiseaseCode());
             if (treatSchemeVo != null)
                 return WebUtils.buildSuccessResponseMessage(treatSchemeVo);
         } catch (Exception e) {

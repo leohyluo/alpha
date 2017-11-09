@@ -1,17 +1,20 @@
 package com.alpha.self.diagnosis.pojo.vo;
 
-import com.alpha.commons.util.BeanCopierUtil;
-import com.alpha.commons.util.DateUtils;
-import com.alpha.server.rpc.user.pojo.UserBasicRecord;
-import com.alpha.server.rpc.user.pojo.UserInfo;
-import org.apache.commons.lang.StringUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang.StringUtils;
+
+import com.alpha.commons.util.BeanCopierUtil;
+import com.alpha.commons.util.DateUtils;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+
 public class DiagnosisResultVo {
+	
+	private Long diagnosisId;
 
     /**
      * 第三方用户编号，用来同步第三方用户信息
@@ -42,6 +45,9 @@ public class DiagnosisResultVo {
     //既往史    
     private PastmedicalHistoryResultVo pastmedicalHistory;
 
+    //经过拼装的既往史
+    private String pastmedicalHistoryText;
+    
     //诊断结果
     private List<UserDiagnosisOutcomeVo> diseaseList;
 
@@ -69,6 +75,7 @@ public class DiagnosisResultVo {
 		this.presentIllnessHistory = StringUtils.trimToEmpty(record.getPresentIllnessHistory())
 				.concat(StringUtils.trimToEmpty(record.getPresentIllnessHistoryHospital()));
         this.buildPastIllHistory(record);
+        this.toPastIllHistoryString(record);
     }
 
     public String getExternalUserId() {
@@ -156,11 +163,30 @@ public class DiagnosisResultVo {
         this.userName = userInfo.getUserName();
         this.gender = userInfo.getGender();
     }
+        
+    public String getPastmedicalHistoryText() {
+		return pastmedicalHistoryText;
+	}
 
-    private void buildPastIllHistory(UserBasicRecord record) {
+	public void setPastmedicalHistoryText(String pastmedicalHistoryText) {
+		this.pastmedicalHistoryText = pastmedicalHistoryText;
+	}
+
+	public Long getDiagnosisId() {
+		return diagnosisId;
+	}
+
+	public void setDiagnosisId(Long diagnosisId) {
+		this.diagnosisId = diagnosisId;
+	}
+
+	private void buildPastIllHistory(UserBasicRecord record) {
         PastmedicalHistoryResultVo vo = new PastmedicalHistoryResultVo();
         //手术史
         List<String> operation = new ArrayList<>();
+        if(StringUtils.isNotEmpty(record.getOperationText())) {
+        	operation = Stream.of(record.getOperationText().split(",")).collect(Collectors.toList());
+        }
         vo.setOperation(operation);
         //疾病史
         List<String> diseaseHistory = new ArrayList<>();
@@ -194,5 +220,40 @@ public class DiagnosisResultVo {
         }
         vo.setSpecialPeriod(specialPeriod);
         this.pastmedicalHistory = vo;
+    }
+    
+    private void toPastIllHistoryString(UserBasicRecord record) {
+    	StringBuffer sb = new StringBuffer();
+    	if(StringUtils.isEmpty(record.getPastmedicalHistoryCode()) || "0".equals(record.getPastmedicalHistoryCode())) {
+    		sb.append("既往体健。");
+    	} else {
+    		sb.append("患者有").append(record.getPastmedicalHistoryText()).append("。");
+    	}
+    	if(StringUtils.isEmpty(record.getOperationCode()) || "0".equals(record.getOperationCode())) {
+    		sb.append("无手术史。");
+    	} else {
+    		sb.append("有手术史。");
+    	}
+    	if(StringUtils.isEmpty(record.getAllergicHistoryCode()) || "0".equals(record.getAllergicHistoryCode())) {
+    		sb.append("药物食物过敏不详。");
+    	} else {
+    		sb.append("患者对").append(record.getAllergicHistoryText()).append("过敏。");
+    	}
+    	if(StringUtils.isNotEmpty(record.getFertilityType()) || StringUtils.isNotEmpty(record.getGestationalAge()) || StringUtils.isNotEmpty(record.getFeedType())) {
+    		sb.append("患儿为");
+    		if(StringUtils.isNotEmpty(record.getGestationalAge())) {
+    			sb.append(record.getGestationalAge());
+    		}
+    		if(StringUtils.isNotEmpty(record.getFertilityType())) {
+    			sb.append(record.getFertilityType());
+    		}
+    		if(StringUtils.isNotEmpty(record.getFeedType())) {
+    			sb.append("出生后").append(record.getFeedType()).append("。");
+    		}
+    	}
+    	if("1".equals(record.getMenstrualPeriod())) {
+    		sb.append("目前处于月经期内。");
+    	}
+    	this.pastmedicalHistoryText = sb.toString();
     }
 }

@@ -12,4 +12,4 @@ eureka:
 server:
   port: 19092
 logging:
-  config: classpath:classpath:logback.xml
+  config: classpath:logback.xml

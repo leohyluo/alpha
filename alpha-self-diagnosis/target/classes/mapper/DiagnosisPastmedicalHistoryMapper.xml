@@ -75,13 +75,13 @@
 			<if test="threshold != null">
 				and threshold = #{threshold} and user_select_count > threshold
 			</if>
-			GROUP BY disease_code 
-			<if test="threshold != null">
+			GROUP BY disease_code order by IFNULL(default_order,1000)
+			<!-- <if test="threshold != null">
 				order by user_select_count desc,IFNULL(max_age,150) 
 			</if>
 			<if test="threshold == null">
-				order by IFNULL(max_age,150)
-			</if>
+				order by IFNULL(default_order,1000)
+			</if> -->
 			
 			<if test="limitSize != null">
 				limit 0,#{limitSize}				

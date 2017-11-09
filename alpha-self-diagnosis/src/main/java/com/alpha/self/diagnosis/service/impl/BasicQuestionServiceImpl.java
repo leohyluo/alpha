@@ -497,7 +497,7 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
     		if(age >=0 && age <= 12) {
     			weightCode = BasicQuestionType.WEIGHT.getValue();
     		}
-    		if(age >= 0 && age <= 3) {
+    		if(age >= 0 && age <= 1) {
     			bornHistoryCode = BasicQuestionType.FERTILITY_TYPE.getValue();
     		}
     		

@@ -1,12 +1,11 @@
 package com.alpha.user.pojo.vo;
 
-import com.alpha.commons.util.BeanCopierUtil;
-import com.alpha.commons.util.DateUtils;
-import com.alpha.commons.util.StringUtils;
-import com.alpha.server.rpc.user.pojo.UserInfo;
-
 import java.util.Date;
 import java.util.List;
+
+import com.alpha.commons.util.BeanCopierUtil;
+import com.alpha.commons.util.DateUtils;
+import com.alpha.server.rpc.user.pojo.UserInfo;
 
 /**
  * 用于接收医院返回的用户实体类
@@ -37,7 +36,8 @@ public class HisUserInfoVo {
     private int inType;
     //年龄
     private String age;
-
+    //月经期
+    private String menstrualPeriod;
     //女性特殊时期（月经期、备孕中、妊娠期、哺乳期、无）
     private String specialPeriod;
     //既往史
@@ -260,7 +260,15 @@ public class HisUserInfoVo {
         this.otherHospitalDiagnosis = otherHospitalDiagnosis;
     }
 
-    /**
+    public String getMenstrualPeriod() {
+		return menstrualPeriod;
+	}
+
+	public void setMenstrualPeriod(String menstrualPeriod) {
+		this.menstrualPeriod = menstrualPeriod;
+	}
+
+	/**
      * 敏感信息处理
      */
     private void processSensitive(UserInfo userInfo) {

@@ -11,6 +11,7 @@ public class SearchRequestVo implements Serializable {
     private Long diagnosisId;
     private Integer inType;
     private String sympCode;
+    private String diseaseCode;
 
     public String getUserId() {
         return userId;
@@ -50,5 +51,13 @@ public class SearchRequestVo implements Serializable {
 
     public void setSympCode(String sympCode) {
         this.sympCode = sympCode;
+    }
+
+    public String getDiseaseCode() {
+        return diseaseCode;
+    }
+
+    public void setDiseaseCode(String diseaseCode) {
+        this.diseaseCode = diseaseCode;
     }
 }

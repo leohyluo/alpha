@@ -123,6 +123,12 @@ public class UserInfo implements Serializable {
     private String weight;
 
     /**
+     * 月经期
+     */
+    @Column(name = "menstrual_period")
+    private String menstrualPeriod;
+    
+    /**
      * 女性特殊时期（月经期、备孕中、妊娠期、哺乳期、无）
      */
     @Column(name = "special_period")
@@ -169,6 +175,18 @@ public class UserInfo implements Serializable {
      */
     @Column(name = "allergic_history_text")
     private String allergicHistoryText;
+    
+    /**
+     * 手术史编码
+     */
+    @Column(name = "operation_code")
+    private String operationCode;
+    
+    /**
+     * operation_text
+     */
+    @Column(name = "operation_text")
+    private String operationText;
 
     /**
      * 挂号科室
@@ -545,8 +563,32 @@ public class UserInfo implements Serializable {
     public void setCureTime(Date cureTime) {
         this.cureTime = cureTime;
     }
+    
+    public String getOperationCode() {
+		return operationCode;
+	}
 
-    public Map<BasicQuestionType, Object> toMap() {
+	public void setOperationCode(String operationCode) {
+		this.operationCode = operationCode;
+	}
+
+	public String getOperationText() {
+		return operationText;
+	}
+
+	public void setOperationText(String operationText) {
+		this.operationText = operationText;
+	}
+
+	public String getMenstrualPeriod() {
+		return menstrualPeriod;
+	}
+
+	public void setMenstrualPeriod(String menstrualPeriod) {
+		this.menstrualPeriod = menstrualPeriod;
+	}
+
+	public Map<BasicQuestionType, Object> toMap() {
         Map<BasicQuestionType, Object> map = new HashMap<>();
         map.put(BasicQuestionType.BORN, this.birth);
         map.put(BasicQuestionType.BOY_OR_GIRL, this.gender);

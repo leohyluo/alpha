@@ -78,7 +78,12 @@ public class MedicineSortUtil {
         Collections.sort(dqAnswers, new Comparator<DiagnosisQuestionAnswer>() {
             @Override
             public int compare(DiagnosisQuestionAnswer o1, DiagnosisQuestionAnswer o2) {
-                return (int) (o2.getWeightValue() - o1.getWeightValue());
+                int difference = (int) (o2.getWeightValue() - o1.getWeightValue());
+                if(difference==0){
+                    return (int) (o2.getWeight() - o1.getWeight());
+                }else {
+                    return difference;
+                }
             }
         });
         return new LinkedHashSet<>(dqAnswers);

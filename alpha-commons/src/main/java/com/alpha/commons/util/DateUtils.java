@@ -51,7 +51,16 @@ public class DateUtils {
 		long year = ChronoUnit.YEARS.between(birth, today);
 		LocalDate birth2 = birth.plusYears(year);
 		long diffMonth = ChronoUnit.MONTHS.between(birth2, today);
-		String result = year + "岁" + diffMonth + "个月";
+		String result = "";
+		if(year == 0) {
+			result = diffMonth + "个月";
+			return result;
+		} else if (diffMonth == 0) {
+			result = year + "岁";
+			return result;
+		} else {
+			result = year + "岁" + diffMonth + "个月";
+		}
 		return result;
 	}
 	
@@ -164,5 +173,4 @@ public class DateUtils {
 		result.add(maxValue);
 		return result;
 	}
-
 }

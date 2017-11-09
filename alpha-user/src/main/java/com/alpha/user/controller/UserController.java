@@ -72,7 +72,10 @@ public class UserController {
      */
     @PostMapping("/query")
     public ResponseMessage query(HisUserInfoVo vo) {
-    	if(StringUtils.isEmpty(vo.getIdcard()) && vo.getUserId() == null) {
+    	String idcard = vo.getIdcard();
+    	Long userId = vo.getUserId();
+    	LOGGER.info("idcard is {}, userId is {}", idcard, userId);
+    	if(StringUtils.isEmpty(idcard) && userId == null) {
     		return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
     	}
         HisUserInfoVo hisUserInfo = userInfoService.queryUserInfoFromHis(vo.getIdcard(), vo.getUserId());

@@ -14,6 +14,7 @@
 	    <result column="renal_func" jdbcType="INTEGER" property="renalFunc" />
 	    <result column="height" jdbcType="VARCHAR" property="height" />
 	    <result column="weight" jdbcType="VARCHAR" property="weight" />
+	    <result column="menstrual_period" jdbcType="VARCHAR" property="menstrualPeriod" />
 	    <result column="special_period" jdbcType="VARCHAR" property="specialPeriod" />
 	    <result column="fertility_type" jdbcType="VARCHAR" property="fertilityType" />
 	    <result column="gestational_age" jdbcType="VARCHAR" property="gestationalAge" />

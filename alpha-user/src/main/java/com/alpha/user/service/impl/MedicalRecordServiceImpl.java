@@ -8,6 +8,7 @@ import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 import com.alpha.user.dao.DiagnosisMedicalTemplateDao;
 import com.alpha.user.pojo.DiagnosisMedicalTemplate;
 import com.alpha.user.service.MedicalRecordService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,7 +101,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     public String runCode1(Map<String, String> question, DiagnosisMainSymptoms symptom) {
-        String result = symptom.getSympName() + question.get("3319");
+        String result = symptom.getSympName() + question.get("3319")+"天";
         return result;
     }
 
@@ -108,7 +109,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         StringBuffer strBuff = new StringBuffer();
         strBuff.append("患儿约");
         strBuff.append(question.get("3319"));
-        strBuff.append("前");
+        strBuff.append("天前");
         if (org.apache.commons.lang3.StringUtils.isEmpty(question.get("3325"))) {
             strBuff.append("无明显诱因");
         } else {
@@ -125,7 +126,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         strBuff.append(question.get("3316"));
         strBuff.append("、");
         strBuff.append(question.get("3324"));
-        strBuff.append("和");
+        strBuff.append("、");
         strBuff.append(question.get("3323"));
         strBuff.append("、");
         strBuff.append(question.get("3320"));
@@ -134,6 +135,7 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         strBuff.append("。");
         String result = strBuff.toString();
         return result;
+
     }
 
     public String runCode3(UserBasicRecord record) {
@@ -141,12 +143,18 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         if (record.getOtherHospital() != null && record.getOtherHospital() == 1) {
             strBuff.append(sdf.format(record.getOtherHospitalCureTime()));
-            strBuff.append("前患儿到其它医院就诊，诊断为");
-            strBuff.append(record.getOtherHospitalDiagnosis());
+            strBuff.append("前患儿到其它医院就诊，");
+            if(org.apache.commons.lang3.StringUtils.isEmpty(record.getOtherHospitalDiagnosis())){
+                strBuff.append("具体诊断不清楚");
+            }else{
+                strBuff.append("诊断为");
+                strBuff.append(record.getOtherHospitalDiagnosis());
+            }
             strBuff.append(",");
             if (record.getOtherHospitalUseDrug() == 1) {
                 strBuff.append("给予药物治疗,病情");
                 strBuff.append(record.getOtherHospitalEffect());
+                strBuff.append(",");
             } else {
                 strBuff.append("未进行治疗,");
             }

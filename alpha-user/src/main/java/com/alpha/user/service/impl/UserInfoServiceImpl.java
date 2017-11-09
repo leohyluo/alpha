@@ -134,10 +134,13 @@ public class UserInfoServiceImpl implements UserInfoService {
         if (StringUtils.isNotEmpty(userInfo.getFeedType()))
             user.setFeedType(userInfo.getFeedType());
 
-        if (StringUtils.isNotEmpty(userInfo.getPastmedicalHistoryCode()))
+        //if (StringUtils.isNotEmpty(userInfo.getMenstrualPeriod()))
+        	user.setMenstrualPeriod(userInfo.getMenstrualPeriod());
+        
+        //if (StringUtils.isNotEmpty(userInfo.getPastmedicalHistoryCode()))
             user.setPastmedicalHistoryCode(userInfo.getPastmedicalHistoryCode());
 
-        if (StringUtils.isNotEmpty(userInfo.getPastmedicalHistoryText()))
+        //if (StringUtils.isNotEmpty(userInfo.getPastmedicalHistoryText()))
             user.setPastmedicalHistoryText(userInfo.getPastmedicalHistoryText());
 
         if (StringUtils.isNotEmpty(userInfo.getAllergicHistoryCode()))
@@ -145,6 +148,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         if (StringUtils.isNotEmpty(userInfo.getAllergicHistoryText()))
             user.setAllergicHistoryText(userInfo.getAllergicHistoryText());
+        
+        if (StringUtils.isNotEmpty(userInfo.getOperationCode()))
+            user.setOperationCode(userInfo.getOperationCode());
+        
+        if (StringUtils.isNotEmpty(userInfo.getOperationText())) 
+        	user.setOperationText(userInfo.getOperationText());
         userInfoDao.update(user);
         return user;
     }
@@ -161,9 +170,18 @@ public class UserInfoServiceImpl implements UserInfoService {
             //既往史
             List<DiseaseHistoryVo> pastmedicalHistoryList = userInfo.getPastmedicalHistory();
             if (CollectionUtils.isNotEmpty(pastmedicalHistoryList)) {
-
                 String codes = pastmedicalHistoryList.stream().map(DiseaseHistoryVo::getAnswerValue).collect(Collectors.joining(","));
                 String names = pastmedicalHistoryList.stream().map(DiseaseHistoryVo::getAnswerTitle).collect(Collectors.joining(","));
+                Boolean containOperation = Stream.of(codes.split(",")).anyMatch("1"::equals);
+                if (containOperation == true) {
+                	String operationCode = "1";
+                	String operationText = "手术史";
+                	codes = Stream.of(codes.split(",")).filter(e->!operationCode.equals(e)).collect(Collectors.joining(","));
+                	names = Stream.of(names.split(",")).filter(e->!operationText.equals(e)).collect(Collectors.joining(","));
+                	userInfo.setOperationCode(operationCode);
+                	userInfo.setOperationText("是");
+                }
+                
                 userInfo.setPastmedicalHistoryCode(codes);
                 userInfo.setPastmedicalHistoryText(names);
             }
