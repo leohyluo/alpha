@@ -1,6 +1,10 @@
 package com.alpha.server.rpc.diagnosis.pojo;
 
 import javax.persistence.*;
+
+import com.alpha.commons.enums.DisplayType;
+import com.alpha.commons.enums.Unit;
+
 import java.util.Date;
 
 @Entity
@@ -105,6 +109,27 @@ public class DiagnosisMainsympQuestion {
      */
     @Transient
     private Double weightValue;
+    
+    /**
+     * 单选、多选
+     */
+    @Column(name = "display_type")
+    private String displayType;
+    
+    /**
+     * 转化类型(hour,day,month)
+     */
+    @Column(name = "parse_class")
+    private String parseClass;
+    
+    @Column(name = "is_show")
+    private Integer showFlag;
+    
+    /**
+     * 依赖问题编码
+     */
+    @Column(name = "dependency_question_code")
+    private String dependencyQuestionCode;
 
     /**
      *
@@ -405,4 +430,41 @@ public class DiagnosisMainsympQuestion {
     public void setQuestionType(Integer questionType) {
         this.questionType = questionType;
     }
+
+	public String getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+	
+	public String getDependencyQuestionCode() {
+		return dependencyQuestionCode;
+	}
+
+	public void setDependencyQuestionCode(String dependencyQuestionCode) {
+		this.dependencyQuestionCode = dependencyQuestionCode;
+	}
+
+	public Integer getShowFlag() {
+		return showFlag;
+	}
+
+	public void setShowFlag(Integer showFlag) {
+		this.showFlag = showFlag;
+	}
+
+	public String getParseClass() {
+		if(this.displayType != null && this.displayType.equals(DisplayType.TEMPERATURE.getValue())) {
+			parseClass = Unit.CENTIGRADE2.getValue();
+		}
+		return parseClass;
+	}
+
+	public void setParseClass(String parseClass) {
+		this.parseClass = parseClass;
+	}
+    
+    
 }

@@ -1,5 +1,6 @@
 package com.alpha.user.service;
 
+import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
@@ -15,7 +16,7 @@ public interface UserBasicRecordService {
     void updateUserBasicRecord(UserBasicRecord record);
 
     void updateUserBasicRecordWithTx(UserBasicRecord record);
-
+    
     /**
      * 获取昵称，如果是本人，昵称：您
      *
@@ -48,6 +49,20 @@ public interface UserBasicRecordService {
      * @return
      */
     UserBasicRecord findLastCompleted(Long userId);
+    
+    /**
+     * 根据挂号号码查看是否已完成预问诊
+     * @param userId
+     * @return
+     */
+    UserBasicRecord findFinishByUserId(Long userId, String hisRegisterNo);
+    
+    /**
+     * 根据用户ID查看已完成预问诊的记录
+     * @param userId
+     * @return
+     */
+    List<UserBasicRecord> listFinishByUserId(Long userId);
 
     /**
      * 查找主症状模板id
@@ -56,4 +71,10 @@ public interface UserBasicRecordService {
      * @return
      */
     String findTemplateId(Long diagnosisId);
+    
+    /**
+     * 查询当天未确诊的数据
+     * @return
+     */
+    List<UserBasicRecord> listTodayUnConfirm();
 }

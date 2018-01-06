@@ -1,7 +1,5 @@
 package com.alpha.commons.util.sim;
 
-import com.alpha.commons.util.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,10 +8,10 @@ import java.util.Set;
  * Created by iEBM on 2017-05-12.
  */
 public class Similarity {
+    private Map<Character, int[]> vectorMap = new HashMap<Character, int[]>();
+    private int[] tempArray = null;
 
-    public static  Map<Character, int[]>  initSimilarity(String string1, String string2) {
-         Map<Character, int[]> vectorMap = new HashMap<Character, int[]>();
-        int[] tempArray = null;
+    public Similarity(String string1, String string2) {
         for (Character character1 : string1.toCharArray()) {
             if (vectorMap.containsKey(character1)) {
                 vectorMap.get(character1)[0]++;
@@ -34,20 +32,16 @@ public class Similarity {
                 vectorMap.put(character2, tempArray);
             }
         }
-        return vectorMap;
     }
 
     // 求余弦相似度
-    public static double sim(String string1, String string2) {
-        if(StringUtils.isEmpty(string1)||StringUtils.isEmpty(string2))
-            return 0d;
-        Map<Character, int[]> vectorMap = initSimilarity(string1, string2);
+    public double sim() {
         double result = 0;
         result = pointMulti(vectorMap) / sqrtMulti(vectorMap);
         return result;
     }
 
-     public static double sqrtMulti(Map<Character, int[]> paramMap) {
+    private double sqrtMulti(Map<Character, int[]> paramMap) {
         double result = 0;
         result = squares(paramMap);
         result = Math.sqrt(result);
@@ -55,7 +49,7 @@ public class Similarity {
     }
 
     // 求平方和
-    private static double squares(Map<Character, int[]> paramMap) {
+    private double squares(Map<Character, int[]> paramMap) {
         double result1 = 0;
         double result2 = 0;
         Set<Character> keySet = paramMap.keySet();
@@ -68,7 +62,7 @@ public class Similarity {
     }
 
     // 点乘法
-    private static double pointMulti(Map<Character, int[]> paramMap) {
+    private double pointMulti(Map<Character, int[]> paramMap) {
         double result = 0;
         Set<Character> keySet = paramMap.keySet();
         for (Character character : keySet) {
@@ -78,15 +72,13 @@ public class Similarity {
         return result;
     }
 
-/*
+
     public static void main(String[] args) {
-        String s1 = "乏力";
-        String s2 = "心力衰竭";
-        System.out.println(sim(s1,s2));
-        String s3 = "乏力";
-        String s4 = "疲乏无力";
-        System.out.println(sim(s3,s4));
+        String s1 = "神经性头痛";
+        String s2 = "经性头痛";
+        Similarity similarity = new Similarity(s1, s2);
+        System.out.println(similarity.sim());
 
 
-    }*/
+    }
 }

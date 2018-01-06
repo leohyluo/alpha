@@ -2,8 +2,10 @@ package com.alpha.self.diagnosis.service;
 
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.Level1AnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
+import com.alpha.server.rpc.diagnosis.pojo.SyDiagnosisAnswer;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
 import java.util.*;
@@ -17,7 +19,7 @@ public interface MedicineAnswerService {
      *
      * @param questionVo
      */
-    void updateDiagnosisAnswer(QuestionRequestVo questionVo);
+    void updateDiagnosisAnswer(QuestionRequestVo questionVo, UserInfo userInfo);
 
     /**
      * 保存问题答案
@@ -47,7 +49,7 @@ public interface MedicineAnswerService {
     /**
      * 根据答案查询所有的答案，计算特异性
      */
-    Map<Integer, Set<String>> mapAnswerSpec(String questionCode, Collection<String> answerCodes);
+    Map<Integer, Set<String>> mapAnswerSpec(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
 
     /**
      * 查询正向特异性的疾病编码
@@ -72,5 +74,19 @@ public interface MedicineAnswerService {
      * @return
      */
     Map<String, List<DiagnosisQuestionAnswer>> mapAnswers(Collection<String> questionCodes, Collection<String> answerCodes);
+    
+    /**
+	 * 根据答案大类编码找小类答案或同义词等
+	 * @param connCode
+	 * @param userInfo
+	 * @return
+	 */
+	List<SyDiagnosisAnswer> listSyDiagnosisAnswer(String connCode, UserInfo userInfo);
 
+	/**
+	 * 建立答案大小类关系
+	 * @param answerList
+	 * @return
+	 */
+	LinkedHashSet<IAnswerVo> mapAnswerLevel(List<IAnswerVo> answerList);
 }

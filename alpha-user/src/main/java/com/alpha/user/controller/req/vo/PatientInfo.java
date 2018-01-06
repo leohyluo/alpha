@@ -1,6 +1,6 @@
 package com.alpha.user.controller.req.vo;
 
-public class PatientInfo {
+public class PatientInfo extends BasicRequestVo {
 
     //用户唯一编号
     private Long userId;

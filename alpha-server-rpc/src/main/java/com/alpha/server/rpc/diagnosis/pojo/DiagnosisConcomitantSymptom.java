@@ -47,6 +47,11 @@ public class DiagnosisConcomitantSymptom {
      * 特殊时期
      */
     private Integer specialPeriod;
+    
+    /**
+     * 客户端显示类型
+     */
+    private String displayType;
 
 
     public void setId(Long id) {
@@ -129,5 +134,13 @@ public class DiagnosisConcomitantSymptom {
         return this.specialPeriod;
     }
 
+	public String getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+    
 
 }

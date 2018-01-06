@@ -5,6 +5,8 @@ import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,10 +50,13 @@ public class MedicineSortUtil {
         for (Map.Entry<Integer, Set<DiagnosisQuestionAnswer>> entry : answerSpecMap.entrySet()) {
             Set<DiagnosisQuestionAnswer> dqAnswerSet = entry.getValue();
             for (DiagnosisQuestionAnswer dqAnswer : dqAnswerSet) {
-                if (udo != null && dqAnswer.getDiseaseCode().equals(udo.getDiseaseCode())) {
-                    dqAnswer.setWeightValue(dqAnswer.getWeight() + 10000);//首选疾病权重
+            	Double weight = dqAnswer.getWeight() == null ? 0.0d : dqAnswer.getWeight();
+            	dqAnswer.setWeight(weight);
+                if (udo != null && StringUtils.isNotEmpty(dqAnswer.getDiseaseCode()) && StringUtils.isNotEmpty(udo.getDiseaseCode()) 
+                		&& dqAnswer.getDiseaseCode().equals(udo.getDiseaseCode())) {
+                    dqAnswer.setWeightValue(weight + 10000);//首选疾病权重
                 } else {
-                    dqAnswer.setWeightValue(dqAnswer.getWeight());
+                    dqAnswer.setWeightValue(weight);
                 }
             }
             //答案排序
@@ -88,7 +93,7 @@ public class MedicineSortUtil {
         });
         return new LinkedHashSet<>(dqAnswers);
     }
-
+    
     /**
      * 答案 特异性培训
      *

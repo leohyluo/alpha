@@ -23,6 +23,7 @@
 	<select id="queryByKeyword" resultType="DataRecord" parameterType="HashMap">
 		select * from diagnosis_main_symptoms
 		<where>
+			1 = 1 
 			<if test="sympNameList != null">
 				and symp_name in
 				<foreach item="item" index="index" collection="sympNameList" open="(" separator="," close=")">
@@ -32,6 +33,10 @@
 			<if test="sympCode != null">
 				and symp_code = #{sympCode}
 			</if>
+			<if test="keyword != null">
+				and (symp_name like concat(concat('%',#{keyword}),'%') or symbol like concat(concat('%',#{keyword}),'%'))
+			</if>
+			order by default_order
 		</where>
 	</select>
 </mapper>

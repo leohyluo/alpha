@@ -1,16 +1,17 @@
 package com.alpha.user.service.impl;
 
-import com.alpha.server.rpc.user.pojo.UserMember;
-import com.alpha.user.dao.UserMemberDao;
-import com.alpha.user.service.UserMemberService;
+import java.util.Date;
+import java.util.List;
+
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import com.alpha.server.rpc.user.pojo.UserMember;
+import com.alpha.user.dao.UserMemberDao;
+import com.alpha.user.service.UserMemberService;
 
 @Service
 @Transactional
@@ -20,16 +21,20 @@ public class UserMemberServiceImpl implements UserMemberService {
     private UserMemberDao userMemberDao;
 
     @Override
-    public List<UserMember> find(Map<String, Object> map) {
-        List<UserMember> list = userMemberDao.find(map);
-        return list;
-    }
-
-    @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     public void create(UserMember userMember) {
         userMember.setCreateTime(new Date());
         userMemberDao.insert(userMember);
     }
+
+	@Override
+	public List<UserMember> listByUserId(Long userId) {
+		return userMemberDao.listByUserId(userId);
+	}
+
+	@Override
+	public List<UserMember> listByUserIdAndMemberName(Long userId, String memberName) {
+		return userMemberDao.listByUserIdAndMemberName(userId, memberName);
+	}
 
 }

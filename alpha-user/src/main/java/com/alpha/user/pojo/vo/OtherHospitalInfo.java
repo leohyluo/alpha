@@ -1,6 +1,7 @@
 package com.alpha.user.pojo.vo;
 
 import java.util.Date;
+import java.util.List;
 
 public class OtherHospitalInfo {
 
@@ -28,6 +29,11 @@ public class OtherHospitalInfo {
      * 是否使用药物治疗
      */
     private Integer otherHospitalUseDrug;
+    
+    /**
+     * 其它医院用药列表
+     */
+    private List<DrugVo> otherHospitalDrugList;
 
     /**
      * 治疗效果
@@ -95,5 +101,13 @@ public class OtherHospitalInfo {
         this.otherHospitalDiagnosis = otherHospitalDiagnosis;
     }
 
+	public List<DrugVo> getOtherHospitalDrugList() {
+		return otherHospitalDrugList;
+	}
 
+	public void setOtherHospitalDrugList(List<DrugVo> otherHospitalDrugList) {
+		this.otherHospitalDrugList = otherHospitalDrugList;
+	}
+
+    
 }

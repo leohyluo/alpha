@@ -1,6 +1,20 @@
 package com.alpha.self.diagnosis.processor;
 
-import com.alpha.commons.constants.GlobalConstants;
+import static java.util.stream.Collectors.toList;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+
 import com.alpha.commons.enums.BasicQuestionType;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.util.DateUtils;
@@ -8,20 +22,16 @@ import com.alpha.commons.util.StringUtils;
 import com.alpha.self.diagnosis.annotation.BasicAnswerProcessor;
 import com.alpha.self.diagnosis.pojo.BasicAnswer;
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
-import com.alpha.self.diagnosis.pojo.vo.*;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionWithSearchVo;
+import com.alpha.self.diagnosis.pojo.vo.DiseaseVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.SelectedBasicAnswerVo;
 import com.alpha.self.diagnosis.service.BasicAnswerService;
 import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisPastmedicalHistory;
 import com.alpha.server.rpc.user.pojo.UserInfo;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @BasicAnswerProcessor
 @Component
@@ -70,6 +80,7 @@ public class PastmedicalHistoryProcessor extends AbstractBasicAnswerProcessor {
         defaultAnswervoList = answerList.stream().map(BasicAnswerVo::new).collect(toList());
         Map<String, DiseaseVo> selectedMap = selectedList.stream().collect(Collectors.toMap(DiseaseVo::getDiseaseCode, Function.identity()));
         defaultAnswervoList = defaultAnswervoList.stream().filter(e -> !selectedMap.containsKey(e.getAnswerValue())).collect(toList());
+        
         //查询用户频次超过阀值的既往史大类
         int limit = showCount - selectedList.size() - defaultAnswervoList.size();
         //暂时不需要把用户行为加进来
@@ -100,7 +111,14 @@ public class PastmedicalHistoryProcessor extends AbstractBasicAnswerProcessor {
             list2 = queryPastMedicalHistory(param);
         }
 
-
+        //用户之前如没选择过既往史，默认选中"无"
+        if(CollectionUtils.isEmpty(list0)) {
+        	defaultAnswervoList = defaultAnswervoList.stream().peek(e->{
+        		if("-1".equals(e.getAnswerValue())) {
+        			e.setChecked("Y");
+        		}
+        	}).collect(toList());
+        }
         //拼装展示用的数据
         showList.addAll(list0);
         //showList.addAll(list1);

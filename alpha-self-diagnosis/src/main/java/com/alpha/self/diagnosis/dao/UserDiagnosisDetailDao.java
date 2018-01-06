@@ -26,5 +26,26 @@ public interface UserDiagnosisDetailDao extends IBaseDao<UserDiagnosisDetail, Lo
      * @return
      */
     List<UserDiagnosisDetail> listUserDiagnosisDetail(Long diagnosisId);
+    
+    /**
+     * 根据就诊编号与主症状编码查询已回答的问题
+     * @param SympCode
+     * @return
+     */
+    List<UserDiagnosisDetail> listUserDiagnosisDetail(Long diagnosisId, String sympCode);
+    
+    /**
+     * 根据就诊编号与问题编码查询已回答的问题
+     * @param SympCode
+     * @return
+     */
+    List<UserDiagnosisDetail> listUserDiagnosisDetail(Long diagnosisId, List<String> questionCodeList);
+    
+    /**
+     * 根据问诊编号，主症状编码删除已回答的问题
+     * @param diagnosisId
+     * @param sympCode
+     */
+    void deleteUserDiagnosisDetail(Long diagnosisId, String sympCode);
 
 }

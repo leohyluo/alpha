@@ -75,7 +75,7 @@ public class MainController {
             userInfo.setBirth(formatDate.parse("1990-01-04"));
             switch (index) {
                 case 1:
-                    question = symptomMainService.getMainSymptomsQuestion(1000L, userInfo,0);
+                    question = symptomMainService.getMainSymptomsQuestion(1000L, userInfo,0, null);
                     break;
             }
             return new ResponseMessage(question);
@@ -96,7 +96,8 @@ public class MainController {
             UserInfo userInfo = new UserInfo();
             userInfo.setGender(1);
             userInfo.setBirth(formatDate.parse("2016-01-04"));
-            IQuestionVo question = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            //IQuestionVo question = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            IQuestionVo question = medicineQuestionService.replyDiagnosisQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
             return new ResponseMessage(question);
         } catch (Exception e) {
             e.printStackTrace();

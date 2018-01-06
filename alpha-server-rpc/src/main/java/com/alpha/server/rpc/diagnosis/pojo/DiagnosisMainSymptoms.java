@@ -319,8 +319,10 @@ public class DiagnosisMainSymptoms {
         	}
         }
         //过滤版本
-
         Integer version = this.getObjectVersion();
+        if(version == null || version == 0){
+        	return false;
+        }
         if(version!= null&&version!=0){
 	        List<ObjectVersionEnum> clientVersion = ObjectVersionEnum.getSupportTypes(inType);
 	        List<ObjectVersionEnum> serverVersion =  ObjectVersionEnum.getSupportTypes(this.objectVersion);

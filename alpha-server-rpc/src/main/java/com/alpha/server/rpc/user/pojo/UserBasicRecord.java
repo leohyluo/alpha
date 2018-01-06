@@ -1,10 +1,13 @@
 package com.alpha.server.rpc.user.pojo;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alpha.commons.enums.FeedType;
 import com.alpha.commons.enums.FertilityType;
 import com.alpha.commons.enums.GestationalAge;
+import com.alpha.commons.enums.VaccinationHistory;
 import com.alpha.commons.enums.WomenSpecialPeriod;
 import com.alpha.commons.util.BeanCopierUtil;
+import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.util.StringUtils;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
@@ -13,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "user_basic_record")
@@ -112,7 +116,13 @@ public class UserBasicRecord {
      */
     @Column(name = "feed_type")
     private String feedType;
-
+    
+    /**
+     * 预防接种史名称
+     */
+    @Column(name = "vaccination_history_text")
+    private String vaccinationHistoryText;
+    
     /**
      * 既往史编码集合
      */
@@ -166,6 +176,12 @@ public class UserBasicRecord {
      */
     @Column(name = "other_hospital_useDrug")
     private Integer otherHospitalUseDrug;
+    
+    /**
+     * 用药列表
+     */
+    @Column(name = "other_hospital_drugList")
+    private String otherHospitalDrugList;
 
     /**
      * 治疗效果
@@ -214,6 +230,52 @@ public class UserBasicRecord {
      */
     @Column(name = "cure_time")
     private Date cureTime;
+    
+    /**
+     * 医院编码
+     */
+    @Column(name = "hospital_code")
+    private String hospitalCode;
+    
+    /**
+     * 医生姓名
+     */
+    @Column(name = "doctor_name")
+    private String doctorName;
+    
+    /**
+     * 紧急联系电话
+     */
+    @Column(name = "phone_num")
+    private String phoneNum;
+    
+    /**
+     * 状态
+     */
+    @Column(name = "status")
+    private String status;
+    
+    //icd10
+    @Column(name = "icd10")
+    private String icd10;
+    
+    //疾病名称
+    @Column(name = "disease_name")
+    private String diseaseName;
+    
+    //检查列表(json数组字符串)
+    @Column(name = "checkList")
+    private String checkList;
+    
+    //药品列表(json数组字符串)
+    @Column(name = "drugList")
+    private String drugList;
+    
+    /**
+     * 医院挂号号码
+     */
+    @Column(name = "his_register_no")
+    private String hisRegisterNo;
 
     public String getDepartment() {
         return department;
@@ -328,6 +390,19 @@ public class UserBasicRecord {
         if (StringUtils.isNotEmpty(this.feedType)) {
             Integer feedType = Integer.parseInt(this.feedType);
             this.feedType = FeedType.getText(feedType);
+        }
+        if (StringUtils.isNotEmpty(userInfo.getVaccinationHistoryCode())) {
+            Integer vaccinationHistoryCode = Integer.parseInt(userInfo.getVaccinationHistoryCode());
+            this.vaccinationHistoryText = VaccinationHistory.getText(vaccinationHistoryCode);
+        }
+        //设置hospitalCode
+        String departmentListStr = userInfo.getDepartmentList();
+        if(StringUtils.isNotEmpty(departmentListStr)) {
+        	List<HisRegisterInfo> hisDepartmentList = JSONArray.parseArray(departmentListStr, HisRegisterInfo.class);
+        	if(CollectionUtils.isNotEmpty(hisDepartmentList)) {
+        		String hospitalCode = hisDepartmentList.get(0).getHospitalCode();
+        		this.hospitalCode = hospitalCode; 
+        	}
         }
     }
 
@@ -673,5 +748,94 @@ public class UserBasicRecord {
 	public void setMenstrualPeriod(String menstrualPeriod) {
 		this.menstrualPeriod = menstrualPeriod;
 	}
+	
+	public String getVaccinationHistoryText() {
+		return vaccinationHistoryText;
+	}
 
+	public void setVaccinationHistoryText(String vaccinationHistoryText) {
+		this.vaccinationHistoryText = vaccinationHistoryText;
+	}
+
+	public String getDoctorName() {
+		return doctorName;
+	}
+
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getHisRegisterNo() {
+		return hisRegisterNo;
+	}
+
+	public void setHisRegisterNo(String hisRegisterNo) {
+		this.hisRegisterNo = hisRegisterNo;
+	}
+
+	public String getOtherHospitalDrugList() {
+		return otherHospitalDrugList;
+	}
+
+	public void setOtherHospitalDrugList(String otherHospitalDrugList) {
+		this.otherHospitalDrugList = otherHospitalDrugList;
+	}
+
+	public String getHospitalCode() {
+		return hospitalCode;
+	}
+
+	public void setHospitalCode(String hospitalCode) {
+		this.hospitalCode = hospitalCode;
+	}
+
+	public String getIcd10() {
+		return icd10;
+	}
+
+	public void setIcd10(String icd10) {
+		this.icd10 = icd10;
+	}
+
+	public String getDiseaseName() {
+		return diseaseName;
+	}
+
+	public void setDiseaseName(String diseaseName) {
+		this.diseaseName = diseaseName;
+	}
+
+	public String getCheckList() {
+		return checkList;
+	}
+
+	public void setCheckList(String checkList) {
+		this.checkList = checkList;
+	}
+
+	public String getDrugList() {
+		return drugList;
+	}
+
+	public void setDrugList(String drugList) {
+		this.drugList = drugList;
+	}
+
+	public String getPhoneNum() {
+		return phoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		this.phoneNum = phoneNum;
+	}
+	
+	
 }

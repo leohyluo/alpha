@@ -18,7 +18,35 @@ public class DiseaseWeightUtil {
      *
      * @param mqv
      */
-    public static Double diagnosisOutcome(int questionSize, StringBuffer calculationFormula, MedicineQuestionVo mqv, Map<String, List<DiagnosisMainsympConcsymp>> dmcsMap, DiagnosisMainsympQuestion dmQuestion) {
+    public static Double diagnosisOutcome(int questionSize, StringBuffer calculationFormula, MedicineQuestionVo mqv, Map<String, List<MedicineQuestionVo>> dmcsMap, DiagnosisMainsympQuestion dmQuestion) {
+        try {
+            if (dmcsMap == null || dmcsMap.size() == 0) {
+                return 0d;
+            }
+            List<MedicineQuestionVo> dmcs = dmcsMap.get(mqv.getDiseaseCode());
+            if (dmcs == null || dmcs.size() == 0) {
+                return 0d;
+            }
+            Double N = 0d;//答案
+            Double Y = questionWeightFormula(questionSize, mqv.getQuestionWeight(), mqv.getQuestionStandardDeviation(), calculationFormula); //问题
+            for (MedicineQuestionVo mdc : dmcs) {
+                N = N + answerWeightFormula(mdc.getAnswerWeight(), mqv.getAnswerStandardDeviation(), dmQuestion, calculationFormula);
+
+            }
+            return diseaseWeightFormula(Y, N, calculationFormula);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0d;
+        }
+    }
+    
+    /**
+     * 计算伴随症状权重
+     * 症状权重=问题 * 伴随症状+伴随症状
+     *
+     * @param mqv
+     */
+    public static Double diagnosisOutcome_bak(int questionSize, StringBuffer calculationFormula, MedicineQuestionVo mqv, Map<String, List<DiagnosisMainsympConcsymp>> dmcsMap, DiagnosisMainsympQuestion dmQuestion) {
         try {
             if (dmcsMap == null || dmcsMap.size() == 0) {
                 return 0d;
@@ -79,6 +107,7 @@ public class DiseaseWeightUtil {
      */
     public static Double answerWeightFormula(Double answerWeight, Double answerStandardDeviation, DiagnosisMainsympQuestion dmQuestion, StringBuffer calculationFormula) {
         try {
+        	answerWeight = answerWeight == null ? 0.0d : answerWeight;
             //排序在最后的答案的权重  X=（100-N*（N+1）/2 *标准差）/(N+1)
             Double M = (100 - dmQuestion.getAnswerTotal() * answerStandardDeviation / (dmQuestion.getAnswerTotal() + 1));
             calculationFormula.append("</br>");

@@ -5,13 +5,13 @@
 
     <select id="queryDiagnosisMainsympConcsymp" parameterType="HashMap" resultType="DataRecord">
         select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
-        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age
+        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age,dcs.display_type
         from diagnosis_mainsymp_concsymp dmcs INNER JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
         where dmcs.main_symp_code=#{mainSympCode}
     </select>
     <select id="queryConcsymp" parameterType="HashMap" resultType="DataRecord">
         select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
-        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age
+        dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age,dcs.display_type
         from diagnosis_mainsymp_concsymp dmcs INNER JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
         where dmcs.main_symp_code=#{mainSympCode} group by dmcs.conc_symp_code
     </select>
@@ -23,5 +23,40 @@
             #{item}
         </foreach>
     </select>
+    
+    <select id="queryConcSympByCodes" parameterType="HashMap" resultType="DataRecord">
+       SELECT
+			dms.symp_code,
+			dms.symp_name,
+			dmc.disease_code,
+			dcs.symp_name AS 'answer_title',
+			dmc.conc_symp_code AS 'answer_code',
+			dmc.rate AS 'answer_weight',
+			dmq.question_code,
+			dmq.question_type,
+			dmq.title AS 'question_title',
+			ddmq.weight AS 'question_weight',
+			dms.standard_deviation AS 'question_standard_deviation',
+			dmq.standard_deviation AS 'answer_standard_deviation'
+			-- ddmq.weight AS 'answer_weight'
+		FROM
+			diagnosis_mainsymp_concsymp dmc
+		LEFT JOIN diagnosis_main_symptoms dms ON dmc.main_symp_code = dms.symp_code
+		LEFT JOIN diagnosis_concomitant_symptom dcs ON dmc.conc_symp_code = dcs.symp_code
+		LEFT JOIN diagnosis_mainsymp_question dmq ON dmc.main_symp_code = dmq.main_symp_code
+		LEFT JOIN diagnosis_disease_mainsym_question ddmq ON (
+			dmc.main_symp_code = ddmq.main_sym_code
+			AND dmc.disease_code = ddmq.disease_code
+			AND dmq.question_code = ddmq.question_code
+		)
+		WHERE
+			dmc.main_symp_code = #{mainSympCode}
+		AND dmc.conc_symp_code IN 
+		<foreach item="item" index="index" collection="concSympCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>			
+		AND dmq.question_type = 102
+    </select>
+    
 
 </mapper>

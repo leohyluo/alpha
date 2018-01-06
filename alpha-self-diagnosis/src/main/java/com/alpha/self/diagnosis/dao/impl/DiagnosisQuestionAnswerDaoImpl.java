@@ -4,6 +4,7 @@ import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
 import com.alpha.self.diagnosis.dao.DiagnosisQuestionAnswerDao;
+import com.alpha.self.diagnosis.pojo.enums.SyAnswerType;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -42,6 +43,7 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
     public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCodes", questionCodes);
+        params.put("wordsProperty", SyAnswerType.PARENT_ANSWER.getValue());
         List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryDiagnosisQuestionAnswer", params);
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
@@ -72,8 +74,9 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
      * @param answerCodes
      * @return
      */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes) {
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
         Map<String, Object> params = new HashMap<>();
+        answerCodes.addAll(hiddenAnswerCodes);
         params.put("questionCode", questionCode);
         params.put("answerCodes", answerCodes);
         List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryByAnswerCodes", params);
@@ -112,6 +115,16 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         List<MedicineQuestionVo> mqvAnswers = JavaBeanMap.convertListToJavaBean(datas, MedicineQuestionVo.class);
         return mqvAnswers;
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DiagnosisQuestionAnswer> listHiddenAnswers(String questionCode) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("questionCode", questionCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryHiddenAnswers", params);
+        List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
+        return dqAnswers;
+	}
 
 
 }

@@ -2,6 +2,7 @@ package com.alpha.self.diagnosis.dao;
 
 import com.alpha.commons.core.dao.IBaseDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
+import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,5 +36,14 @@ public interface DiagnosisMainsympConcsympDao extends IBaseDao<DiagnosisMainsymp
      * @return
      */
     List<DiagnosisMainsympConcsymp> listDiagnosisMainsympConcsymp(String mainSympCode, Collection concSympCodes);
+    
+    /**
+     * 查询伴随症状
+     *
+     * @param mainSympCode
+     * @param concSympCodes
+     * @return
+     */
+    List<MedicineQuestionVo> listDiagnosisMainsympConcsymp(String mainSympCode, List<String> concSympCodes);
 
 }

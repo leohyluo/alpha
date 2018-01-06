@@ -10,9 +10,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -151,6 +154,20 @@ public class UserInfo implements Serializable {
      */
     @Column(name = "feed_type")
     private String feedType;
+    
+    /**
+     * 预防接种史编码
+     */
+    @Column(name = "vaccination_history_code")
+    private String vaccinationHistoryCode;
+    
+    public String getVaccinationHistoryCode() {
+		return vaccinationHistoryCode;
+	}
+
+	public void setVaccinationHistoryCode(String vaccinationHistoryCode) {
+		this.vaccinationHistoryCode = vaccinationHistoryCode;
+	}
 
     /**
      * 既往史编码集合
@@ -187,19 +204,49 @@ public class UserInfo implements Serializable {
      */
     @Column(name = "operation_text")
     private String operationText;
+    
+    /**
+     * 挂号科室数组
+     */
+    @Column(name = "department_json")
+    private String departmentList;
 
     /**
      * 挂号科室
      */
-    @Column(name = "department")
+  /*  @Column(name = "department")
     private String department;
 
-    /**
+    *//**
      * 就诊日期
-     */
+     *//*
     @Column(name = "cure_time")
     private Date cureTime;
+    
+    *//**
+     * 医生姓名
+     *//*
+    @Column(name = "doctor_name")
+    private String doctorName;
+    
+    *//**
+     * 医院挂号号码
+     *//*
+    @Column(name = "his_register_no")
+    private String hisRegisterNo;*/
+    
+    /**
+     * 将挂号科室json字符串转为List集合
+     */
+    @Transient
+    private List<HisRegisterInfo> hisDepartmentList; 
 
+    /**
+     * 用户 来源类型，h5=1
+     */
+    @Column(name = "in_type")
+    private Integer inType;
+    
     /**
      * 创建时间
      */
@@ -211,12 +258,6 @@ public class UserInfo implements Serializable {
      */
     @Column(name = "last_update_time")
     private Date lastUpdateTime;
-
-    /**
-     * 用户 来源类型，h5=1
-     */
-    @Column(name = "in_type")
-    private Integer inType;
 
     /**
      *
@@ -548,21 +589,7 @@ public class UserInfo implements Serializable {
         return this.versionEvolution;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public Date getCureTime() {
-        return cureTime;
-    }
-
-    public void setCureTime(Date cureTime) {
-        this.cureTime = cureTime;
-    }
+    
     
     public String getOperationCode() {
 		return operationCode;
@@ -586,6 +613,22 @@ public class UserInfo implements Serializable {
 
 	public void setMenstrualPeriod(String menstrualPeriod) {
 		this.menstrualPeriod = menstrualPeriod;
+	}
+	
+	public String getDepartmentList() {
+		return departmentList;
+	}
+
+	public void setDepartmentList(String departmentList) {
+		this.departmentList = departmentList;
+	}
+
+	public List<HisRegisterInfo> getHisDepartmentList() {
+		return hisDepartmentList;
+	}
+
+	public void setHisDepartmentList(List<HisRegisterInfo> hisDepartmentList) {
+		this.hisDepartmentList = hisDepartmentList;
 	}
 
 	public Map<BasicQuestionType, Object> toMap() {

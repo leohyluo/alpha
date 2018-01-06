@@ -1,8 +1,8 @@
 package com.alpha.treatscheme.service.impl;
 
-import com.alpha.commons.core.dao.DiagnosisDiseaseDao;
 import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.treatscheme.dao.DiagnosisDiseaseCheckDao;
+import com.alpha.treatscheme.dao.DiagnosisDiseaseDao;
 import com.alpha.treatscheme.dao.DiagnosisDiseasePhysicalexamDao;
 import com.alpha.treatscheme.dao.DiagnosisDiseaseTreatoptionsDao;
 import com.alpha.treatscheme.pojo.DiagnosisDiseaseCheck;

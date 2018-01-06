@@ -10,4 +10,17 @@ public interface UserMemberDao extends IBaseDao<UserMember, Long> {
 
     List<UserMember> find(Map<String, Object> map);
 
+    /**
+     * 查询用户成员列表
+     * @param userId
+     * @return
+     */
+    List<UserMember> listByUserId(Long userId);
+    
+    /**
+     * 查询用户成员列表
+     * @param userId
+     * @return
+     */
+    List<UserMember> listByUserIdAndMemberName(Long userId, String memberName);
 }

@@ -13,7 +13,6 @@ import org.springframework.cglib.core.Converter;
 public class BeanCopierUtil {
 
 	public static void copy(Object srcObj, Object destObj, Converter converter) {
-
 		BeanCopier copier = BeanCopier.create(srcObj.getClass(), destObj.getClass(), converter != null);
 		copier.copy(srcObj, destObj, converter != null ? converter : null);
 	}

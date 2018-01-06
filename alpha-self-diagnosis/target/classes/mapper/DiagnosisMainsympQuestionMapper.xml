@@ -12,6 +12,8 @@
         <result column="max_age" jdbcType="INTEGER" property="maxAge"/>
         <result column="default_order" jdbcType="INTEGER" property="defaultOrder"/>
         <result column="question_type" jdbcType="INTEGER" property="questionType"/>
+        <result column="display_type" jdbcType="VARCHAR" property="displayType"/>
+        <result column="parse_class" jdbcType="VARCHAR" property="parseClass"/>
         <result column="incre_flag" jdbcType="VARCHAR" property="increFlag"/>
         <result column="opera_flag" jdbcType="VARCHAR" property="operaFlag"/>
         <result column="operate_type" jdbcType="VARCHAR" property="operateType"/>
@@ -26,7 +28,12 @@
 
     <!-- 查询主症状下的未回答问题 -->
     <select id="queryUntreatedQuestion" resultType="DataRecord" parameterType="HashMap">
-      select * from diagnosis_mainsymp_question where is_show>0 and main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC
+      <!-- select * from diagnosis_mainsymp_question where is_show>0 and main_symp_code=#{mainSympCode} and default_order>#{defaultOrder} order by default_order ASC -->
+      <!--  查询主症状下的未回答问题,(包括有依赖的隐藏问题) -->
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode}
+       and default_order>#{defaultOrder}
+       and (is_show > 0 OR dependency_question_code is not null)
+       order by default_order ASC
     </select>
     <!-- 查询主症状下的所有自动计算问题 -->
     <select id="queryAutoQuestion" resultType="DataRecord" parameterType="HashMap">
@@ -40,9 +47,16 @@
 
     <!--查询单个问题 -->
     <select id="getQuestionByCode" resultType="DataRecord" parameterType="HashMap">
-      select dmq.id,dmq.question_code,dmq.main_symp_code,dmq.title,dmq.popu_title,dmq.gender,dmq.min_age,dmq.max_age,dmq.default_order,dmq.question_type,dms.symp_name,dms.popu_name
+      select dmq.id,dmq.question_code,dmq.main_symp_code,dmq.title,dmq.popu_title,dmq.gender,dmq.min_age,dmq.max_age,dmq.default_order,dmq.question_type,dms.symp_name,dms.popu_name,dmq.display_type,dmq.parse_class,dmq.dependency_question_code,dmq.is_show
       from diagnosis_mainsymp_question dmq INNER join diagnosis_main_symptoms dms on(dms.symp_code=dmq.main_symp_code)
-      where dmq.question_code=#{questionCode}
+      <where>
+          <if test = "questionCode != null">
+              and dmq.question_code=#{questionCode}
+          </if>
+          <if test = "mainSympCode != null">
+              and dmq.main_symp_code = #{mainSympCode}
+          </if>
+      </where>
     </select>
     <!--查询多个问题 -->
     <select id="queryDiseaseQuestion" resultType="DataRecord" parameterType="HashMap">
@@ -60,4 +74,12 @@
         order by answer_total desc
     </select>
 
+	<!--查询疾病下伴随症状总数量 -->
+    <select id="queryConcSymptomCount" resultType="DataRecord" parameterType="HashMap">
+     select dmq.*,dqa.disease_code,count(dqa.conc_symp_code) answer_total from  diagnosis_mainsymp_question dmq
+        INNER join diagnosis_mainsymp_concsymp dqa on(dmq.main_symp_code=dqa.main_symp_code)
+        where dmq.main_symp_code= #{mainSympCode} and dmq.question_type = 102
+        group by dqa.main_symp_code,dqa.disease_code
+        order by answer_total desc
+    </select>
 </mapper>

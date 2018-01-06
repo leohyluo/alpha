@@ -1,6 +1,7 @@
 package com.alpha.self.diagnosis.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympQuestionDao;
 import com.alpha.self.diagnosis.dao.DiagnosisQuestionAnswerDao;
@@ -90,28 +91,47 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
                 }
             }
 
-            Map<String, List<DiagnosisMainsympConcsymp>> dmcsMap = null;
+            Map<String, List<MedicineQuestionVo>> dmcsMap = new HashMap<>();
             List<String> concSympCodes = new ArrayList<>();
             //获取伴随症状数据
             if (mainsympConcsympQuestion != null && StringUtils.isNotEmpty(mainsympConcsympQuestion.getAnswerCode())) {
                 concSympCodes = (List) JSON.parseArray(mainsympConcsympQuestion.getAnswerCode());
                 if (concSympCodes != null && concSympCodes.size() > 0) {
-                    dmcsMap = symptomAccompanyService.mapDiagnosisMainsympConcsymp(mainSympCode, concSympCodes);
+                    dmcsMap = symptomAccompanyService.mapDiagnosisMainsympConcsymp2(mainSympCode, concSympCodes);
                 }
             }
             //主症状下的问题总数
             List<DiagnosisMainsympQuestion> dmQuestions = diagnosisMainsympQuestionDao.listDiagnosisMainsympQuestion(mainSympCode);
             // 查找症状下疾病答案最多的答案总数总数，条件：所有疾病、主、问题，排序，取最多的一条
             Map<String, Map<String, DiagnosisMainsympQuestion>> deiseaseQuestionMap = listAnswerCount(mainSympCode);
+            Map<String, Map<String, DiagnosisMainsympQuestion>> deiseaseconcSympMap = listConcSympCount(mainSympCode);
             // 获取所有的答案
             List<MedicineQuestionVo> mqvAnswers = diagnosisQuestionAnswerDao.listMedicineQuestionVo(questionCodes, answerCodes);
             Map<String, List<MedicineQuestionVo>> mqvAnswerMap = new HashMap<>();
             for (Iterator iterator = mqvAnswers.iterator(); iterator.hasNext(); ) {
                 MedicineQuestionVo mqv = (MedicineQuestionVo) iterator.next();
+                if(GlobalConstants.UNKNOWN_ANSWER.equals(mqv.getAnswerTitle())) {
+                	continue;
+                }
                 List<MedicineQuestionVo> questions = mqvAnswerMap.get(mqv.getDiseaseCode()) == null ? new ArrayList<>() : mqvAnswerMap.get(mqv.getDiseaseCode());
                 questions.add(mqv);
                 mqvAnswerMap.put(mqv.getDiseaseCode(), questions);
             }
+            //遍历伴随症状
+            dmcsMap.forEach((k,v)->{
+            	for(MedicineQuestionVo mqv : v) {
+            		if(GlobalConstants.UNKNOWN_ANSWER.equals(mqv.getAnswerTitle())) {
+            			continue;
+            		}
+            		if(mqvAnswerMap.containsKey(k)) {
+            			mqvAnswerMap.get(k).add(mqv);
+            		} else {
+            			List<MedicineQuestionVo> questions = new ArrayList<>();
+            			questions.add(mqv);
+            			mqvAnswerMap.put(k, questions);
+            		}
+            	}
+            });
             //查询所有的疾病名称
             Map<String, DiagnosisDisease> diagnosisDiseaseMap = diagnosisDiseaseService.mapDiagnosisDisease(mqvAnswerMap.keySet(),userInfo);
 
@@ -119,16 +139,27 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
                 Double diseaseWeight = 0d;
                 StringBuffer calculationFormula = new StringBuffer();
                 for (MedicineQuestionVo mqv : entry.getValue()) {
-                    if (deiseaseQuestionMap.get(mqv.getDiseaseCode()) == null || deiseaseQuestionMap.get(mqv.getDiseaseCode()).get(mqv.getQuestionCode()) == null)
+                	Integer questionType = mqv.getQuestionType();
+                	String diseaseCode = mqv.getDiseaseCode();
+                	DiagnosisMainsympQuestion dmQuestion = null;
+                	if (StringUtils.isEmpty(diseaseCode)) {
                         continue;
-                    DiagnosisMainsympQuestion dmQuestion = deiseaseQuestionMap.get(mqv.getDiseaseCode()).get(mqv.getQuestionCode());
+                    }
+                	if(questionType == QuestionEnum.医学问题.getValue() || questionType == QuestionEnum.年龄问题.getValue() || questionType == QuestionEnum.季节问题.getValue()) {
+                		dmQuestion = deiseaseQuestionMap.get(mqv.getDiseaseCode()).get(mqv.getQuestionCode());
+                	} else if(questionType == QuestionEnum.伴随症状.getValue()) {
+                		dmQuestion = deiseaseconcSympMap.get(mqv.getDiseaseCode()).get(mqv.getQuestionCode());
+                	}
+                	if (deiseaseQuestionMap.get(diseaseCode) == null || dmQuestion == null)
+                        continue;
+                    //DiagnosisMainsympQuestion dmQuestion = deiseaseQuestionMap.get(mqv.getDiseaseCode()).get(mqv.getQuestionCode());
                     calculationFormula.append("<p>" + diagnosisDiseaseMap.get(entry.getValue().get(0).getDiseaseCode()).getDiseaseName() + " " + mqv.getDiseaseCode());
                     calculationFormula.append(" >> " + mqv.getQuestionTitle() + " " + mqv.getQuestionCode());
                     calculationFormula.append(" $" + mqv.getAnswerTitle() + " " + mqv.getAnswerCode() + "</p>");
                     //伴随症状问题权重
                     if (mqv.getQuestionType() == QuestionEnum.伴随症状.getValue()) {
                         diseaseWeight = diseaseWeight + DiseaseWeightUtil.diagnosisOutcome(dmQuestions.size(), calculationFormula, mqv, dmcsMap, dmQuestion);
-                    } else if (mqv.getQuestionType() == QuestionEnum.医学问题.getValue()) {
+                    } else if (mqv.getQuestionType() == QuestionEnum.医学问题.getValue() || mqv.getQuestionType() == QuestionEnum.年龄问题.getValue() || mqv.getQuestionType() == QuestionEnum.季节问题.getValue()) {
                         //主症状下的问题权重
                         Double Y = DiseaseWeightUtil.questionWeightFormula(dmQuestions.size(), mqv.getQuestionWeight(), mqv.getQuestionStandardDeviation(), calculationFormula);
                         Double N = DiseaseWeightUtil.answerWeightFormula(mqv.getAnswerWeight(), mqv.getAnswerStandardDeviation(), dmQuestion, calculationFormula);
@@ -173,6 +204,34 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
             Map<String, DiagnosisMainsympQuestion> qMap = deiseaseQuestionMap.get(dmq.getDiseaseCode()) == null ? new HashMap<>() : deiseaseQuestionMap.get(dmq.getDiseaseCode());
             qMap.put(dmq.getQuestionCode(), dmq);
             deiseaseQuestionMap.put(dmq.getDiseaseCode(), qMap);
+        }
+        return deiseaseQuestionMap;
+    }
+    
+    /**
+     * 处理主症状下的所有问题
+     *
+     * @param mainSympCode
+     * @return
+     */
+    public Map<String, Map<String, DiagnosisMainsympQuestion>> listConcSympCount(String mainSympCode) {
+        List<DiagnosisMainsympQuestion> dmQuestions = diagnosisMainsympQuestionDao.listConcSymptomCount(mainSympCode);
+        Map<String, Map<String, DiagnosisMainsympQuestion>> deiseaseQuestionMap = new HashMap<>();
+        for (DiagnosisMainsympQuestion dmq : dmQuestions) {
+           /* Map<String, DiagnosisMainsympQuestion> qMap = deiseaseQuestionMap.get(dmq.getDiseaseCode()) == null ? new HashMap<>() : deiseaseQuestionMap.get(dmq.getDiseaseCode());
+            qMap.put(dmq.getQuestionCode(), dmq);
+            deiseaseQuestionMap.put(dmq.getDiseaseCode(), qMap);*/
+            
+            String diseaseCode = dmq.getDiseaseCode();
+            Map<String, DiagnosisMainsympQuestion> qMap = null;
+            if(deiseaseQuestionMap.containsKey(diseaseCode)) {
+            	qMap = deiseaseQuestionMap.get(dmq.getDiseaseCode());
+            	qMap.put(dmq.getQuestionCode(), dmq);
+            } else {
+            	qMap = new HashMap<>();
+            	qMap.put(dmq.getQuestionCode(), dmq);
+            	deiseaseQuestionMap.put(diseaseCode, qMap);
+            }
         }
         return deiseaseQuestionMap;
     }

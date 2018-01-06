@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
+import com.alpha.commons.enums.Unit;
+
 public class DateUtils {
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
@@ -126,6 +128,20 @@ public class DateUtils {
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
 		return localDateTime;
 	}
+
+
+	public static Date dayDiffence(ChronoUnit unit, long value) {
+		LocalDate today = LocalDate.now();
+		LocalDate result = LocalDate.now();
+		if (unit == ChronoUnit.DAYS) {
+			result = today.plusDays(value);
+		} else if (unit == ChronoUnit.MONTHS) {
+			result = today.plusMonths(value);
+		} else if (unit == ChronoUnit.YEARS) {
+			result = today.plusYears(value);
+		}
+		return localDate2Date(result);
+	}
 	
 	public static Date stringToDate(String dateStr) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
@@ -173,4 +189,51 @@ public class DateUtils {
 		result.add(maxValue);
 		return result;
 	}
+
+	public static Date localDate2Date (LocalDate localDate) {
+		ZoneId zoneId = ZoneId.systemDefault();
+		ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
+
+		Date date = Date.from(zdt.toInstant());
+		return  date;
+	}
+	
+	public static Double toMillSeond(Double val, Unit unit) {
+		double result = 0;
+		
+		if(unit == Unit.MINUTE) {
+			result = val * 60 * 1000;
+			return result;
+		}
+		if(unit == Unit.HOUR) {
+			result = val * 60 * 60 * 1000;
+			return result;		
+		}
+		if(unit == Unit.DAY) {
+			result = val * 24 * 60 * 60 * 1000;
+			return result;
+		} 
+		if(unit == Unit.WEEK) {
+			result = val * 7 * 24 * 60 * 60 * 1000;
+			return result;
+		}
+		if(unit == Unit.MONTH) {
+			result = val * 30 * 24 * 60 * 60 * 1000;
+			return result;
+		}
+		if(unit == Unit.YEAR) {
+			result = val * 365 * 24 * 60 * 60 * 1000;
+			return result;
+		}
+		return result;
+	}
+	
+	public static Double millSecond2Day(Double val) {
+		double millSecondOfOneDay = 1 * 24 * 60 * 60 * 1000;
+		double day = val / millSecondOfOneDay;
+		double day2 = val % millSecondOfOneDay;
+		double result = day + day2;
+		return result;
+	}
+
 }

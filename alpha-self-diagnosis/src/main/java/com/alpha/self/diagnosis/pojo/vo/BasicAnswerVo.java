@@ -3,6 +3,8 @@ package com.alpha.self.diagnosis.pojo.vo;
 import com.alpha.self.diagnosis.pojo.BasicAnswer;
 import com.alpha.server.rpc.diagnosis.pojo.*;
 import com.alpha.server.rpc.user.pojo.UserMember;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
@@ -30,6 +32,23 @@ public class BasicAnswerVo implements IAnswerVo {
      * 序号
      */
     private Integer defaultOrder;
+    /**
+     * 客户端展示类型
+     */
+    private String displayType;
+    
+    private String image;
+    
+    /**
+     * 是否需要选中
+     */
+    private String checked;
+    
+    /**
+     * 所属大类
+     */
+    @JsonIgnore
+    private SyDiagnosisAnswer syAnswer;
 
     public BasicAnswerVo(BasicAnswer basicAnswer) {
         BeanUtils.copyProperties(basicAnswer, this);
@@ -80,6 +99,7 @@ public class BasicAnswerVo implements IAnswerVo {
         this.answerValue = dmc.getConcSympCode();
         this.answerTitle = dmc.getSympName();
         this.defaultOrder = dmc.getDefaultOrder();
+        this.displayType = dmc.getDisplayType();
     }
 
     public String getAnswerTitle() {
@@ -121,9 +141,34 @@ public class BasicAnswerVo implements IAnswerVo {
     public void setAnswerValue(String answerValue) {
         this.answerValue = answerValue;
     }
+    
 
+    public String getDisplayType() {
+		return displayType;
+	}
 
-    /**
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+	
+	
+	public SyDiagnosisAnswer getSyAnswer() {
+		return syAnswer;
+	}
+
+	public void setSyAnswer(SyDiagnosisAnswer syAnswer) {
+		this.syAnswer = syAnswer;
+	}
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	/**
      * 医学答案转换
      *
      * @param dqAnswers
@@ -148,6 +193,7 @@ public class BasicAnswerVo implements IAnswerVo {
         this.description = dqAnswer.getPopuContent();
         this.answerValue = dqAnswer.getAnswerCode();
         this.defaultOrder = dqAnswer.getDefaultOrder();
+        this.syAnswer = dqAnswer.getSyAnswer();
     }
 
     @Override
@@ -165,4 +211,14 @@ public class BasicAnswerVo implements IAnswerVo {
         int result = answerValue.hashCode();
         return result;
     }
+
+	public String getChecked() {
+		return checked;
+	}
+
+	public void setChecked(String checked) {
+		this.checked = checked;
+	}
+    
+    
 }

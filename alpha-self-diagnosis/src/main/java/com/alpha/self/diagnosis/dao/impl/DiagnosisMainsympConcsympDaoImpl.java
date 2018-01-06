@@ -5,6 +5,8 @@ import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
+import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -74,6 +76,17 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
         List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
         return dmcs;
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<MedicineQuestionVo> listDiagnosisMainsympConcsymp(String mainSympCode, List<String> concSympCodes) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        params.put("concSympCodes", concSympCodes);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.queryConcSympByCodes", params);
+        List<MedicineQuestionVo> dmcs = JavaBeanMap.convertListToJavaBean(datas, MedicineQuestionVo.class);
+        return dmcs;
+	}
 
 
 }

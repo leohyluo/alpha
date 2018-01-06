@@ -1,5 +1,7 @@
 package com.alpha.self.diagnosis.controller;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,13 +12,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.commons.exception.ServiceException;
+import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
@@ -30,14 +33,19 @@ import com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
+import com.alpha.self.diagnosis.pojo.vo2.DrugListVo;
 import com.alpha.self.diagnosis.service.BasicQuestionService;
 import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
 import com.alpha.self.diagnosis.service.DiagnosisService;
 import com.alpha.self.diagnosis.service.MedicineQuestionService;
+import com.alpha.self.diagnosis.service.SymptomMainService;
 import com.alpha.self.diagnosis.service.UserDiagnosisOutcomeService;
+import com.alpha.self.diagnosis.service.WecharService;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.user.controller.req.vo.PatientInfo;
+import com.alpha.user.service.UserBasicRecordService;
 import com.alpha.user.service.UserInfoService;
 
 /**
@@ -62,6 +70,12 @@ public class DiagnosisController {
     private UserDiagnosisOutcomeService userDiagnosisOutcomeService;
     @Resource
     private DiagnosisPastmedicalHistoryService diagnosisPastmedicalHistoryService;
+    @Resource
+    private SymptomMainService symptomMainService;
+    @Resource
+    private WecharService wecharService;
+    @Resource
+    private UserBasicRecordService userBasicRecordService;
 
     /**
      * 开始问诊，生成问诊编号
@@ -103,9 +117,10 @@ public class DiagnosisController {
             if (questionVo.getType() == null || questionVo.getType() < 99) {
                 result = basicQuestionService.next(questionVo);
             } else if (questionVo.getType() == QuestionEnum.主症状语义分析.getValue()) {
-                result = medicineQuestionService.nextAnalysisByBaidu(questionVo.getDiagnosisId(), questionVo, userInfo);
+                result = medicineQuestionService.listMainSymptom(questionVo.getDiagnosisId(), questionVo, userInfo);
             } else {
-                result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+                //result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            	result = medicineQuestionService.replyDiagnosisQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
             }
             return WebUtils.buildSuccessResponseMessage(result);
         } catch (Exception e) {
@@ -122,8 +137,8 @@ public class DiagnosisController {
      * @return diagnosisId  唯一诊断编号
      */
     @PostMapping("/medicine/next")
-    public ResponseMessage diagnosisMedicineNext(QuestionRequestVo questionVo) {
-
+    public ResponseMessage diagnosisMedicineNext(String allParam) {
+    	QuestionRequestVo questionVo = JSON.parseObject(allParam,QuestionRequestVo.class);
         LOGGER.info("循环获取下一个问题: {}", JSON.toJSONString(questionVo));
         if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())) {
             return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
@@ -139,9 +154,10 @@ public class DiagnosisController {
             }
             IQuestionVo result;
             if (questionVo.getType() == QuestionEnum.主症状语义分析.getValue()) {
-                result = medicineQuestionService.nextAnalysisByBaidu(questionVo.getDiagnosisId(), questionVo, userInfo);
+                result = medicineQuestionService.listMainSymptom(questionVo.getDiagnosisId(), questionVo, userInfo);
             } else {
-                result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+                //result = medicineQuestionService.saveAnswerGetQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
+            	result = medicineQuestionService.replyDiagnosisQuestion(questionVo.getDiagnosisId(), questionVo, userInfo);
             }
             return WebUtils.buildSuccessResponseMessage(result);
         } catch (Exception e) {
@@ -194,6 +210,18 @@ public class DiagnosisController {
         }
         return WebUtils.buildResponseMessage(ResponseStatus.SUCCESS);
     }
+    
+    /**
+     * 就诊经历-添加药品
+     * @param diagnosisId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/drug/query")
+    public ResponseMessage diagnosisDrugQuery(String keyword) {
+    	List<DrugListVo> drugList = wecharService.listByKeyword(keyword);
+		return WebUtils.buildSuccessResponseMessage(drugList);
+    }
 
     /**
      * 问诊结束后展示就诊信息
@@ -202,7 +230,7 @@ public class DiagnosisController {
      * @return
      */
     @PostMapping("/showResult")
-    public ResponseMessage showDiagnosisResult(@RequestBody BasicRequestVo basicRequestVo) {
+    public ResponseMessage showDiagnosisResult(BasicRequestVo basicRequestVo) {
         Long userId = basicRequestVo.getUserId();
         Long diagnosisId = basicRequestVo.getDiagnosisId();
         if (userId == null || diagnosisId == null) {
@@ -234,32 +262,73 @@ public class DiagnosisController {
 
     /**
      * 疾病史(既往史、过敏史)
-     *
      * @return
      */
     @PostMapping("/diseaseHistory")
-    public ResponseMessage diseaseHistory(@RequestBody DiseaseHistoryRequestVo vo) {
+    public ResponseMessage diseaseHistory(DiseaseHistoryRequestVo vo) {
         Long userId = vo.getUserId();
         Long diagnosisId = vo.getDiagnosisId();
         Integer historyType = vo.getHistoryType();
         if (userId == null || diagnosisId == null || historyType == null) {
             return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
-        IQuestionVo questionVo = diagnosisPastmedicalHistoryService.queryDiseaseHistory(userId, diagnosisId, historyType);
+        UserInfo userInfo = userInfoService.queryByUserId(userId);
+        if (userInfo == null) {
+            return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+        }
+        Integer gender = StringUtils.isEmpty(vo.getGender()) ? 1 : Integer.parseInt(vo.getGender());
+        Date birth = DateUtils.dayDiffence(ChronoUnit.YEARS, -1);
+        if(StringUtils.isNotEmpty(vo.getBirth())) {
+            birth = DateUtils.stringToDate(vo.getBirth());
+        }
+        userInfo.setGender(gender);
+        userInfo.setBirth(birth);
+
+        IQuestionVo questionVo = diagnosisPastmedicalHistoryService.queryDiseaseHistory(userInfo, diagnosisId, historyType);
         BasicQuestionWithSearchVo resultVo = (BasicQuestionWithSearchVo) questionVo;
         List<IAnswerVo> answerList = resultVo.getAnswers();
         return WebUtils.buildSuccessResponseMessage(answerList);
     }
     
+    /**
+     * 确认病历
+     * @param diagnosisId
+     * @return
+     */
+    @PostMapping("/result/confirm")
+    public ResponseMessage confirmDiagnosisResult(String mobile, Long diagnosisId){
+    	if(diagnosisId == null) {
+    		return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+    	}
+    	UserBasicRecord record = userBasicRecordService.findByDiagnosisId(diagnosisId);
+    	if(record == null) {
+    		return WebUtils.buildResponseMessage(ResponseStatus.INVALID_VALUE);
+    	}
+    	if(StringUtils.isNotEmpty(mobile)) {
+    		record.setPhoneNum(mobile);
+    	}
+    	record.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+    	//标记此次预问诊已结束
+    	userBasicRecordService.updateUserBasicRecord(record);
+        return WebUtils.buildSuccessResponseMessage();
+    }
+    
+    /**
+     * 是否需要提问特殊时期、体重、出生史、接种史等问题
+     * 
+     * @param patientInfo
+     * @return
+     */
     @PostMapping("/queryBasicQuestion")
-    public ResponseMessage queryBasicQuestion(@RequestBody PatientInfo patientInfo) {
+    public ResponseMessage queryBasicQuestion(PatientInfo patientInfo) {
     	String birth = patientInfo.getBirth();
     	int gender = patientInfo.getGender();
+    	String systemType = patientInfo.getSystemType();
+        LOGGER.info("birth="+birth+",gender="+gender+",systemType="+systemType);
     	if(StringUtils.isEmpty(birth)) {
     		return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
     	}
-    	Map<String, String> result = basicQuestionService.queryByBirthOrGender(birth, gender);
+    	Map<String, String> result = basicQuestionService.askBasicQuestion(systemType, birth, gender);
     	return WebUtils.buildSuccessResponseMessage(result);
     }
-
 }

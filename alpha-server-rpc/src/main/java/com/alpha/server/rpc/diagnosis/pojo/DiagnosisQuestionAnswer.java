@@ -1,8 +1,15 @@
 package com.alpha.server.rpc.diagnosis.pojo;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.apache.commons.lang3.StringUtils;
 
 @Entity
 @Table(name = "diagnosis_question_answer")
@@ -33,6 +40,9 @@ public class DiagnosisQuestionAnswer implements Serializable {
      */
     @Column(name = "answer_code")
     private String answerCode;
+
+    @Column(name = "answer_title")
+    private String answerTitle;
 
     /**
      * 答案范围值的最小值
@@ -98,6 +108,24 @@ public class DiagnosisQuestionAnswer implements Serializable {
      */
     @Column(name = "weight")
     private Double weight;
+    
+    /**
+     * 所属答案大类
+     */
+    @Transient
+    private SyDiagnosisAnswer syAnswer;
+    
+    /**
+     * 所属大类编码
+     */
+    @Column(name = "conn_code")
+    private String syAnswerCode;
+    
+    /**
+     * 计算公式
+     */
+    @Column(name = "calculation_formula")
+    private String calculationFormula;
 
     /**
      * 顺序
@@ -116,6 +144,18 @@ public class DiagnosisQuestionAnswer implements Serializable {
      */
     @Transient
     private Double weightValue;
+    
+    /**
+     * 是否存在互相排斥属性，1=存在；如果存在，默认选中互斥的答案
+     */
+    @Column(name = "mutually_exclusive")
+    private Integer mutuallyExclusive;
+    
+    /**
+     * 互斥答案编码
+     */
+    @Column(name = "mutually_answer_code")
+    private String mutuallyAnswerCode;
 
     /**
      *
@@ -423,8 +463,58 @@ public class DiagnosisQuestionAnswer implements Serializable {
     public void setMaxValue(Double maxValue) {
         this.maxValue = maxValue;
     }
+    
+    public Integer getMutuallyExclusive() {
+		return mutuallyExclusive;
+	}
 
-    @Override
+	public void setMutuallyExclusive(Integer mutuallyExclusive) {
+		this.mutuallyExclusive = mutuallyExclusive;
+	}
+
+	public String getMutuallyAnswerCode() {
+		return mutuallyAnswerCode;
+	}
+
+	public void setMutuallyAnswerCode(String mutuallyAnswerCode) {
+		this.mutuallyAnswerCode = mutuallyAnswerCode;
+	}
+
+	public SyDiagnosisAnswer getSyAnswer() {
+		return syAnswer;
+	}
+
+	public void setSyAnswer(SyDiagnosisAnswer syAnswer) {
+		this.syAnswer = syAnswer;
+	}
+
+	public String getSyAnswerCode() {
+		return syAnswerCode;
+	}
+
+	public void setSyAnswerCode(String syAnswerCode) {
+		this.syAnswerCode = syAnswerCode;
+	}
+
+	public String getCalculationFormula() {
+		return calculationFormula;
+	}
+
+	public void setCalculationFormula(String calculationFormula) {
+		this.calculationFormula = calculationFormula;
+	}
+	
+	
+
+	public String getAnswerTitle() {
+		return answerTitle;
+	}
+
+	public void setAnswerTitle(String answerTitle) {
+		this.answerTitle = answerTitle;
+	}
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DiagnosisQuestionAnswer)) return false;
@@ -433,6 +523,7 @@ public class DiagnosisQuestionAnswer implements Serializable {
 
         if (!questionCode.equals(answer.questionCode)) return false;
         if (!answerCode.equals(answer.answerCode)) return false;
+        if(StringUtils.isEmpty(diseaseCode) || StringUtils.isEmpty(this.diseaseCode)) return false;
         return diseaseCode.equals(answer.diseaseCode);
     }
 
@@ -440,7 +531,9 @@ public class DiagnosisQuestionAnswer implements Serializable {
     public int hashCode() {
         int result = questionCode.hashCode();
         result = 31 * result + answerCode.hashCode();
-        result = 31 * result + diseaseCode.hashCode();
+        //答案不清楚没有关联的疾病和权重
+        if(StringUtils.isNotEmpty(diseaseCode))
+        	result = 31 * result + diseaseCode.hashCode();
         return result;
     }
 }

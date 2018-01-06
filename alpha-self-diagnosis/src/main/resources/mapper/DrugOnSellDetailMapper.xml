@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.alpha.server.rpc.diagnosis.pojo.DrugOnSellDetail">
+
+
+    <select id="queryByKeyword" parameterType="HashMap" resultType="DataRecord">
+        SELECT * FROM zhys_drug 
+        <where>
+        	<if test="keyword != null">
+        		and c007 like CONCAT('%',#{keyword},'%')
+        	</if>
+        </where>
+    </select>
+
+	<select id="queryByDrugCode" parameterType="HashMap" resultType="DataRecord">
+        SELECT * FROM zhys_drug where drug_code = #{drugCode} 
+    </select>
+    
+    <!-- 根据用户行为获取热门药品 -->
+	<select id="getUserHotDrug" parameterType="HashMap" resultType="DataRecord">
+		SELECT * from zhys_drug zd where zd.threshold > #{threshold} 
+		 AND IFNULL(zd.user_select_count,0) > zd.threshold ORDER BY zd.user_select_count DESC LIMIT 0,#{size}
+	</select>
+	<!-- 获取默认热门药品 -->
+	<select id="getDefaultHotDrug" parameterType="HashMap" resultType="DataRecord">
+		SELECT * from zhys_drug zd ORDER BY zd.default_order DESC LIMIT 0,#{size}
+	</select>
+	<!-- 根据疾病名称查询 -->
+	<select id="getByDrugName" parameterType="HashMap" resultType="DataRecord">
+		SELECT * from zhys_drug zd where c007 = #{drugName}
+	</select>
+</mapper>

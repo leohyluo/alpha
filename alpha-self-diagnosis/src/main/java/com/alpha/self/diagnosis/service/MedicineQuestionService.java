@@ -10,6 +10,15 @@ import com.alpha.server.rpc.user.pojo.UserInfo;
  * Created by xc.xiong on 2017/9/6.
  */
 public interface MedicineQuestionService {
+	
+	/**
+	 * 列出主症状
+	 * @param diagnosisId
+	 * @param questionVo
+	 * @param userInfo
+	 * @return
+	 */
+	IQuestionVo listMainSymptom(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
 
     /**
      * 获取下一个问题
@@ -21,15 +30,6 @@ public interface MedicineQuestionService {
      */
     IQuestionVo next(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
 
-    /**
-     * 百度语义分析接口
-     *
-     * @param diagnosisId
-     * @param questionVo
-     * @param userInfo
-     * @return
-     */
-    IQuestionVo nextAnalysisByBaidu(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
 
     /**
      * 保存医学答案并返回新的问题
@@ -39,7 +39,13 @@ public interface MedicineQuestionService {
      * @param userInfo
      * @return
      */
-    IQuestionVo saveAnswerGetQuestion(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
+    //IQuestionVo saveAnswerGetQuestion(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
+    
+    /**
+     * 回答医学问题
+     * @return
+     */
+    IQuestionVo replyDiagnosisQuestion(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo);
 
     /**
      * 获取下一个问题

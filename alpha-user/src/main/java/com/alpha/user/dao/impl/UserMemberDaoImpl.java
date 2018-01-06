@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,37 @@ public class UserMemberDaoImpl extends BaseDao<UserMember, Long> implements User
     public Class<UserMember> getClz() {
         return UserMember.class;
     }
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserMember> listByUserId(Long userId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		String statement = NAME_SPACE + ".find";
+		
+        List<DataRecord> list = super.selectForList(statement, param);
+        List<UserMember> resultList = new ArrayList<>();
+        if (resultList != null) {
+            resultList = JavaBeanMap.convertListToJavaBean(list, UserMember.class);
+        }
+        return resultList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserMember> listByUserIdAndMemberName(Long userId, String memberName) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("userId", userId);
+		param.put("memberName", memberName);
+		String statement = NAME_SPACE + ".find";
+		
+        List<DataRecord> list = super.selectForList(statement, param);
+        List<UserMember> resultList = new ArrayList<>();
+        if (resultList != null) {
+            resultList = JavaBeanMap.convertListToJavaBean(list, UserMember.class);
+        }
+        return resultList;
+	}
 
 
 }

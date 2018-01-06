@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -34,6 +36,12 @@ public class UserFeedback implements Serializable {
      */
     @Column(name = "content")
     private String content;
+    
+    /**
+     * 反馈选项编码
+     */
+    @Column(name = "item_code")
+    private String itemCode;
 
     /**
      * 反馈时间
@@ -46,6 +54,18 @@ public class UserFeedback implements Serializable {
      */
     @Column(name = "diagnosis_id")
     private Long diagnosisId;
+    
+    /**
+     * 点赞标识符
+     */
+    @Column(name = "useful")
+    private Integer useful;
+    
+    /**
+     *  1:点赞 2：反馈
+     */
+    @Transient
+    private Integer useType;
 
 
     public Long getId() {
@@ -87,4 +107,29 @@ public class UserFeedback implements Serializable {
     public void setDiagnosisId(Long diagnosisId) {
         this.diagnosisId = diagnosisId;
     }
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public Integer getUseful() {
+		return useful;
+	}
+
+	public void setUseful(Integer useful) {
+		this.useful = useful;
+	}
+
+	public Integer getUseType() {
+		return useType;
+	}
+
+	public void setUseType(Integer useType) {
+		this.useType = useType;
+	}
+    
 }

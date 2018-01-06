@@ -1,0 +1,63 @@
+2017-12-21 13:00:02,590 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:05:02,600 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:10:02,605 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:15:02,607 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:20:02,610 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:25:02,613 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:25:46,041 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"diagnosisId":3856,"inType":1,"userId":"1003"}
+2017-12-21 13:25:46,276 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"xxx","content":"xxx"}],"diagnosisId":3856,"inType":1,"questionCode":"9990","sympCode":"54","systemType":"pre","type":99,"userId":"1003"}
+2017-12-21 13:25:46,397 INFO [com.alpha.self.diagnosis.service.impl.SymptomMainServiceImpl:50] getMainSymptomsQuestion start with 3856
+2017-12-21 13:25:46,492 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"腹泻","content":"54"}],"diagnosisId":3856,"inType":1,"questionCode":"9992","sympCode":"54","type":100,"userId":"1003"}
+2017-12-21 13:25:46,922 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,923 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,923 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,924 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,924 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,925 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,926 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,926 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,926 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,927 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,927 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血丝便所属大类为血样便
+2017-12-21 13:25:46,927 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,928 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,928 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,929 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,929 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,929 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,930 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,930 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,931 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,931 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,931 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,932 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,932 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:46,932 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 血水样便所属大类为血样便
+2017-12-21 13:25:46,933 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:256] 脓血便所属大类为血样便
+2017-12-21 13:25:47,492 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"稀水样便","content":"14554"}],"diagnosisId":3856,"inType":1,"questionCode":"3316","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:47,529 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:122] 开始处理问题3316的隐藏答案
+2017-12-21 13:25:47,532 INFO [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:140] 问题3316的隐藏答案为[14484, 14482]
+2017-12-21 13:25:48,066 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：致病性大肠埃希菌肠炎
+2017-12-21 13:25:48,113 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"","content":"1天"}],"diagnosisId":3856,"inType":1,"questionCode":"3319","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:48,145 ERROR [com.alpha.self.diagnosis.service.impl.MedicineAnswerServiceImpl:95] 页面的答案没能与知识库的答案匹配
+2017-12-21 13:25:48,428 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：致病性大肠埃希菌肠炎
+2017-12-21 13:25:48,482 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"14515","content":"<10次"}],"diagnosisId":3856,"inType":1,"questionCode":"3320","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:48,779 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：致病性大肠埃希菌肠炎
+2017-12-21 13:25:48,837 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"急","content":"14516"}],"diagnosisId":3856,"inType":1,"questionCode":"3321","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:49,211 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：轮状病毒肠炎
+2017-12-21 13:25:49,260 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"个人","content":"14645"}],"diagnosisId":3856,"inType":1,"questionCode":"3322","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:49,706 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：轮状病毒肠炎
+2017-12-21 13:25:49,766 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"无腥臭","content":"14703"}],"diagnosisId":3856,"inType":1,"questionCode":"3323","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:50,129 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：轮状病毒肠炎
+2017-12-21 13:25:50,179 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"淡绿色","content":"14523"}],"diagnosisId":3856,"inType":1,"questionCode":"3324","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:50,459 INFO [com.alpha.self.diagnosis.utils.MedicineSortUtil:33] 首选疾病：诺瓦克（诺如）病毒肠炎
+2017-12-21 13:25:50,516 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"不洁的食物","content":"14529"}],"diagnosisId":3856,"inType":1,"questionCode":"3325","sympCode":"54","type":101,"userId":"1003"}
+2017-12-21 13:25:51,119 INFO [com.alpha.self.diagnosis.service.impl.SymptomAccompanyServiceImpl:149] 首选疾病：诺瓦克（诺如）病毒肠炎
+2017-12-21 13:25:51,192 INFO [com.alpha.self.diagnosis.controller.DiagnosisController:133] 循环获取下一个问题: {"answers":[{"answerTitle":"腹胀","content":"1006"},{"answerTitle":"咳嗽","content":"1008"},{"answerTitle":"低热（37.5-38℃）","content":"604614"},{"answerTitle":"非喷射性呕吐","content":"604605"}],"diagnosisId":3856,"inType":1,"questionCode":"3338","sympCode":"54","type":102,"userId":"1003"}
+2017-12-21 13:25:52,338 INFO [com.alpha.self.diagnosis.service.impl.MedicineQuestionServiceImpl:412] 生成诊断结果3856
+2017-12-21 13:30:02,616 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:35:02,619 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:40:02,623 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:45:02,628 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:50:02,631 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2017-12-21 13:55:02,635 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration

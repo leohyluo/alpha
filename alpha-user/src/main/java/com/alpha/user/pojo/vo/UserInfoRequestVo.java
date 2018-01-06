@@ -10,6 +10,10 @@ public class UserInfoRequestVo {
      */
     private Long diagnosisId;
     /**
+     * 用户成员信息
+     */
+    private MemberInfoVo memberInfo;
+    /**
      * 用户基础信息
      */
     private SaveUserInfoVo userInfo;
@@ -51,5 +55,13 @@ public class UserInfoRequestVo {
     public void setDiagnosisId(Long diagnosisId) {
         this.diagnosisId = diagnosisId;
     }
+
+	public MemberInfoVo getMemberInfo() {
+		return memberInfo;
+	}
+
+	public void setMemberInfo(MemberInfoVo memberInfo) {
+		this.memberInfo = memberInfo;
+	}
 
 }

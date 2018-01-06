@@ -65,7 +65,7 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
             }
             //根据问题类型计算答案
             for (DiagnosisMainsympQuestion question : autoQuestions) {
-                BasicQuestionVo basicQuestionVo = new BasicQuestionVo(question, diagnosisId, mainSympCode);
+                BasicQuestionVo basicQuestionVo = new BasicQuestionVo(question, diagnosisId, mainSympCode, userInfo);
                 Set<DiagnosisQuestionAnswer> answerSet = answerMap.get(question.getQuestionCode());
                 if (answerSet == null || answerSet.size() == 0) {
                     continue;
@@ -142,6 +142,11 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
      * @param
      */
     public void saveDiagnosisAnswer(Long diagnosisId, UserInfo userInfo, DiagnosisMainsympQuestion question, Collection<DiagnosisQuestionAnswer> dqAnswers) {
+    	String questionCode = question.getQuestionCode();
+    	UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(diagnosisId, questionCode);
+    	if(udd != null) {
+    		return;
+    	}
         Set<String> answerContents = new HashSet<>();
         Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
         Set<String> answerCodes = new HashSet<>();
@@ -155,7 +160,7 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
         Set<String> forwardDiseaseCode = answerSpecMap.get(1) == null ? new HashSet<String>() : answerSpecMap.get(1);   //正向特异性
         Set<String> reverseDiseaseCode = answerSpecMap.get(-1) == null ? new HashSet<String>() : answerSpecMap.get(-1);   //反向特异性
         Set<String> nothingDiseaseCode = answerSpecMap.get(0) == null ? new HashSet<String>() : answerSpecMap.get(0); //无特异性
-        UserDiagnosisDetail udd = new UserDiagnosisDetail();
+        udd = new UserDiagnosisDetail();
         udd.setDiagnosisId(diagnosisId);
         udd.setUserId(0L);
         udd.setMemberId(userInfo.getUserId());

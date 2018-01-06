@@ -1,0 +1,36 @@
+2018-01-06 04:00:00,006 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012200008
+2018-01-06 04:00:00,027 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012200008
+2018-01-06 04:00:31,548 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:05:00,006 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012300008
+2018-01-06 04:05:00,020 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012300008
+2018-01-06 04:05:31,554 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:10:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012400008
+2018-01-06 04:10:00,021 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012400008
+2018-01-06 04:10:31,561 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:15:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012500008
+2018-01-06 04:15:00,017 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012500008
+2018-01-06 04:15:31,567 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:20:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012600008
+2018-01-06 04:20:00,020 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012600008
+2018-01-06 04:20:31,573 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:25:00,007 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012700008
+2018-01-06 04:25:00,022 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012700008
+2018-01-06 04:25:31,578 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:30:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012800008
+2018-01-06 04:30:00,023 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012800008
+2018-01-06 04:30:31,584 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:35:00,006 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0012900008
+2018-01-06 04:35:00,018 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0012900008
+2018-01-06 04:35:31,591 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:40:00,006 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0013000008
+2018-01-06 04:40:00,019 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0013000008
+2018-01-06 04:40:31,599 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:45:00,006 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0013100008
+2018-01-06 04:45:00,020 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0013100008
+2018-01-06 04:45:31,605 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:50:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0013200008
+2018-01-06 04:50:00,019 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0013200008
+2018-01-06 04:50:31,611 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration
+2018-01-06 04:55:00,005 INFO [com.atomikos.logging.Slf4jLogger:16] createCompositeTransaction ( 10000 ): created new ROOT transaction with id 192.168.29.54.tm0013300008
+2018-01-06 04:55:00,017 INFO [com.atomikos.logging.Slf4jLogger:16] commit() done (by application) of transaction 192.168.29.54.tm0013300008
+2018-01-06 04:55:31,617 INFO [com.netflix.discovery.shared.resolver.aws.ConfigClusterResolver:43] Resolving eureka endpoints via configuration

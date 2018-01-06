@@ -35,4 +35,45 @@ public interface UserBasicRecordDao extends IBaseDao<UserBasicRecord, Long> {
      * @return
      */
     String findTemplateId(Long diagnosisId);
+    
+    /**
+     * 根据挂号号码查看是否已完成预问诊
+     * @param userId
+     * @return
+     */
+    UserBasicRecord findFinishByUserId(Long userId, String hisRegisterNo);
+    
+    /**
+     * 根据用户ID查看已完成预问诊的记录
+     * @param userId
+     * @return
+     */
+    List<UserBasicRecord> listFinishByUserId(Long userId);
+    
+    /**
+     * 根据用户ID查看当天已完成预问诊的记录
+     * @param userId
+     * @return
+     */
+    List<UserBasicRecord> listTodayFinishByUserId(Long userId);
+    
+    /**
+     * 查询当天未确诊的数据
+     * @return
+     */
+    List<UserBasicRecord> listTodayUnConfirm();
+    
+    /**
+     * 获取用户所有就诊记录 
+     * @param userId
+     * @return
+     */
+    List<UserBasicRecord> listByUserId(Long userId);
+    
+    /**
+     * 查询用户最后一条就诊记录
+     * @param userId
+     * @return
+     */
+    UserBasicRecord getLastFinishByUserId(Long userId);
 }

@@ -58,9 +58,9 @@ public enum ResponseStatus {
      */
     PATIENT_INFO_NOTFOUND(212, "患者基本信息不存在"),
     /**
-     * 座席信息不存在
+     * 身份证号码/就诊号不存在
      */
-    EVENT_NO_NOTFOUND(213, "事件编号不存在"),
+    IDCARD_NOTFOUND(213, "号码不存在"),
     /**
      * 服务器异常 44444, "Exception"
      */
@@ -101,12 +101,14 @@ public enum ResponseStatus {
     /**
      * 不匹配的参数值 30006, "Invalid value"
      */
-    INVALID_VALUE(30006, "Invalid value"),
+    INVALID_VALUE(30006, "请求参数不正确"),
 
     /**
      * 用户已存在 30022, "Existing user name"
      */
     USER_EXISTED(30022, "用户已存在"),
+    
+    USER_MEMBER_FULL(30023, "用户成员已达到5个"),
 
     NULL_DIAGNOSIS(20011, "没有找到对应的诊断结果");
 

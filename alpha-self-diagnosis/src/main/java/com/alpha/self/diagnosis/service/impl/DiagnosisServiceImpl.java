@@ -8,6 +8,7 @@ import com.alpha.commons.api.tencent.vo.KeywordResultVo;
 import com.alpha.commons.api.tencent.vo.Keywords;
 import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.core.service.SysSequenceService;
+import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.web.ResponseStatus;
@@ -232,21 +233,6 @@ public class DiagnosisServiceImpl implements DiagnosisService {
         UserBasicRecord record = userBasicRecordService.findByDiagnosisId(diagnosisId);
         DiagnosisResultVo resultVo = new DiagnosisResultVo(record);
         resultVo.merge(userInfo);
-        //拼装主症状
-    	/*List<UserDiagnosisDetail> detailList = userDiagnosisDetailDao.listUserDiagnosisDetail(diagnosisId);
-    	if(CollectionUtils.isNotEmpty(detailList)) {
-    		UserDiagnosisDetail item = detailList.get(0);
-    		String mainCode = item.getSympCode();
-    		
-    		Map<String, Object> param = new HashMap<>();
-    		param.put("sympCode", mainCode);
-    		List<DiagnosisMainSymptoms> mainList = symptomMainService.query(param);
-    		if(CollectionUtils.isNotEmpty(mainList)) {
-    			DiagnosisMainSymptoms mainSymptoms = mainList.get(0);
-    			String mainSymptomName = mainSymptoms.getSympName();
-    			resultVo.setMainSymptom(mainSymptomName);
-    		}
-    	}*/
         //拼装诊断结果
         List<UserDiagnosisOutcome> udos = userDiagnosisOutcomeService.listTop5UserDiagnosisOutcome(diagnosisId);
         List<UserDiagnosisOutcomeVo> diseasevoList = new ArrayList<>();

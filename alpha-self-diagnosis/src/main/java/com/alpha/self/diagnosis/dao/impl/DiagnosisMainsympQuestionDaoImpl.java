@@ -121,6 +121,16 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
         return dmQuestions;
     }
 
+    @Override
+	public List<DiagnosisMainsympQuestion> listConcSymptomCount(String mainSympCode) {
+    	Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.queryConcSymptomCount", params);
+        List<DiagnosisMainsympQuestion> dmQuestions = new ArrayList<>();
+        dmQuestions = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympQuestion.class);
+        return dmQuestions;
+	}
+    
 
     /**
      * 查询主症状的单个问题
@@ -128,9 +138,11 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
      * @param questionCode
      * @return
      */
-    public DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String questionCode) {
+    @Override
+    public DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String questionCode, String mainSympCode) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCode", questionCode);
+        params.put("mainSympCode", mainSympCode);
         DataRecord dataRecord = super.selectOne("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion.getQuestionByCode", params);
         if (dataRecord == null)
             return null;
@@ -138,6 +150,5 @@ public class DiagnosisMainsympQuestionDaoImpl extends BaseDao<DiagnosisMainsympQ
         JavaBeanMap.convertMapToJavaBean(dataRecord, dmQuestions);
         return dmQuestions;
     }
-
 
 }

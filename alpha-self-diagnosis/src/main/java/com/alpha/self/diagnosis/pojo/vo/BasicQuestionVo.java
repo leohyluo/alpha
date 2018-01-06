@@ -1,14 +1,18 @@
 package com.alpha.self.diagnosis.pojo.vo;
 
+import java.io.Serializable;
+import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import com.alpha.commons.enums.DisplayType;
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
+import com.alpha.self.diagnosis.utils.AppUtils;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.user.pojo.UserInfo;
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import java.io.Serializable;
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 public class BasicQuestionVo implements Serializable, IQuestionVo {
 
@@ -65,16 +69,19 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
      * @param question
      * @return
      */
-    public BasicQuestionVo(DiagnosisMainsympQuestion question, Long diagnosisId, String sympCode) {
+    public BasicQuestionVo(DiagnosisMainsympQuestion question, Long diagnosisId, String sympCode, UserInfo userInfo) {
         if (question.getQuestionType() == QuestionEnum.伴随症状.getValue()) {
-            this.displayType = "checkbox_more_input_confirm";
+            //this.displayType = "checkbox_more_input_confirm";
+        	this.displayType = DisplayType.CHECKBOX_MORE_INPUT_CONFIRM.getValue();
             this.searchUrl = "/data/search/concsymp";
         } else {
-            this.displayType = "radio";
+            //this.displayType = "radio";
+            String displayType = StringUtils.isNotEmpty(question.getDisplayType()) ? question.getDisplayType() : "radio";
+        	this.displayType = displayType;
         }
         this.diagnosisId = diagnosisId;
         this.questionCode = question.getQuestionCode();
-        this.questionTitle = question.getPopuTitle();
+        this.questionTitle = AppUtils.setUserNameAtQuestionTitle(question.getPopuTitle(), userInfo);
         this.title = question.getTitle();
         this.sympCode = sympCode;
         this.type = question.getQuestionType();
@@ -194,4 +201,5 @@ public class BasicQuestionVo implements Serializable, IQuestionVo {
     public void setTitle(String title) {
         this.title = title;
     }
+    
 }

@@ -65,5 +65,35 @@ public class UserDiagnosisDetailDaoImpl extends BaseDao<UserDiagnosisDetail, Lon
         return udds;
     }
 
+	@Override
+	public List<UserDiagnosisDetail> listUserDiagnosisDetail(Long diagnosisId, String sympCode) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("diagnosisId", diagnosisId);
+        params.put("sympCode", sympCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.user.pojo.UserDiagnosisDetail.queryBySympCode", params);
+        List<UserDiagnosisDetail> udds = JavaBeanMap.convertListToJavaBean(datas, UserDiagnosisDetail.class);
+        return udds;
+	}
+
+	@Override
+	public void deleteUserDiagnosisDetail(Long diagnosisId, String sympCode) {
+		Map<String, Object> params = new HashMap<>();
+        params.put("diagnosisId", diagnosisId);
+        params.put("sympCode", sympCode);
+        super.deleteByStatement("com.alpha.server.rpc.user.pojo.UserDiagnosisDetail.delBySympcode", params);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserDiagnosisDetail> listUserDiagnosisDetail(Long diagnosisId, List<String> questionCodeList) {
+		// TODO Auto-generated method stub
+		Map<String, Object> params = new HashMap<>();
+        params.put("diagnosisId", diagnosisId);
+        params.put("questionCodeList", questionCodeList);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.user.pojo.UserDiagnosisDetail.queryByQuestionCodeList", params);
+        List<UserDiagnosisDetail> udds = JavaBeanMap.convertListToJavaBean(datas, UserDiagnosisDetail.class);
+		return udds;
+	}
+
 
 }

@@ -2,6 +2,7 @@ package com.alpha.self.diagnosis.service.impl;
 
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.FigureUtil;
+import com.alpha.commons.util.sim.CosineSimilarAlgorithm;
 import com.alpha.commons.util.sim.Similarity;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
@@ -14,6 +15,7 @@ import com.alpha.self.diagnosis.service.MedicineQuestionService;
 import com.alpha.self.diagnosis.service.SymptomAccompanyService;
 import com.alpha.self.diagnosis.utils.MedicineSortUtil;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
+import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import org.apache.commons.lang3.StringUtils;
@@ -175,11 +177,13 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
         LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();
         for (Iterator i = dmcs.iterator(); i.hasNext(); ) {
             DiagnosisMainsympConcsymp dmc = (DiagnosisMainsympConcsymp) i.next();
-            Double sympNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSympName()).toUpperCase(), keyword.toUpperCase());
-            Double popuNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getPopuName()).toUpperCase(), keyword.toUpperCase());
-            Double symbolSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSymbol()).toUpperCase(), keyword.toUpperCase());
-            Double similarity = MedicineSortUtil.sortDouble(symbolSimilarity, popuNameSimilarity, sympNameSimilarity);
-            if (similarity == 0) {
+            Double similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
+
+//            Double sympNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSympName()).toUpperCase(), keyword.toUpperCase());
+//            Double popuNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getPopuName()).toUpperCase(), keyword.toUpperCase());
+//            Double symbolSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSymbol()).toUpperCase(), keyword.toUpperCase());
+//            Double similarity = MedicineSortUtil.sortDouble(symbolSimilarity, popuNameSimilarity, sympNameSimilarity);
+            if (similarity < 0.5) {
                 i.remove();
             } else {
                 dmc.setSimilarity(similarity);
@@ -201,6 +205,7 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
      * @param concSympCodes
      * @return
      */
+    @Override
     public Map<String, List<DiagnosisMainsympConcsymp>> mapDiagnosisMainsympConcsymp(String mainSympCode, Collection<String> concSympCodes) {
         Map<String, List<DiagnosisMainsympConcsymp>> dmcsMap = new HashMap<>();
         if (concSympCodes == null || concSympCodes.size() == 0)
@@ -209,6 +214,33 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
         for (DiagnosisMainsympConcsymp dmc : dmcs) {
             List<DiagnosisMainsympConcsymp> dmcList = dmcsMap.get(dmc.getDiseaseCode()) == null ? new ArrayList<>() : dmcsMap.get(dmc.getDiseaseCode());
             dmcsMap.put(dmc.getDiseaseCode(), dmcList);
+        }
+        return dmcsMap;
+    }
+    
+    /**
+     * 查询疾病下的伴随症状
+     *
+     * @param mainSympCode
+     * @param concSympCodes
+     * @return
+     */
+    @Override
+    public Map<String, List<MedicineQuestionVo>> mapDiagnosisMainsympConcsymp2(String mainSympCode, List<String> concSympCodes) {
+        Map<String, List<MedicineQuestionVo>> dmcsMap = new HashMap<>();
+        if (concSympCodes == null || concSympCodes.size() == 0)
+            return dmcsMap;
+        List<MedicineQuestionVo> dmcs = diagnosisMainsympConcsympDao.listDiagnosisMainsympConcsymp(mainSympCode, concSympCodes);
+        for (MedicineQuestionVo dmc : dmcs) {
+        	String diseaseCode = dmc.getDiseaseCode();
+        	if(dmcsMap.containsKey(diseaseCode)) {
+        		List<MedicineQuestionVo> list = dmcsMap.get(diseaseCode);
+        		list.add(dmc);
+        	} else {
+        		List<MedicineQuestionVo> list = new ArrayList<>();
+        		list.add(dmc);
+        		dmcsMap.put(diseaseCode, list);
+        	}
         }
         return dmcsMap;
     }

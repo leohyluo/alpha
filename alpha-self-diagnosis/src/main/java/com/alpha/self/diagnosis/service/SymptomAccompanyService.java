@@ -3,6 +3,7 @@ package com.alpha.self.diagnosis.service;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
+import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
 import java.util.Collection;
@@ -41,6 +42,14 @@ public interface SymptomAccompanyService {
      * @return
      */
     Map<String, List<DiagnosisMainsympConcsymp>> mapDiagnosisMainsympConcsymp(String mainSympCode, Collection<String> concSympCodes);
+    
+    /**
+     * 查询疾病下的伴随症状及标准差、权重
+     * @param mainSympCode
+     * @param concSympCodes
+     * @return
+     */
+    Map<String, List<MedicineQuestionVo>> mapDiagnosisMainsympConcsymp2(String mainSympCode, List<String> concSympCodes);
 
     /**
      * 生成伴随症状提问

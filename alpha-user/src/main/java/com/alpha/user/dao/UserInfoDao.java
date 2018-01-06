@@ -25,4 +25,18 @@ public interface UserInfoDao extends IBaseDao<UserInfo, Long> {
     UserInfo queryByUserId(Long userId);
 
     List<UserInfo> query(Map<String, Object> map);
+    
+    /**
+     * 根据手机号码查询用户信息
+     * @param phoneNumber
+     * @return
+     */
+    UserInfo getByPhoneNumber(String phoneNumber);
+    
+    /**
+     * 根据用户id查询下属成员的信息
+     * @param userId
+     * @return
+     */
+    List<UserInfo> listUserMemberInfo(Long userId);
 }

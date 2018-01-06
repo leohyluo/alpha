@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,12 +57,13 @@ public class DiagnosisPastmedicalHistoryServiceImpl implements DiagnosisPastmedi
     }
 
     @Override
-    public IQuestionVo queryDiseaseHistory(Long userId, Long diagnosisId, Integer historyType) {
-        UserInfo userInfo = userInfoService.queryByUserId(userId);
+    public IQuestionVo queryDiseaseHistory(UserInfo userInfo, Long diagnosisId, Integer historyType) {
+        /*UserInfo userInfo = userInfoService.queryByUserId(userId);
         if (userInfo == null) {
             logger.warn("user not found by userId {}", userId);
             return null;
-        }
+        }*/
+        //由于用户信息未保存，所以要手机设置用户年龄、性别
         String questionCode = historyType == 1 ? BasicQuestionType.PAST_MEDICAL_HISTORY.getValue() : BasicQuestionType.ALLERGIC_HISTORY.getValue();
         BasicQuestion question = basicQuestionService.findByQuestionCode(questionCode);
         AbstractBasicAnswerProcessor answerProcessor = BasicAnswerProcessorAdaptor.getProcessor(question.getQuestionCode());

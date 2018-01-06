@@ -17,24 +17,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alpha.commons.core.service.SysSequenceService;
+import com.alpha.commons.enums.DiagnosisStatus;
+import com.alpha.commons.enums.InType;
 import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.RandomUtils;
+import com.alpha.server.rpc.user.pojo.HisRegisterInfo;
 import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.server.rpc.user.pojo.UserMember;
 import com.alpha.user.dao.DiagnosisMedicalTemplateDao;
 import com.alpha.user.dao.UserInfoDao;
 import com.alpha.user.pojo.DiagnosisMedicalTemplate;
 import com.alpha.user.pojo.vo.DiseaseHistoryVo;
+import com.alpha.user.pojo.vo.DrugVo;
 import com.alpha.user.pojo.vo.HisUserInfoVo;
 import com.alpha.user.pojo.vo.OtherHospitalInfo;
 import com.alpha.user.pojo.vo.SaveUserInfoVo;
 import com.alpha.user.service.MedicalRecordService;
 import com.alpha.user.service.UserBasicRecordService;
 import com.alpha.user.service.UserInfoService;
+import com.alpha.user.service.UserMemberService;
 
 @Service
 @Transactional
@@ -54,6 +62,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Resource
     private DiagnosisMedicalTemplateDao diagnosisMedicalTemplateDao;
+    @Resource
+    private UserMemberService userMemberService;
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -154,6 +164,10 @@ public class UserInfoServiceImpl implements UserInfoService {
         
         if (StringUtils.isNotEmpty(userInfo.getOperationText())) 
         	user.setOperationText(userInfo.getOperationText());
+        
+        if (StringUtils.isNotEmpty(userInfo.getVaccinationHistoryCode())) 
+        	user.setVaccinationHistoryCode(userInfo.getVaccinationHistoryCode());
+        
         userInfoDao.update(user);
         return user;
     }
@@ -162,6 +176,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfo queryByUserId(Long userId) {
         return userInfoDao.queryByUserId(userId);
     }
+    
+
+	@Override
+	public UserInfo queryByExternalUserId(String externalUserId, int inType) {
+		return userInfoDao.getUserInfoByExternalUserId(externalUserId, inType);
+	}
+
 
     @Override
     public UserInfo save(Long diagnosisId, SaveUserInfoVo userInfo, OtherHospitalInfo hospitalInfo, int inType) {
@@ -223,28 +244,48 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public HisUserInfoVo queryUserInfoFromHis(String cardNo, Long userId) {
     	UserInfo userInfo = null;
+    	List<HisRegisterInfo> hisDepartmentList = new ArrayList<>();
     	if (userId != null) {
     		userInfo = queryByUserId(userId);
     	} else if(StringUtils.isNotEmpty(cardNo)) {
     		//调用第三方接口获取用户信息
     		String userStr = getThirdUser(cardNo);
+    		if(StringUtils.isEmpty(userStr)) {
+    			return null;
+    		}
     		logger.info("third user is {}", userStr);
     		userInfo = JSONObject.parseObject(userStr, UserInfo.class);
+    		//挂号科室由jSONArray字符串转为List
+    		hisDepartmentList = JSONArray.parseArray(userInfo.getDepartmentList(), HisRegisterInfo.class);
     		//根据身份证查询用户是否存在
     		Map<String, Object> param = new HashMap<>();
     		param.put("idcard", cardNo);
     		List<UserInfo> list = userInfoDao.query(param);
     		//保存第三方用户信息
     		if(CollectionUtils.isNotEmpty(list)) {
-    			UserInfo alphaUserInfo = list.get(0);
+    			userInfo = list.get(0);
+    			userId = userInfo.getUserId();
+    			hisDepartmentList = JSONArray.parseArray(userInfo.getDepartmentList(), HisRegisterInfo.class);
+    			for(HisRegisterInfo dept : hisDepartmentList) {
+    				//根据就诊编码查询是否已完成预问诊
+    				String hisRegisterNo = dept.getHisRegisterNo();
+    				if(StringUtils.isNotEmpty(hisRegisterNo)) {
+    					UserBasicRecord record = userBasicRecordService.findFinishByUserId(userId, hisRegisterNo);
+    					if(record != null) {
+    						dept.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+    					}
+    				}
+    			}
+    			
+    			/*UserInfo alphaUserInfo = list.get(0);
     			mergeUserInfo(alphaUserInfo, userInfo);
-    			userInfo = updateUserInfo(alphaUserInfo, userInfo.getInType());
+    			userInfo = updateUserInfo(alphaUserInfo, userInfo.getInType());*/
     		} else {
     			userInfo = create(userInfo);
     		}
     	} 
     	//目前没有第三方接口,所以只查本地UserInfo，以后需将第三方的用户信息保存至userInfo表
-        HisUserInfoVo hisUserInfo = new HisUserInfoVo(userInfo);
+        HisUserInfoVo hisUserInfo = new HisUserInfoVo(userInfo, hisDepartmentList);
         //拼装既往史
         String pastmedicalHistoryCode = userInfo.getPastmedicalHistoryCode();
         if (StringUtils.isNotEmpty(pastmedicalHistoryCode)) {
@@ -260,6 +301,17 @@ public class UserInfoServiceImpl implements UserInfoService {
                 }
             }
             hisUserInfo.setPastmedicalHistory(pastmedicalHistory);
+        }
+        //将手术史拼到过既往史
+        String operationCode = userInfo.getOperationCode();
+        if (StringUtils.isNotEmpty(operationCode) && "1".equals(operationCode)) {
+        	List<DiseaseHistoryVo> pastmedicalHistory = hisUserInfo.getPastmedicalHistory();
+        	if(pastmedicalHistory == null) {
+        		pastmedicalHistory = new ArrayList<>();
+        		hisUserInfo.setPastmedicalHistory(pastmedicalHistory);
+        	}
+        	DiseaseHistoryVo operationHistory = new DiseaseHistoryVo(operationCode, "手术史");
+        	pastmedicalHistory.add(operationHistory);
         }
         //拼装过敏史
         String allergicHistoryCode = userInfo.getAllergicHistoryCode();
@@ -277,6 +329,16 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
             hisUserInfo.setAllergicHistory(allergicHistory);
         }
+        //拼装就诊药品
+        if(userId != null) {
+        	UserBasicRecord basicRecord = userBasicRecordService.findLastCompleted(userId);
+        	String userDrugListStr = basicRecord.getOtherHospitalDrugList();
+        	if(StringUtils.isNotEmpty(userDrugListStr)) {
+        		List<DrugVo> drugList = JSONArray.parseArray(userDrugListStr, DrugVo.class);
+        		hisUserInfo.setOtherHospitalDrugList(drugList);
+        	}
+        }
+        	
         return hisUserInfo;
     }
     
@@ -284,6 +346,119 @@ public class UserInfoServiceImpl implements UserInfoService {
 	public List<UserInfo> query(Map<String, Object> map) {
 		return userInfoDao.query(map);
 	}
+
+	@Override
+	public List<HisUserInfoVo> list(Long userId) {
+		List<HisUserInfoVo> userList = new ArrayList<>();
+		
+		HisUserInfoVo self = this.queryUserInfoFromHis(null, userId);
+		self.setSelf("Y");
+		userList.add(self);
+		List<UserMember> userMemberList = userMemberService.listByUserId(userId);
+		
+		for(UserMember userMember : userMemberList) {
+			HisUserInfoVo memberInfo = this.queryUserInfoFromHis(null, userMember.getMemberId());
+			userList.add(memberInfo);
+		}
+		return userList;
+	}
+
+	@Override
+	@Transactional
+	public HisUserInfoVo saveUserMember(Long userId, String memberName) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setUserName(memberName);
+		userInfo = this.create(userInfo);
+		Long memberId = userInfo.getUserId();
+		
+		UserMember userMember = new UserMember();
+		userMember.setUserId(userId);
+		userMember.setMemberId(memberId);
+		userMember.setMemberName(memberName);
+		userMemberService.create(userMember);
+		
+		HisUserInfoVo hisUserInfo = this.queryUserInfoFromHis(null, memberId);
+		return hisUserInfo;
+	}
+	
+
+	@Override
+	public UserInfo getByPhoneNumber(String phoneNumber) {
+		return userInfoDao.getByPhoneNumber(phoneNumber);
+	}
+	
+
+	@Override
+	public UserInfo follow(UserInfo userInfo, String wecharId) {
+		userInfo.setExternalUserId(wecharId);
+		userInfo.setInType(InType.WECHAR.getValue());
+		userInfo.setLastUpdateTime(new Date());
+		userInfoDao.update(userInfo);
+		return userInfo;
+	}
+
+	@Override
+	public List<UserInfo> listUserMemberInfo(Long userId) {
+		return userInfoDao.listUserMemberInfo(userId);
+	}
+    
+    /**
+     * 测试代码，模似HIS返回用户信息
+     * @param idcard
+     * @return
+     */
+    private String getThirdUser(String idcard) {
+    	String userName = RandomUtils.randomUserName();
+    	String birth = DateUtils.date2String(RandomUtils.randomDate("2000-01-01", "2017-09-10"), DateUtils.DATE_FORMAT);
+    	Integer gender = RandomUtils.getRandomNum(1, 2);
+    	String cureTime = DateUtils.date2String(new Date(), DateUtils.DATE_TIME_FORMAT);
+    	JSONObject json = new JSONObject();
+    	json.put("userName", userName);
+    	json.put("birth", birth);
+    	json.put("gender", gender);
+    	json.put("idcard", idcard);
+    	json.put("inType", "1");
+    	
+    	JSONArray jarr = new JSONArray();
+    	JSONObject dept1 = new JSONObject();
+    	dept1.put("hospitalCode", "A001");
+    	dept1.put("hisRegisterNo", System.currentTimeMillis()+"");
+    	dept1.put("department", "小儿消化内科");
+    	dept1.put("doctorName", "李珊珊");
+    	dept1.put("cureTime", cureTime);
+    	
+    	JSONObject dept2 = new JSONObject();
+    	dept2.put("hospitalCode", "A002");
+    	dept2.put("department", "小儿皮肤科");
+    	dept2.put("doctorName", "袁明珠");
+    	dept2.put("hisRegisterNo", System.currentTimeMillis()+"");
+    	dept2.put("cureTime", cureTime);
+    	
+    	jarr.add(dept1);
+    	jarr.add(dept2);
+    	
+    	json.put("departmentList", jarr.toJSONString());
+    	
+    	return json.toJSONString();
+    }
+    
+    private void mergeUserInfo(UserInfo alphaUser, UserInfo hisUser) {
+    	if(StringUtils.isNotEmpty(hisUser.getUserName())) {
+    		alphaUser.setUserName(hisUser.getUserName());
+    	} 
+    	if (hisUser.getBirth() != null) {
+    		alphaUser.setBirth(hisUser.getBirth());
+    	}
+    	if(hisUser.getGender() != null && hisUser.getGender() != 0) {
+    		alphaUser.setGender(hisUser.getGender());
+    	}
+    	/*if (hisUser.getDepartment() != null) {
+    		alphaUser.setDepartment(hisUser.getDepartment());
+    	}
+    	if (hisUser.getCureTime() != null) {
+    		alphaUser.setCureTime(hisUser.getCureTime());
+    	}*/
+    }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
     private void updateUserBasicRecord(Long diagnosisId, UserInfo userInfo) {
@@ -307,6 +482,12 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         BeanCopierUtil.copy(hospitalInfo, record);
+        List<DrugVo> useDrugList = hospitalInfo.getOtherHospitalDrugList();
+        String otherHospitalDrugList = "[]";
+        if(CollectionUtils.isNotEmpty(useDrugList)) {
+        	otherHospitalDrugList = JSON.toJSONString(useDrugList);
+        	record.setOtherHospitalDrugList(otherHospitalDrugList);
+        }
         //填充模板
         String templateId = userBasicRecordService.findTemplateId(diagnosisId);
         if (StringUtils.isNotEmpty(templateId)) {
@@ -315,45 +496,5 @@ public class UserInfoServiceImpl implements UserInfoService {
             record.setPresentIllnessHistoryHospital(presentIllnessHistoryHospital);
         }
         userBasicRecordService.updateUserBasicRecord(record);
-    }
-    
-    /**
-     * 测试代码，模似HIS返回用户信息
-     * @param idcard
-     * @return
-     */
-    private String getThirdUser(String idcard) {
-    	String userName = RandomUtils.randomUserName();
-    	String birth = DateUtils.date2String(RandomUtils.randomDate("2000-01-01", "2017-09-10"), DateUtils.DATE_FORMAT);
-    	Integer gender = RandomUtils.getRandomNum(1, 2);
-    	String department = "小儿消化内科";
-    	String cureTime = DateUtils.date2String(new Date(), DateUtils.DATE_TIME_FORMAT);
-    	JSONObject json = new JSONObject();
-    	json.put("userName", userName);
-    	json.put("birth", birth);
-    	json.put("gender", gender);
-    	json.put("department", department);
-    	json.put("cureTime", cureTime);
-    	json.put("idcard", idcard);
-    	json.put("inType", "1");
-    	return json.toJSONString();
-    }
-    
-    private void mergeUserInfo(UserInfo alphaUser, UserInfo hisUser) {
-    	if(StringUtils.isNotEmpty(hisUser.getUserName())) {
-    		alphaUser.setUserName(hisUser.getUserName());
-    	} 
-    	if (hisUser.getBirth() != null) {
-    		alphaUser.setBirth(hisUser.getBirth());
-    	}
-    	if(hisUser.getGender() != null && hisUser.getGender() != 0) {
-    		alphaUser.setGender(hisUser.getGender());
-    	}
-    	if (hisUser.getDepartment() != null) {
-    		alphaUser.setDepartment(hisUser.getDepartment());
-    	}
-    	if (hisUser.getCureTime() != null) {
-    		alphaUser.setCureTime(hisUser.getCureTime());
-    	}
     }
 }

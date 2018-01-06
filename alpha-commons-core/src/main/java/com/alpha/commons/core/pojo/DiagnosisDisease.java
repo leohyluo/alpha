@@ -90,6 +90,42 @@ public class DiagnosisDisease implements Serializable {
      */
     @Column(name = "icd10_code")
     private String icd10Code;
+    
+    /**
+     * 疾病概述
+     */
+    @Column(name = "disease_summary")
+    private String diseaseSummary;
+    
+    /**
+     * 指南意见
+     */
+    @Column(name = "guide_option")
+    private String guideOption;
+    
+    /**
+     * 家庭微治疗
+     */
+    @Column(name = "treat_family")
+    private String treatFamily;
+    
+    /**
+     * 疾病预防
+     */
+    @Column(name = "defend_option")
+    private String defendOption;
+    
+    //智能排序阀值
+    @Column(name = "threshold")
+    private Long threshold;
+    
+    //用户选择次数
+    @Column(name = "user_select_count")
+    private Long userSelectCount;
+    
+    //默认排序
+    @Column(name = "default_order")
+    private String defaultOrder;
 
     /**
      * 同步时间（暂时不填）
@@ -403,5 +439,61 @@ public class DiagnosisDisease implements Serializable {
         return this.itDataStatus;
     }
 
+	public String getDiseaseSummary() {
+		return diseaseSummary;
+	}
 
+	public void setDiseaseSummary(String diseaseSummary) {
+		this.diseaseSummary = diseaseSummary;
+	}
+
+	public String getGuideOption() {
+		return guideOption;
+	}
+
+	public void setGuideOption(String guideOption) {
+		this.guideOption = guideOption;
+	}
+
+	public String getTreatFamily() {
+		return treatFamily;
+	}
+
+	public void setTreatFamily(String treatFamily) {
+		this.treatFamily = treatFamily;
+	}
+
+	public String getDefendOption() {
+		return defendOption;
+	}
+
+	public void setDefendOption(String defendOption) {
+		this.defendOption = defendOption;
+	}
+
+	public Long getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(Long threshold) {
+		this.threshold = threshold;
+	}
+
+	public Long getUserSelectCount() {
+		return userSelectCount;
+	}
+
+	public void setUserSelectCount(Long userSelectCount) {
+		this.userSelectCount = userSelectCount;
+	}
+
+	public String getDefaultOrder() {
+		return defaultOrder;
+	}
+
+	public void setDefaultOrder(String defaultOrder) {
+		this.defaultOrder = defaultOrder;
+	}
+
+	
 }

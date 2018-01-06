@@ -19,6 +19,7 @@
 	    <result column="fertility_type" jdbcType="VARCHAR" property="fertilityType" />
 	    <result column="gestational_age" jdbcType="VARCHAR" property="gestationalAge" />
 	    <result column="feed_type" jdbcType="VARCHAR" property="feedType" />
+	    <result column="vaccination_history_text" jdbcType="VARCHAR" property="vaccinationHistoryText" />
 	    <result column="pastmedical_history_code" jdbcType="VARCHAR" property="pastmedicalHistoryCode" />
 	    <result column="pastmedical_history_text" jdbcType="VARCHAR" property="pastmedicalHistoryText" />
 	    <result column="allergic_history_code" jdbcType="VARCHAR" property="allergicHistoryCode" />
@@ -55,11 +56,33 @@
  			<if test="presentIllnessHistory != null">
  				and char_length(present_illness_history) > 0
  			</if>
+ 			<if test="status">
+ 				and status = #{status}
+ 			</if>
  			ORDER BY create_time desc
  		</where>
  		limit 0,1
  	</select>
  	
+ 	<select id="findFinishByUser" resultType="DataRecord" parameterType="HashMap">
+ 		select * from user_basic_record
+ 		<where>
+ 			<if test="userId != null">
+ 				and user_id = #{userId}
+ 			</if>
+ 			<if test="status != null">
+ 				and status = #{status}
+ 			</if>
+ 			<if test="hisRegisterNo != null">
+ 				and his_register_no = #{hisRegisterNo}
+ 			</if>
+ 			<if test="finishDate">
+ 				and DATE(create_time) = #{finishDate}
+ 			</if>
+ 			ORDER BY create_time desc
+ 		</where>
+ 	</select>
+ 	 	
  	<select id="findByLastMonth" parameterType="HashMap" resultType="DataRecord">
  		<![CDATA[
 	 		SELECT * from user_basic_record
@@ -82,5 +105,20 @@
  		SELECT template_id from diagnosis_main_symptoms where symp_code 
 		=
 		(SELECT symp_code from user_diagnosis_detail where diagnosis_id = #{diagnosisId} and char_length(symp_code) > 0 limit 0, 1)
+ 	</select>
+ 	
+ 	<!-- 查找当天未确诊的数据 -->
+ 	<select id="findUnComfirmOnToday" parameterType="HashMap" resultType="DataRecord">
+ 		SELECT * from user_basic_record ubr where DATE(ubr.create_time) = CURDATE() AND ubr.`status` = #{status}
+ 	</select>
+ 	
+ 	<!-- 获取用户所有就诊记录 -->
+ 	<select id="findByUserId" parameterType="HashMap" resultType="DataRecord">
+ 		SELECT * from user_basic_record ubr where ubr.user_id = #{userId}
+ 	</select>
+ 	
+ 	<!-- 查询用户最后一条就诊记录 -->
+ 	<select id="findLastFinishByUser" resultType="DataRecord" parameterType="HashMap">
+ 		select * from user_basic_record where user_id = #{userId} and status >= 10 ORDER BY create_time desc limit 0,1
  	</select>
 </mapper>

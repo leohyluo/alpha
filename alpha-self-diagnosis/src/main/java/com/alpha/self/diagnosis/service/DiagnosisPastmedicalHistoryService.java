@@ -4,7 +4,9 @@ import com.alpha.self.diagnosis.pojo.vo.DiseaseVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisPastmedicalHistory;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisSubpastmedicalHistory;
+import com.alpha.server.rpc.user.pojo.UserInfo;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +39,5 @@ public interface DiagnosisPastmedicalHistoryService {
      * @param historyType 1:既往史 2:过敏史
      * @return
      */
-    IQuestionVo queryDiseaseHistory(Long userId, Long diagnosisId, Integer historyType);
+    IQuestionVo queryDiseaseHistory(UserInfo userInfo, Long diagnosisId, Integer historyType);
 }

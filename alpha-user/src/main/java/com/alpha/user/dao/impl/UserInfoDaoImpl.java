@@ -64,4 +64,34 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo, Long> implements UserInfo
         return resultList;
     }
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public UserInfo getByPhoneNumber(String phoneNumber) {
+		String statement = "com.alpha.user.mapper.UserInfoMapper.find";
+		Map<String, Object> param = new HashMap<>();
+		param.put("phoneNumber", phoneNumber);
+        List<DataRecord> list = super.selectForList(statement, param);
+        List<UserInfo> resultList = new ArrayList<>();
+        UserInfo userInfo = null;
+        if (resultList != null) {
+            resultList = JavaBeanMap.convertListToJavaBean(list, UserInfo.class);
+            userInfo =  resultList.get(0);
+        }
+        return userInfo;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listUserMemberInfo(Long userId) {
+		String statement = "com.alpha.user.mapper.UserInfoMapper.queryUserMemberInfoList";
+        Map<String, Object> param = new HashMap<>();
+        param.put("userId", userId);
+		List<DataRecord> list = super.selectForList(statement, param);
+        List<UserInfo> resultList = new ArrayList<>();
+        if (resultList != null) {
+            resultList = JavaBeanMap.convertListToJavaBean(list, UserInfo.class);
+        }
+        return resultList;
+	}
+
 }

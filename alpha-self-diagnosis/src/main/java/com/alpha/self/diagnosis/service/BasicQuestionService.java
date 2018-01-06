@@ -41,5 +41,5 @@ public interface BasicQuestionService {
      * @param gender
      * @return
      */
-    Map<String, String> queryByBirthOrGender(String birth, int gender);
+    Map<String, String> askBasicQuestion(String systemType, String birth, int gender);
 }

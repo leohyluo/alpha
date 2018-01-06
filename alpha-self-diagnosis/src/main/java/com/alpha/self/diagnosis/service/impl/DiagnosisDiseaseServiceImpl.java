@@ -14,12 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.alpha.commons.core.dao.DiagnosisDiseaseDao;
 import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.self.diagnosis.pojo.vo.DiseaseVo;
+import com.alpha.self.diagnosis.pojo.vo.TreatAdviceVo;
 import com.alpha.self.diagnosis.service.DiagnosisDiseaseService;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.treatscheme.dao.DiagnosisDiseaseDao;
 
 /**
  * Created by xc.xiong on 2017/9/11.
@@ -89,4 +90,20 @@ public class DiagnosisDiseaseServiceImpl implements DiagnosisDiseaseService {
         List<DiseaseVo> diseasevoList = dds.stream().map(DiseaseVo::new).collect(Collectors.toList());
         return diseasevoList;
     }
+
+	@Override
+	public TreatAdviceVo queryTreatAdvice(String diseaseCode) {
+		DiagnosisDisease disease = diagnosisDiseaseDao.getDiagnosisDisease(diseaseCode);
+		TreatAdviceVo treatAdvice = null;
+		if(disease != null) {
+			//更新用户选择次数
+			Long userSelectCount = disease.getUserSelectCount() == null ? 0L : disease.getUserSelectCount();
+			userSelectCount++;
+			disease.setUserSelectCount(userSelectCount);
+			diagnosisDiseaseDao.update(disease);
+			
+			treatAdvice = new TreatAdviceVo(disease);
+		}
+		return treatAdvice;
+	}
 }

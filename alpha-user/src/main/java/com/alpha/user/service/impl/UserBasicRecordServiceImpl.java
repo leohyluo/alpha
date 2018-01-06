@@ -1,16 +1,19 @@
 package com.alpha.user.service.impl;
 
-import com.alpha.server.rpc.user.pojo.UserBasicRecord;
-import com.alpha.server.rpc.user.pojo.UserInfo;
-import com.alpha.user.dao.UserBasicRecordDao;
-import com.alpha.user.service.UserBasicRecordService;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Map;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.dao.UserBasicRecordDao;
+import com.alpha.user.service.UserBasicRecordService;
 
 @Service
 @Transactional
@@ -48,6 +51,7 @@ public class UserBasicRecordServiceImpl implements UserBasicRecordService {
         if (record != null && record.getUserId().longValue() == userInfo.getUserId().longValue()) {
             userName = "您";
         }
+        userName = StringUtils.isEmpty(userName) ? "您" : userName;
         return userName;
     }
 
@@ -77,5 +81,20 @@ public class UserBasicRecordServiceImpl implements UserBasicRecordService {
 	@Override
 	public UserBasicRecord findLastCompleted(Long userId) {
 		return dao.findLastCompleted(userId);
+	}
+
+	@Override
+	public UserBasicRecord findFinishByUserId(Long userId, String hisRegisterNo) {
+		return dao.findFinishByUserId(userId, hisRegisterNo);
+	}
+
+	@Override
+	public List<UserBasicRecord> listFinishByUserId(Long userId) {
+		return dao.listFinishByUserId(userId);
+	}
+
+	@Override
+	public List<UserBasicRecord> listTodayUnConfirm() {
+		return dao.listTodayUnConfirm();
 	}
 }

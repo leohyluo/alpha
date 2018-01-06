@@ -36,7 +36,7 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @param answerCodes
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
 
     /**
      * 根据答案编号查询答案
@@ -55,4 +55,11 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @return
      */
     List<MedicineQuestionVo> listMedicineQuestionVo(Collection<String> questionCodes, Collection<String> answerCodes);
+    
+    /**
+     * 查询问题下的所有隐藏答案
+     * @param questionCode
+     * @return
+     */
+    List<DiagnosisQuestionAnswer> listHiddenAnswers(String questionCode);
 }

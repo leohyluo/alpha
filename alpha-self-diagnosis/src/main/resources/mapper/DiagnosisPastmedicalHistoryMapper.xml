@@ -50,7 +50,7 @@
 			</if>
 			<if test="age != null">
 				<![CDATA[
-					and ((min_age is null and min_age is null)
+					and ((min_age is null and max_age is null)
 					or (min_age <= #{age} and max_age >= #{age}))
 				]]>
 			</if>
@@ -75,7 +75,7 @@
 			<if test="threshold != null">
 				and threshold = #{threshold} and user_select_count > threshold
 			</if>
-			GROUP BY disease_code order by IFNULL(default_order,1000)
+			GROUP BY disease_code order by max_age,IFNULL(default_order,1000)
 			<!-- <if test="threshold != null">
 				order by user_select_count desc,IFNULL(max_age,150) 
 			</if>

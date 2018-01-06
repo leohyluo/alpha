@@ -1,8 +1,13 @@
 package com.alpha.self.diagnosis.controller;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -19,12 +24,15 @@ import com.alpha.commons.util.StringUtils;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.SearchRequestVo;
 import com.alpha.self.diagnosis.service.BasicQuestionService;
 import com.alpha.self.diagnosis.service.BasicWeightInfoService;
 import com.alpha.self.diagnosis.service.SymptomAccompanyService;
+import com.alpha.self.diagnosis.service.SymptomMainService;
 import com.alpha.self.diagnosis.utils.ServiceUtil;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.user.pojo.vo.HisUserInfoVo;
 import com.alpha.user.service.UserInfoService;
@@ -45,6 +53,8 @@ public class DataSearchController {
     private UserInfoService userInfoService;
     @Resource
     private BasicWeightInfoService basicWeightInfoService;
+    @Resource
+    private SymptomMainService symptomMainService; 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSearchController.class);
 
@@ -117,5 +127,26 @@ public class DataSearchController {
     	Date birth = DateUtils.stringToDate(birthStr);
         List<IAnswerVo> answerList = basicWeightInfoService.queryAnswers(birth, gender);
         return WebUtils.buildSuccessResponseMessage(answerList);
+    }
+    
+    /**
+     * 搜索主症状
+     * @param userId
+     * @param inType
+     * @param keyword
+     * @return
+     */
+    @PostMapping("/mainSymptom")
+    public ResponseMessage mainSymptomSearch(Long userId, Integer inType, String keyword) {
+    	UserInfo userInfo = userInfoService.queryByUserId(userId);
+        if (userInfo == null) {
+            return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+        }
+        Map<String, Object> param = new HashMap<>();
+        param.put("keyword", keyword);
+        List<DiagnosisMainSymptoms> mainList = symptomMainService.query(param);
+        mainList = mainList.stream().filter(e -> e.mainSymptomPredicate(userInfo, inType)).collect(toList());
+		List<BasicAnswerVo> mainvoList = mainList.stream().map(BasicAnswerVo::new).collect(Collectors.toList());
+		return WebUtils.buildSuccessResponseMessage(mainvoList);		
     }
 }

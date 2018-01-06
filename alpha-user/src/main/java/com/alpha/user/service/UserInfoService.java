@@ -9,7 +9,15 @@ import com.alpha.user.pojo.vo.OtherHospitalInfo;
 import com.alpha.user.pojo.vo.SaveUserInfoVo;
 
 public interface UserInfoService {
-
+	
+	/**
+	 * 用户通过微信公众号关注预问诊
+	 * @param userInfo
+	 * @param wecharId
+	 * @return
+	 */
+	UserInfo follow(UserInfo userInfo, String wecharId);
+	
     /**
      * 根据第三方用户编号，渠道编号获取用户信息
      * 如果没有用户信息，则创建一个新的用户
@@ -35,6 +43,14 @@ public interface UserInfoService {
      * @return
      */
     UserInfo queryByUserId(Long userId);
+    
+    /**
+     * 根据第三方渠道的用户id查询用户基础信息
+     * @param externalUserId
+     * @param inType
+     * @return
+     */
+    UserInfo queryByExternalUserId(String externalUserId, int inType);
 
     /**
      * 创建用户
@@ -60,4 +76,32 @@ public interface UserInfoService {
      * @return
      */
     List<UserInfo> query(Map<String, Object> map);
+    
+    /**
+     * 获取用户/用户成员列表
+     * @param userId
+     * @return
+     */
+    List<HisUserInfoVo> list(Long userId);
+    
+    /**
+     * 保存用户成员
+     * @param userId
+     * @param memberName
+     */
+    HisUserInfoVo saveUserMember(Long userId, String memberName);
+    
+    /**
+     * 通过电话号码获取信息
+     * @param phoneNumber
+     * @return
+     */
+    UserInfo getByPhoneNumber(String phoneNumber);
+    
+    /**
+     * 根据用户id查询下属成员的信息
+     * @param userId
+     * @return
+     */
+    List<UserInfo> listUserMemberInfo(Long userId);
 }

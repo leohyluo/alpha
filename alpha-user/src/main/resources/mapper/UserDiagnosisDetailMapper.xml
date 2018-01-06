@@ -7,9 +7,22 @@
     select * from user_diagnosis_detail where diagnosis_id=#{diagnosisId} and question_code=#{questionCode} limit 1
   </select>
 
-    <select id="queryByDiagnosisId" parameterType="HashMap" resultType="DataRecord">
+  <select id="queryByDiagnosisId" parameterType="HashMap" resultType="DataRecord">
     select * from user_diagnosis_detail where diagnosis_id=#{diagnosisId}
   </select>
 
+	<select id="queryBySympCode" parameterType="HashMap" resultType="DataRecord">
+    select * from user_diagnosis_detail where diagnosis_id=#{diagnosisId} and symp_code!=#{sympCode}
+  </select>
+	
+	<select id="queryByQuestionCodeList" parameterType="HashMap" resultType="DataRecord">
+    	select * from user_diagnosis_detail where diagnosis_id=#{diagnosisId} and question_code in
+    	<foreach item="item" collection="questionCodeList" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>  
 
+	<delete id="delBySympcode" parameterType="HashMap">
+		delete from user_diagnosis_detail where diagnosis_id=#{diagnosisId} and symp_code!=#{sympCode}
+	</delete>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.DateUtils;
+import com.alpha.server.rpc.user.pojo.HisRegisterInfo;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
 /**
@@ -24,10 +25,6 @@ public class HisUserInfoVo {
     private String birth;
     //性别
     private Integer gender;
-    //挂号科室
-    private String department;
-    //就诊时间
-    private String cureTime;
     //身份证号码
     private String idcard;
     //电话号码
@@ -50,6 +47,8 @@ public class HisUserInfoVo {
     private String gestationalAge;
     //喂养史
     private String feedType;
+    //预防接种史编码
+    private String vaccinationHistoryCode;
     //体重
     private String weight;
     //是否到其它医院就诊
@@ -58,14 +57,23 @@ public class HisUserInfoVo {
     private Date otherHospitalCureTime;
     //是否使用药物治疗
     private Integer otherHospitalUseDrug;
+    //其它医院用药列表
+    private List<DrugVo> otherHospitalDrugList;
     //治疗效果
     private String otherHospitalEffect;
     //其它医院诊断
     private String otherHospitalDiagnosis;
+    //是否自己
+    private String self;
+    
+    /**
+     * 将挂号科室json字符串转为List集合
+     */
+    private List<HisRegisterInfo> hisDepartmentList; 
     
     public HisUserInfoVo() {}
     
-    public HisUserInfoVo(UserInfo userInfo) {
+    /*public HisUserInfoVo(UserInfo userInfo) {
     	BeanCopierUtil.copy(userInfo, this);
     	if(userInfo.getBirth() != null) {
     		this.birth = DateUtils.date2String(userInfo.getBirth(), DateUtils.DATE_FORMAT);
@@ -73,6 +81,15 @@ public class HisUserInfoVo {
     	if(userInfo.getCureTime() != null) {
     		this.cureTime = DateUtils.date2String(userInfo.getCureTime(), DateUtils.DATE_FORMAT);
     	}
+    	processSensitive(userInfo);
+    }*/
+    
+    public HisUserInfoVo(UserInfo userInfo, List<HisRegisterInfo> hisDepartmentList) {
+    	BeanCopierUtil.copy(userInfo, this);
+    	if(userInfo.getBirth() != null) {
+    		this.birth = DateUtils.date2String(userInfo.getBirth(), DateUtils.DATE_FORMAT);
+    	}
+    	this.hisDepartmentList = hisDepartmentList;
     	processSensitive(userInfo);
     }
 
@@ -114,22 +131,6 @@ public class HisUserInfoVo {
 
     public void setGender(Integer gender) {
         this.gender = gender;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getCureTime() {
-        return cureTime;
-    }
-
-    public void setCureTime(String cureTime) {
-        this.cureTime = cureTime;
     }
 
     public String getIdcard() {
@@ -266,6 +267,38 @@ public class HisUserInfoVo {
 
 	public void setMenstrualPeriod(String menstrualPeriod) {
 		this.menstrualPeriod = menstrualPeriod;
+	}
+
+	public String getVaccinationHistoryCode() {
+		return vaccinationHistoryCode;
+	}
+
+	public void setVaccinationHistoryCode(String vaccinationHistoryCode) {
+		this.vaccinationHistoryCode = vaccinationHistoryCode;
+	}
+
+	public List<HisRegisterInfo> getHisDepartmentList() {
+		return hisDepartmentList;
+	}
+
+	public void setHisDepartmentList(List<HisRegisterInfo> hisDepartmentList) {
+		this.hisDepartmentList = hisDepartmentList;
+	}
+
+	public List<DrugVo> getOtherHospitalDrugList() {
+		return otherHospitalDrugList;
+	}
+
+	public void setOtherHospitalDrugList(List<DrugVo> otherHospitalDrugList) {
+		this.otherHospitalDrugList = otherHospitalDrugList;
+	}
+
+	public String getSelf() {
+		return self;
+	}
+
+	public void setSelf(String self) {
+		this.self = self;
 	}
 
 	/**

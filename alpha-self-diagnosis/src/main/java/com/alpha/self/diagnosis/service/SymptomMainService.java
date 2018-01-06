@@ -1,5 +1,6 @@
 package com.alpha.self.diagnosis.service;
 
+import com.alpha.commons.enums.AppType;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
@@ -19,11 +20,11 @@ public interface SymptomMainService {
      *
      * @return
      */
-    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo,int inType);
+    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo,int inType, AppType appType);
 
     BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, List<DiagnosisMainSymptoms> list);
 
-    public List<DiagnosisMainSymptoms> query(Map<String, Object> param);
+    List<DiagnosisMainSymptoms> query(Map<String, Object> param);
 
     /**
      * 生成主症状问题

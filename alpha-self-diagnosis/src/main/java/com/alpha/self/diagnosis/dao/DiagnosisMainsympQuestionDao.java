@@ -51,7 +51,7 @@ public interface DiagnosisMainsympQuestionDao extends IBaseDao<DiagnosisMainsymp
      * @param questionCode
      * @return
      */
-    DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String questionCode);
+    DiagnosisMainsympQuestion getDiagnosisMainsympQuestion(String questionCode, String mainSympCode);
 
     /**
      * 查询主症状的未回答问题
@@ -68,4 +68,12 @@ public interface DiagnosisMainsympQuestionDao extends IBaseDao<DiagnosisMainsymp
      * @return
      */
     List<DiagnosisMainsympQuestion> listAnswerCount(String mainSympCode);
+    
+    /**
+     * 查询主症状下疾病下的所有伴随症状，并计算伴随症状数量
+     *
+     * @param mainSympCode
+     * @return
+     */
+    List<DiagnosisMainsympQuestion> listConcSymptomCount(String mainSympCode);
 }

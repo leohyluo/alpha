@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
+import com.alpha.commons.enums.System;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -165,10 +166,7 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
         //当选择他人时新建一个用户
         if ("1000".equals(questionCode) && "0".equals(answer.getContent())) {
             String memberName = answer.getAnswerTitle();
-            Map<String, Object> userMemberParam = new HashMap<>();
-            userMemberParam.put("userId", userId);
-            userMemberParam.put("memberName", memberName);
-            List<UserMember> userMemberList = userMemberService.find(userMemberParam);
+            List<UserMember> userMemberList = userMemberService.listByUserIdAndMemberName(userId, memberName);
             logger.info("found {} members by userId:{} and memberName:{}", userMemberList.size(), userId, memberName);
 
             UserMember userMember = null;
@@ -465,8 +463,8 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
         List<IAnswerVo> basicAnswers = new ArrayList<>();
 
         questionVo.setAnswers(basicAnswers);
-        questionVo.setQuestionTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么，我将调动全身的每一个细胞进行运算！");
-        questionVo.setTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么，我将调动全身的每一个细胞进行运算！");
+        questionVo.setQuestionTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
+        questionVo.setTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
         questionVo.setQuestionCode("9990");
         questionVo.setDiagnosisId(diagnosisId);
         questionVo.setType(QuestionEnum.主症状语义分析.getValue());
@@ -479,12 +477,14 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
     }
 
 	@Override
-	public Map<String, String> queryByBirthOrGender(String birth, int gender) {
+	public Map<String, String> askBasicQuestion(String systemType, String birth, int gender) {
 		Map<String, String> result = new HashMap<>();
-		String specialPeriodCode = "0";
-		String weightCode = "0";
-		String bornHistoryCode = "0";
+		String specialPeriodCode = "0";		//女性特殊时期
+		String weightCode = "0";			//体重
+		String bornHistoryCode = "0";		//出生史
+		String vaccinationHistory = "0";	//预防接种史
     	try {
+            System system = System.findByValue(systemType);
     		Date date = DateUtils.string2Date(birth);
     		float age = DateUtils.getAge(date);
     		if(gender == 1) {
@@ -500,10 +500,16 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
     		if(age >= 0 && age <= 1) {
     			bornHistoryCode = BasicQuestionType.FERTILITY_TYPE.getValue();
     		}
-    		
-    		result.put("askSpecialPeriod", specialPeriodCode);
-    		result.put("askWeight", weightCode);
-    		result.put("askBorn", bornHistoryCode);
+    		if(system != null && system == System.PRE) {
+                if(age >= 0 && age <= 18) {
+                    vaccinationHistory = BasicQuestionType.VACCINATION_HISTORY.getValue();
+                }
+                result.put("askVaccination", vaccinationHistory);
+            }
+
+            result.put("askSpecialPeriod", specialPeriodCode);
+            result.put("askWeight", weightCode);
+            result.put("askBorn", bornHistoryCode);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

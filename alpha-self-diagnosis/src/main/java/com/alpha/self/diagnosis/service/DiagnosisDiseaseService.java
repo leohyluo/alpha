@@ -2,6 +2,7 @@ package com.alpha.self.diagnosis.service;
 
 import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.self.diagnosis.pojo.vo.DiseaseVo;
+import com.alpha.self.diagnosis.pojo.vo.TreatAdviceVo;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 
 import java.util.Collection;
@@ -22,4 +23,11 @@ public interface DiagnosisDiseaseService {
     Map<String, DiagnosisDisease> mapDiagnosisDisease(Collection diseaseCodes,UserInfo userInfo);
 
     List<DiseaseVo> findByDiseaseName(String diseaseName);
+    
+    /**
+     * 查询疾病诊疗意见
+     * @param diseaseCode
+     * @return
+     */
+    TreatAdviceVo queryTreatAdvice(String diseaseCode);
 }

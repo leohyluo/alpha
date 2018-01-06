@@ -12,6 +12,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Created by xc.xiong on 2017/8/31.
@@ -22,6 +23,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableFeignClients(basePackages = "com.alpha.server.rpc.user")
 @EnableCircuitBreaker
 @EnableDiscoveryClient
+@EnableScheduling
 @SpringBootApplication
 public class AlphaApplication extends SpringBootServletInitializer {
 

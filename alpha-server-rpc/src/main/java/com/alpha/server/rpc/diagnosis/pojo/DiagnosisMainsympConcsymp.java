@@ -87,7 +87,7 @@ public class DiagnosisMainsympConcsymp implements Serializable {
      */
     @Column(name = "rate")
     private Double rate;
-
+    
     /**
      * 排序
      */
@@ -171,6 +171,12 @@ public class DiagnosisMainsympConcsymp implements Serializable {
      */
     @Column(name = "it_data_status")
     private Integer itDataStatus;
+    
+    /**
+     * 客户端显示类型
+     */
+    @Column(name = "display_type")
+    private String displayType;
 
     /**
      * 关键词相似度
@@ -413,4 +419,14 @@ public class DiagnosisMainsympConcsymp implements Serializable {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
+	public String getDisplayType() {
+		return displayType;
+	}
+
+	public void setDisplayType(String displayType) {
+		this.displayType = displayType;
+	}
+
+    
 }

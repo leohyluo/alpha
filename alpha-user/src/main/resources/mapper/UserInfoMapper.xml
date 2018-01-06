@@ -21,6 +21,7 @@
         <result column="menstrual_period" jdbcType="VARCHAR" property="menstrualPeriod" />
         <result column="special_period" jdbcType="VARCHAR" property="specialPeriod" />
         <result column="fertility_type" jdbcType="VARCHAR" property="fertilityType" />
+        <result column="vaccination_history_code" jdbcType="VARCHAR" property="vaccinationHistoryCode" />
         <result column="gestational_age" jdbcType="VARCHAR" property="gestationalAge" />
         <result column="feed_type" jdbcType="VARCHAR" property="feedType" />
         <result column="pastmedical_history_code" jdbcType="VARCHAR" property="pastmedicalHistoryCode" />
@@ -32,24 +33,25 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
         <result column="in_type" jdbcType="TINYINT" property="inType" />
-		<result column="department" jdbcType="VARCHAR" property="department" />
-        <result column="cure_time" jdbcType="TIMESTAMP" property="cureTime" />
+<!-- 		<result column="department" jdbcType="VARCHAR" property="department" />
+        <result column="cure_time" jdbcType="TIMESTAMP" property="cureTime" /> -->
     </resultMap>
 
     <!-- 根据条件查询用户信息-->
     <select id="queryUserInfo" resultMap="userInfo" parameterType="HashMap">
-			SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,operation_code,operation_text,menstrual_period from user_info
+			SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text
+			 from user_info
     </select>
 
     <!-- 根据条件查询用户信息-->
     <select id="getUserInfoByExternalUserId" resultMap="userInfo" parameterType="HashMap">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text
         from user_info where external_user_id=#{externalUserId} and in_type=#{inType} LIMIT 1
     </select>
     
     <!-- 根据条件查询用户信息-->
     <select id="queryByUserId" resultMap="userInfo" parameterType="java.lang.Long">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text
         from user_info where user_id=#{userId}
     </select>
     
@@ -66,7 +68,14 @@
         	<if test="idcard != null">
         		and idcard = #{idcard}
         	</if>
+        	<if test="phoneNumber != null">
+        		and phone_number = #{phoneNumber}
+        	</if>
         </where>
     </select>
 
+	<select id="queryUserMemberInfoList" resultType="DataRecord" parameterType="HashMap">
+		SELECT ui.* from user_info ui where 1=1 AND (EXISTS
+	(SELECT 1 from user_member um WHERE um.user_id = #{userId} AND ui.user_id = um.member_id) OR ui.user_id = #{userId})
+	</select>
 </mapper>

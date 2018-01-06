@@ -19,7 +19,8 @@ public enum BasicQuestionType {
     FEED_TYPE("1010"),			//{userName}目前的喂养状况如何?
     HEIGHT("1011"),				//{userName}目前的身高是多少?
     WEIGHT("1012"),				//{userName}目前的体重是多少?
-    LIVER_RENAL("1013");			//近期检查肝肾功能是否正常?(对于用药安全很重要哦)
+    LIVER_RENAL("1013"),			//近期检查肝肾功能是否正常?(对于用药安全很重要哦)
+    VACCINATION_HISTORY("1015");	//预防接种史
 
     private String value;
 
