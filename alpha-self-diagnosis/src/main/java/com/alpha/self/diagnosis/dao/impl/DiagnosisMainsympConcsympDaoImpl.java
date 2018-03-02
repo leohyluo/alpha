@@ -87,6 +87,16 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
         return dmcs;
     }
 
+    @Override
+    public List<DiagnosisMainsympConcsymp> listByConcSympNames(String mainSympCode, Collection concSympNames) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        params.put("concSympNames", concSympNames);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.queryByconcSympCodes", params);
+        List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
+        return dmcs;
+    }
+
     @SuppressWarnings("unchecked")
 	@Override
 	public List<MedicineQuestionVo> listDiagnosisMainsympConcsymp(String mainSympCode, List<String> concSympCodes) {

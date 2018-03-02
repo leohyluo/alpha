@@ -7,10 +7,7 @@ import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.web.ResponseStatus;
-import com.alpha.self.diagnosis.dao.DiagnosisMainsympQuestionDao;
-import com.alpha.self.diagnosis.dao.DiagnosisQuestionAnswerDao;
-import com.alpha.self.diagnosis.dao.SyDiagnosisAnswerDao;
-import com.alpha.self.diagnosis.dao.UserDiagnosisDetailDao;
+import com.alpha.self.diagnosis.dao.*;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
 import com.alpha.self.diagnosis.pojo.enums.SyAnswerType;
 import com.alpha.self.diagnosis.pojo.vo.*;
@@ -18,10 +15,7 @@ import com.alpha.self.diagnosis.service.DiagnosisMainsympNeConcsympService;
 import com.alpha.self.diagnosis.service.MedicineAnswerService;
 import com.alpha.self.diagnosis.service.MedicineQuestionService;
 import com.alpha.self.diagnosis.utils.ServiceUtil;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympNeConcsymp;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
-import com.alpha.server.rpc.diagnosis.pojo.SyDiagnosisAnswer;
+import com.alpha.server.rpc.diagnosis.pojo.*;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.treatscheme.dao.DiagnosisDiseaseDao;
@@ -57,6 +51,8 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
     private DiagnosisMainsympNeConcsympService diagnosisMainsympNeConcsympService;
     @Resource
     private DiagnosisDiseaseDao diagnosisDiseaseDao;
+    @Resource
+    private DiagnosisMainsympConcsympDao diagnosisMainsympConcsympDao;
 
     /**
      * 记录用户的答案
@@ -73,6 +69,7 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         List<String> answerContents = new ArrayList<>();
         String questionCode = questionVo.getQuestionCode();
         String mainSympCode = questionVo.getSympCode();
+        Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
         DiagnosisMainsympQuestion diagnosisQuestion = diagnosisMainsympQuestionDao.getDiagnosisMainsympQuestion(questionCode, mainSympCode);
         //判断当前问题是否有答案转化标志
         if(diagnosisQuestion != null && StringUtils.isNotEmpty(diagnosisQuestion.getParseClass())) {
@@ -107,6 +104,19 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
                 answerContents.add(answerVo.getAnswerTitle());
             }
         }
+        //常见伴随症状
+        if(questionVo.getType() == QuestionEnum.常见伴随症状.getValue()) {
+            Set<String> commonConcSympNames = answerContents.stream().collect(Collectors.toSet());
+            List<DiagnosisMainsympConcsymp> diagnosisMainsympConcsympList = diagnosisMainsympConcsympDao.listByConcSympNames(mainSympCode, commonConcSympNames);
+            answerSpecMap = new HashMap<>();
+            for (DiagnosisMainsympConcsymp dmc : diagnosisMainsympConcsympList) {
+                Set<String> specSet = answerSpecMap.get(dmc.getSympSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dmc.getSympSpec());
+                if(StringUtils.isNotEmpty(dmc.getDiseaseCode())) {
+                    specSet.add(dmc.getDiseaseCode());
+                    answerSpecMap.put(dmc.getSympSpec(), specSet);
+                }
+            }
+        }
         //添加阴性伴随症状
         if(questionVo.getType() == QuestionEnum.伴随症状.getValue()) {
             //主症状下的所有阴性伴随症状
@@ -118,9 +128,9 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
                 }
             });
         }
-        //查询该问题下的所有隐藏答案
-        List<String> hiddenAnswerCodes = new ArrayList<>();
+        //查询医学问题下的隐藏答案
         if(questionVo.getType() == QuestionEnum.医学问题.getValue()) {
+            List<String> hiddenAnswerCodes = new ArrayList<>();
             List<DiagnosisQuestionAnswer> hiddenAnswerList = diagnosisQuestionAnswerDao.listHiddenAnswers(questionCode);
             if(CollectionUtils.isNotEmpty(hiddenAnswerList)) {
                 LOGGER.info("开始处理问题"+questionCode+"的隐藏答案");
@@ -143,24 +153,22 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
                 }
                 LOGGER.info("问题"+questionCode+"的隐藏答案为"+hiddenAnswerCodes);
             }
+            List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionVo.getQuestionCode(), answerCodes, hiddenAnswerCodes);
+            answerSpecMap = new HashMap<>();
+            for (DiagnosisQuestionAnswer dqa : dqAnswers) {
+                Set<String> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dqa.getAnswerSpec());
+                if(StringUtils.isNotEmpty(dqa.getDiseaseCode())) {
+                    specSet.add(dqa.getDiseaseCode());
+                    answerSpecMap.put(dqa.getAnswerSpec(), specSet);
+                }
+            }
         }
 
         UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(questionVo.getDiagnosisId(), questionVo.getQuestionCode());
         if (udd == null) {
             throw new ServiceException(ResponseStatus.INVALID_VALUE, "没有找到提问记录");
         }
-//        Map<Integer, Set<String>> answerSpecMap = this.mapAnswerSpec(questionVo.getQuestionCode(), answerCodes);
 
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionVo.getQuestionCode(), answerCodes, hiddenAnswerCodes);
-        Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
-        for (DiagnosisQuestionAnswer dqa : dqAnswers) {
-            Set<String> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dqa.getAnswerSpec());
-            if(StringUtils.isNotEmpty(dqa.getDiseaseCode())) {
-                specSet.add(dqa.getDiseaseCode());
-                answerSpecMap.put(dqa.getAnswerSpec(), specSet);
-            }
-//            answerContents.add(dqa.getContent());
-        }
         Set<String> forwardDiseaseCode = answerSpecMap.get(1) == null ? new HashSet<String>() : answerSpecMap.get(1);   //正向特异性
         Set<String> reverseDiseaseCode = answerSpecMap.get(-1) == null ? new HashSet<String>() : answerSpecMap.get(-1);   //反向特异性
         Set<String> nothingDiseaseCode = answerSpecMap.get(0) == null ? new HashSet<String>() : answerSpecMap.get(0); //无特异性

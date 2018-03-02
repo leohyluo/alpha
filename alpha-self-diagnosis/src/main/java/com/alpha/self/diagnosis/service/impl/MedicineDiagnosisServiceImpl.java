@@ -7,9 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
+import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.self.diagnosis.service.MedicineDiagnosisService;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import org.apache.commons.collections.CollectionUtils;
@@ -52,7 +55,8 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
     private SymptomAccompanyService symptomAccompanyService;
     @Resource
     private DiagnosisDiseaseService diagnosisDiseaseService;
-
+    @Resource
+    private DiagnosisMainsympConcsympDao diagnosisMainsympConcsympDao;
 
     /**
      * 诊断方法 主要逻辑
@@ -69,6 +73,7 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
             Set<String> nothingDiseaseCodeSet = new HashSet<>();
             Set<String> reverseDiseaseCodeSet = new HashSet<>();
             UserDiagnosisDetail mainsympConcsympQuestion = null;
+            UserDiagnosisDetail normalMainsympConcsympQuestion = null;
             for (Iterator iterator = udds.iterator(); iterator.hasNext(); ) {
                 UserDiagnosisDetail udd = (UserDiagnosisDetail) iterator.next();
                 if (udd.getAnswerTime() == null)
@@ -76,6 +81,10 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
                 questionCodes.add(udd.getQuestionCode());
                 if (udd.getQuestionType() == QuestionEnum.伴随症状.getValue()) {
                     mainsympConcsympQuestion = udd;
+                    continue;
+                }
+                if (udd.getQuestionType() == QuestionEnum.常见伴随症状.getValue()) {
+                    normalMainsympConcsympQuestion = udd;
                     continue;
                 }
                 answerCodes.addAll(JSON.parseArray(udd.getAnswerCode(), String.class));
@@ -100,9 +109,23 @@ public class MedicineDiagnosisServiceImpl implements MedicineDiagnosisService {
                 }
             }
 
+            //获取常见伴随症状数据
+            Map<String, List<MedicineQuestionVo>> dmcsMap4Normal = new HashMap<>();
+            if (normalMainsympConcsympQuestion != null && StringUtils.isNotEmpty(normalMainsympConcsympQuestion.getAnswerCode())) {
+                String concSympName = normalMainsympConcsympQuestion.getAnswerContent();
+                //concSympName = concSympName.replace("、",",");
+                Set<String> concSympNames = Stream.of(concSympName.split("、")).collect(Collectors.toSet());
+                List<DiagnosisMainsympConcsymp> diagnosisMainsympConcsymps = diagnosisMainsympConcsympDao.listByConcSympNames(mainSympCode, concSympNames);
+
+                if (CollectionUtils.isNotEmpty(diagnosisMainsympConcsymps)) {
+                    List<String> normalConcSympCodes = diagnosisMainsympConcsymps.stream().map(DiagnosisMainsympConcsymp::getConcSympCode).distinct().collect(Collectors.toList());
+                    dmcsMap4Normal = symptomAccompanyService.mapDiagnosisMainsympConcsymp2(mainSympCode, normalConcSympCodes);
+                    03-02
+                }
+            }
+            //获取伴随症状数据
             Map<String, List<MedicineQuestionVo>> dmcsMap = new HashMap<>();
             List<String> concSympCodes = new ArrayList<>();
-            //获取伴随症状数据
             if (mainsympConcsympQuestion != null && StringUtils.isNotEmpty(mainsympConcsympQuestion.getAnswerCode())) {
                 concSympCodes = (List) JSON.parseArray(mainsympConcsympQuestion.getAnswerCode());
                 if (concSympCodes != null && concSympCodes.size() > 0) {

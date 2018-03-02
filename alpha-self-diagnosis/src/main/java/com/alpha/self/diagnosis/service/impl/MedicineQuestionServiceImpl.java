@@ -321,7 +321,7 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
             //主症状获取下一个问题
             AnswerRequestVo answerVo = questionVo.getAnswers().get(0);
             question = getNextDiagnosisMainsympQuestion(answerVo.getContent(), 0, userInfo);
-        } else if (questionVo.getType() == QuestionEnum.医学问题.getValue()) {
+        } else if (questionVo.getType() == QuestionEnum.医学问题.getValue() || questionVo.getType() == QuestionEnum.常见伴随症状.getValue()) {
             //非主症状获取下一个问题
             question = getNextQuestion(dmQuestion, questionVo, userInfo);
         }

@@ -44,6 +44,13 @@ public interface DiagnosisMainsympConcsympDao extends IBaseDao<DiagnosisMainsymp
      */
     List<DiagnosisMainsympConcsymp> listByConcSympCodes(Collection concSympCodes);
 
+    /**
+     * 根据伴随症状名字查询
+     * @param mainSympCode
+     * @param concSympNames
+     * @return
+     */
+    List<DiagnosisMainsympConcsymp> listByConcSympNames(String mainSympCode, Collection concSympNames);
 
     /**
      * 查询伴随症状

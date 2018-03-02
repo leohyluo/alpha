@@ -64,6 +64,18 @@
 		</foreach>
 	</select>
 
+	<!--根据名字查伴随症状-->
+	<select id="queryByconcSympName" parameterType="HashMap" resultType="DataRecord">
+		SELECT dmc.* from diagnosis_concomitant_symptom dcs
+		INNER JOIN diagnosis_mainsymp_concsymp dmc
+		ON dcs.symp_code = dmc.conc_symp_code
+		WHERE dmc.main_symp_code = =#{mainSympCode}
+		AND dcs.symp_name in
+		<foreach item="item" index="index" collection="concSympNames" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
 	<!--查询主症状下权重最高的伴随症状-->
 	<select id="getMaxWeightConcSympByMainCode" parameterType="HashMap" resultType="DataRecord">
 		select *  from diagnosis_mainsymp_concsymp dmcs where dmcs.main_symp_code=#{mainSympCode} ORDER BY dmcs.rate desc limit 1
