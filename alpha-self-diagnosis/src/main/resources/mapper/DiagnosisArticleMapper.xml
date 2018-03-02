@@ -10,5 +10,7 @@
 		ORDER BY dma.default_order LIMIT 0,5
     </select>
 
-
+	<select id="queryByArticleCode" parameterType="HashMap" resultType="DataRecord">
+		SELECT da.* from diagnosis_article da where da.article_code = #{articleCode}
+	</select>
 </mapper>

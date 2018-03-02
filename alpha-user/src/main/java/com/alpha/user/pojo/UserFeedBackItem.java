@@ -32,7 +32,7 @@ public class UserFeedBackItem implements Serializable {
 	
 	@Column(name = "system_type")
 	private String systemType;
-
+	
 	public Long getId() {
 		return id;
 	}

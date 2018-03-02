@@ -3,6 +3,7 @@ package com.alpha.self.diagnosis.service.impl;
 import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.enums.AppType;
+import com.alpha.commons.enums.DiagnosisStatus;
+import com.alpha.commons.enums.DisplayType;
 import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.CollectionUtils;
@@ -40,6 +43,7 @@ import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.DiagnosisOutcomeVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.Level1AnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
 import com.alpha.self.diagnosis.service.DiagnosisService;
 import com.alpha.self.diagnosis.service.MedicineAnswerAutoService;
@@ -172,11 +176,12 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
 	public IQuestionVo listMainSymptom(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo) {
 		String systemType = questionVo.getSystemType();
 		AppType system = AppType.findByValue(systemType);
-		if(system == AppType.PRE) {
+		/*if(system == AppType.PRE) {
 			return listDefaultMainSymptom(diagnosisId, questionVo, userInfo);
 		} else {
 			return languageAnalysisByBaidu(diagnosisId, questionVo, userInfo);
-		}
+		}*/
+		return languageAnalysisByBaidu(diagnosisId, questionVo, userInfo);
 	}
 
     /**
@@ -237,12 +242,12 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
     
     /**
      * 查询所有主症状
-     * @param keyword
+     * @param
      * @param userInfo
-     * @param inType
+     * @param
      * @return
      */
-    public IQuestionVo listDefaultMainSymptom(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo) {
+    /*public IQuestionVo listDefaultMainSymptom(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo) {
 		Map<String, Object> param = new HashMap<>();
 		List<DiagnosisMainSymptoms> mainList = diagnosisMainSymptomsDao.query(param);
 		mainList = mainList.stream().filter(e -> e.mainSymptomPredicate(userInfo, questionVo.getInType())).limit(6).collect(toList());
@@ -251,10 +256,11 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
         	QuestionRequestVo nextQuestionVo = new QuestionRequestVo();
         	nextQuestionVo.setInType(questionVo.getInType());
         	nextQuestionVo.setSystemType(questionVo.getSystemType());
-            return saveAnswerGetQuestion(diagnosisId, nextQuestionVo, userInfo);
+        	BasicQuestionVo basicQuestionVo = saveAnswerGetQuestion(diagnosisId, nextQuestionVo, userInfo);
+        	return basicQuestionVo;
         }
 		return null;
-	}
+	}*/
 
     @Override
     public BasicQuestionVo replyDiagnosisQuestion(Long diagnosisId, QuestionRequestVo questionVo, UserInfo userInfo) {
@@ -265,7 +271,7 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
     	DiagnosisMainsympQuestion question = diagnosisMainsympQuestionDao.getDiagnosisMainsympQuestion(result.getQuestionCode(), result.getSympCode());
     	//自动回答有依赖关系的隐藏问题
     	if(question.getShowFlag() != null && question.getShowFlag() == 0 && StringUtils.isNotEmpty(question.getDependencyQuestionCode())) {
-    		DiagnosisQuestionAnswer autoReplyQuestionAnswer = autoReplyHiddenDependencyQuestion(diagnosisId, question, userInfo);
+    		DiagnosisQuestionAnswer autoReplyQuestionAnswer = autoReplyHiddenDependencyQuestion(diagnosisId, questionVo.getSympCode(), question, userInfo);
     		if(autoReplyQuestionAnswer != null) {
 	    		QuestionRequestVo newQuestionVo = new QuestionRequestVo();
 	    		BeanCopierUtil.copy(questionVo, newQuestionVo);
@@ -331,9 +337,10 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
         BasicQuestionVo basicQuestionVo = null;
         LinkedHashSet<IAnswerVo> specAnswer = null;
         //非伴随症状问题
+        IAnswerVo unknown = null;
         if (question.getQuestionType() != QuestionEnum.伴随症状.getValue()) {
             //查询小类答案,过滤年龄，性别
-            List<DiagnosisQuestionAnswer> dqAnswers = medicineAnswerService.listDiagnosisQuestionAnswer(question.getQuestionCode(), userInfo);
+            List<DiagnosisQuestionAnswer> dqAnswers = medicineAnswerService.listDiagnosisQuestionAnswer(mainSympCode, question.getQuestionCode(), userInfo);
             //从答案中取出"不清楚"的答案
             List<DiagnosisQuestionAnswer> unknownAnswers = dqAnswers.stream().filter(e->e.getContent().equals(GlobalConstants.UNKNOWN_ANSWER)).collect(toList());
             dqAnswers = dqAnswers.stream().filter(e->!e.getContent().equals(GlobalConstants.UNKNOWN_ANSWER)).collect(toList());
@@ -348,6 +355,7 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
             for(DiagnosisQuestionAnswer answer: unknownAnswers) {
             	BasicAnswerVo answerVo = new BasicAnswerVo(answer);
             	unknownAnswerSet.add(answerVo);
+            	unknown = answerVo;
             }
             answers.addAll(unknownAnswerSet);
             specAnswer.addAll(answers);
@@ -370,6 +378,18 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
         }
         // 问题转换保存
         medicineAnswerService.saveDiagnosisAnswer(basicQuestionVo, userInfo);
+        //如果答案超过10，则将"不清楚"提前到第10位
+        List<IAnswerVo> answervoList = basicQuestionVo.getAnswers();
+        if(unknown != null && answervoList.size() > 10) {
+        	List<IAnswerVo> viewAnswervoList = new ArrayList<>();
+        	for(int i = 0; i < answervoList.size(); i++) {  
+        		if(i == 9) {
+    				viewAnswervoList.add(unknown);
+    			}
+    			viewAnswervoList.add(answervoList.get(i));
+        	}
+        	basicQuestionVo.setAnswers(viewAnswervoList);
+        }
         return basicQuestionVo;
     }
 
@@ -409,11 +429,18 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
      * @param diagnosisId
      */
     public BasicQuestionVo diagnosisOutcomeResult(Long diagnosisId, String mainSympCode,UserInfo userInfo) {
-        LOGGER.info("生成诊断结果{}", diagnosisId);
+    	UserBasicRecord userBasicRecord = userBasicRecordDao.findByDiagnosisId(diagnosisId);
+    	if(userBasicRecord != null) {
+    		userBasicRecord.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+    		userBasicRecord.setUpdateTime(new Date());
+    		userBasicRecordDao.update(userBasicRecord);
+    		LOGGER.info("标记问诊记录{}已结束", diagnosisId);
+    	}
+    	LOGGER.info("生成诊断结果{}", diagnosisId);
         List<UserDiagnosisOutcome> userDiagnosisOutcomes = medicineDiagnosisService.diagnosisOutcome(diagnosisId, mainSympCode, userInfo);//计算疾病的权重
         userDiagnosisOutcomes = MedicineSortUtil.specUserDiagnosisOutcome(userDiagnosisOutcomes);//根据特异性重新计算权重
         MedicineSortUtil.sortUserDiagnosisOutcome(userDiagnosisOutcomes);//排序
-        userDiagnosisOutcomes = calculateProbability(userDiagnosisOutcomes);//计算发病概率,保存，返回5个结果
+        userDiagnosisOutcomes = calculateProbability(diagnosisId, userDiagnosisOutcomes);//计算发病概率,保存，返回5个结果
         BasicQuestionVo basicQuestionVo = convertOutcome(diagnosisId, userDiagnosisOutcomes);
         if (basicQuestionVo != null) {
         	//生成诊断结果后初始化用户反馈信息
@@ -451,8 +478,11 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
      * @param userDiagnosisOutcomes
      * @return
      */
-    public List<UserDiagnosisOutcome> calculateProbability(List<UserDiagnosisOutcome> userDiagnosisOutcomes) {
+    public List<UserDiagnosisOutcome> calculateProbability(Long diagnosisId, List<UserDiagnosisOutcome> userDiagnosisOutcomes) {
         try {
+            //插入前先删除
+            userDiagnosisOutcomeDao.deleteByDiagnosisId(diagnosisId);
+
             Double maxProbability = ServiceUtil.getTempProbability();
             for (UserDiagnosisOutcome udo : userDiagnosisOutcomes) {
                 Double probability = ServiceUtil.getTempProbability(maxProbability, userDiagnosisOutcomes.get(0).getWeight(), udo.getWeight());
@@ -583,7 +613,7 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
      * @param diagnosisId
      * @param question
      */
-    private DiagnosisQuestionAnswer autoReplyHiddenDependencyQuestion(Long diagnosisId, DiagnosisMainsympQuestion question, UserInfo userInfo) {
+    private DiagnosisQuestionAnswer autoReplyHiddenDependencyQuestion(Long diagnosisId, String mainSympCode, DiagnosisMainsympQuestion question, UserInfo userInfo) {
     	String dependencyQuestionCode = question.getDependencyQuestionCode();
     	if(StringUtils.isEmpty(dependencyQuestionCode)) {
     		LOGGER.warn("隐藏问题:"+question.getPopuTitle()+"无依赖问题");
@@ -593,7 +623,7 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
     	List<UserDiagnosisDetail> uddList = userDiagnosisDetailDao.listUserDiagnosisDetail(diagnosisId, questionCodeList);
     	Map<String, UserDiagnosisDetail> map = uddList.stream().collect(Collectors.toMap(UserDiagnosisDetail::getQuestionCode, Function.identity()));
     	//查询问题的所有答案		
-    	List<DiagnosisQuestionAnswer> answerList = medicineAnswerService.listDiagnosisQuestionAnswer(question.getQuestionCode(), userInfo);
+    	List<DiagnosisQuestionAnswer> answerList = medicineAnswerService.listDiagnosisQuestionAnswer(mainSympCode, question.getQuestionCode(), userInfo);
     	//去重
     	Map<String, DiagnosisQuestionAnswer> answerMap = answerList.stream().collect(Collectors.toMap(DiagnosisQuestionAnswer::getAnswerCode, Function.identity(), (e1,e2)->e1));
     	answerList = new ArrayList<>();
@@ -630,6 +660,5 @@ public class MedicineQuestionServiceImpl implements MedicineQuestionService {
 		}
 		return null;
     }
-    
-    
+
 }

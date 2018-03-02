@@ -56,4 +56,20 @@ spring:
 #mybatis:
 #  config-location: classpath:mybatis-config.xml
 #  mapper-locations: classpath:mapper/*.xml,classpath*:mapper/*Mapper.xml
-
+#ftp服务器配置
+ftp:
+  server:
+    ip: 120.76.153.220
+    port: 52151
+    userName: ftpuser
+    password: zhys%vVUUqy#igK3Ft?I
+  alpha:
+    save-path:
+      qr-code: alpha/images/qrcode
+#微信公众号配置
+wechar:
+    menu:
+      #就诊记录
+      diagnosisRecord: http%3A%2F%2Fjcyx18081.ebmsz.com%2Falpha%2Frecord.html
+      #阿尔法医生
+      alpha: http%3A%2F%2Fjcyx18081.ebmsz.com%2Falpha%2Falpha.html

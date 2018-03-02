@@ -21,4 +21,8 @@
 			</if>
 		</where>
 	</select>
+	
+	<delete id="deleteByMemberId" parameterType="HashMap">
+		delete from user_member where user_id = #{userId}
+	</delete>
 </mapper>

@@ -3,16 +3,16 @@ package com.alpha.self.diagnosis.pojo.vo;
 import java.io.Serializable;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import com.alpha.commons.enums.DisplayType;
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
-import com.alpha.self.diagnosis.utils.AppUtils;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.user.pojo.UserInfo;
-import org.apache.commons.lang3.StringUtils;
+import com.alpha.user.utils.AppUtils;
 
 public class BasicQuestionVo implements Serializable, IQuestionVo {
 

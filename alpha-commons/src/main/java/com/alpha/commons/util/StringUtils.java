@@ -1,15 +1,19 @@
 package com.alpha.commons.util;
 
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -41,6 +45,7 @@ public final class StringUtils {
 	private static final char EXTENSION_SEPARATOR = 46;
 	
 	public static final String[] UNITS = {"min", "分钟", "小时", "天", "日", "周", "月", "年", "度", "摄氏度", "℃"}; 
+	
 	
 	/**
 	 * 将一个数组转换成指定格式字符串
@@ -751,4 +756,20 @@ public final class StringUtils {
         }
         return sb.toString();
     }
+	
+	public static Map<String, String> paramToMap(String content) {
+		Map<String, String> param = new HashMap<>();
+		String[] arr = content.split("&");
+		for(String item : arr) {
+			String[] arr2 = item.split("=");
+			if(arr2.length == 2) {
+				String key = arr2[0].trim();
+				String val = arr2[1].trim();
+				param.put(key, val);
+			}
+		}
+		return param;
+	}
+	
+	
 }

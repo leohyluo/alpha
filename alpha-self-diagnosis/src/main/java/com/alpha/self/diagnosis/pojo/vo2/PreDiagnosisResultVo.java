@@ -70,7 +70,7 @@ public class PreDiagnosisResultVo {
 
     public PreDiagnosisResultVo() {}
 
-    public PreDiagnosisResultVo(UserBasicRecord record) {
+    public PreDiagnosisResultVo(UserBasicRecord record, UserInfo userInfo) {
         BeanCopierUtil.copy(record, this);
         if (record.getBirth() != null) {
             this.age = DateUtils.getAgeText(record.getBirth());
@@ -82,6 +82,14 @@ public class PreDiagnosisResultVo {
 				.concat(StringUtils.trimToEmpty(record.getPresentIllnessHistoryHospital()));
         this.buildPastIllHistory(record);
         this.toPastIllHistoryString(record);
+        //设置用户信息
+        this.externalUserId = userInfo.getExternalUserId();
+        this.gender = userInfo.getGender();
+        this.userName = userInfo.getUserName();
+        if(StringUtils.isNotEmpty(userInfo.getWeight())) {
+        	this.weight = userInfo.getWeight() + "kg";
+        }
+        this.phoneNumber = userInfo.getPhoneNumber();
     }
 
     public String getExternalUserId() {
@@ -290,7 +298,13 @@ public class PreDiagnosisResultVo {
     	if(StringUtils.isNotEmpty(record.getFertilityType()) || StringUtils.isNotEmpty(record.getGestationalAge()) || StringUtils.isNotEmpty(record.getFeedType())) {
     		sb.append("患儿为");
     		if(StringUtils.isNotEmpty(record.getGestationalAge())) {
-    			sb.append(record.getGestationalAge());
+    			if("37周~42周".equals(record.getGestationalAge())) {
+    				sb.append("足月儿,");
+    			} else if ("＜37周".equals(record.getGestationalAge())){
+    				sb.append("早产儿,");
+    			} else if ("＞42周".equals(record.getGestationalAge())) {
+    				sb.append("过期产儿,");
+    			}
     		}
     		if(StringUtils.isNotEmpty(record.getFertilityType())) {
     			sb.append(record.getFertilityType());

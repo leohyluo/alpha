@@ -77,7 +77,7 @@ public class DiagnosisResultVo {
             this.age = DateUtils.getAgeText(record.getBirth());
         }
         if (record.getCureTime() != null) {
-            this.cureTime = DateUtils.date2String(record.getCreateTime(), DateUtils.DATE_FORMAT);
+            this.cureTime = DateUtils.date2String(record.getCureTime(), DateUtils.DATE_FORMAT);
         }
 		this.presentIllnessHistory = StringUtils.trimToEmpty(record.getPresentIllnessHistory())
 				.concat(StringUtils.trimToEmpty(record.getPresentIllnessHistoryHospital()));
@@ -169,7 +169,9 @@ public class DiagnosisResultVo {
         this.externalUserId = userInfo.getExternalUserId();
         this.userName = userInfo.getUserName();
         this.gender = userInfo.getGender();
-        this.weight = userInfo.getWeight() + "kg";
+        if(StringUtils.isNotEmpty(userInfo.getWeight())) {
+        	this.weight = userInfo.getWeight() + "kg";
+        }
         this.phoneNumber = userInfo.getPhoneNumber();
     }
         
@@ -272,18 +274,26 @@ public class DiagnosisResultVo {
     	if(StringUtils.isEmpty(vaccinationHistoryText)) {
     		sb.append("无预防接种史");
     	} else if(VaccinationHistory.INTIME.getText().equals(vaccinationHistoryText)) {
-    		sb.append("预防接种史按时完成。");
+    		sb.append("预防接种按时完成。");
     	} else if(VaccinationHistory.UNTIMELY.getText().equals(vaccinationHistoryText)) {
-    		sb.append("预防接种史未按时完成。");
+    		sb.append("预防接种未按时完成。");
     	} else if(VaccinationHistory.UNDO.getText().equals(vaccinationHistoryText)) {
-    		sb.append("预防接种史未进行。");
+    		sb.append("预防接种未进行。");
     	} else if(VaccinationHistory.UNKNOWN.getText().equals(vaccinationHistoryText)) {
     		sb.append("预防接种史不详。");
     	}
     	if(StringUtils.isNotEmpty(record.getFertilityType()) || StringUtils.isNotEmpty(record.getGestationalAge()) || StringUtils.isNotEmpty(record.getFeedType())) {
     		sb.append("患儿为");
     		if(StringUtils.isNotEmpty(record.getGestationalAge())) {
-    			sb.append(record.getGestationalAge());
+    			if("37周~42周".equals(record.getGestationalAge())) {
+    				sb.append("足月儿,");
+    			} else if ("＜37周".equals(record.getGestationalAge())){
+    				sb.append("早产儿,");
+    			} else if ("＞42周".equals(record.getGestationalAge())) {
+    				sb.append("过期产儿,");
+    			} else {
+    				sb.append("胎龄不清楚");
+    			}
     		}
     		if(StringUtils.isNotEmpty(record.getFertilityType())) {
     			sb.append(record.getFertilityType());

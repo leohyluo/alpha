@@ -36,7 +36,15 @@ public interface DiagnosisMainsympConcsympDao extends IBaseDao<DiagnosisMainsymp
      * @return
      */
     List<DiagnosisMainsympConcsymp> listDiagnosisMainsympConcsymp(String mainSympCode, Collection concSympCodes);
-    
+
+    /**
+     * 根据伴随症状编码查询
+     * @param concSympCodes
+     * @return
+     */
+    List<DiagnosisMainsympConcsymp> listByConcSympCodes(Collection concSympCodes);
+
+
     /**
      * 查询伴随症状
      *
@@ -46,4 +54,10 @@ public interface DiagnosisMainsympConcsympDao extends IBaseDao<DiagnosisMainsymp
      */
     List<MedicineQuestionVo> listDiagnosisMainsympConcsymp(String mainSympCode, List<String> concSympCodes);
 
+    /**
+     * 查询主症状下权重最高的伴随症状
+     * @param mainSympCode
+     * @return
+     */
+    DiagnosisMainsympConcsymp getMaxWeightConcSymp(String mainSympCode);
 }

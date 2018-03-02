@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
 import com.alpha.commons.enums.DiseaseType;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.StringUtils;
@@ -26,7 +25,6 @@ import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
 import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
-import com.alpha.self.diagnosis.pojo.vo.SearchRequestVo;
 import com.alpha.self.diagnosis.service.BasicQuestionService;
 import com.alpha.self.diagnosis.service.BasicWeightInfoService;
 import com.alpha.self.diagnosis.service.SymptomAccompanyService;
@@ -66,12 +64,11 @@ public class DataSearchController {
      * @return
      */
     @PostMapping("/pastmedicalHistory")
-    public ResponseMessage pastmedicalHistorySearch(SearchRequestVo diseasevo) {
-        String keyword = ServiceUtil.stringFilter(diseasevo.getKeyword());
+    public ResponseMessage pastmedicalHistorySearch(Long userId, String keyword) {
+        keyword = ServiceUtil.stringFilter(keyword);
         if (StringUtils.isEmpty(keyword))
             return new ResponseMessage();
-        diseasevo.setKeyword(keyword);
-        List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(diseasevo, DiseaseType.PASTMEDICALHISTORY);
+        List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(userId, keyword, DiseaseType.PASTMEDICALHISTORY);
         return WebUtils.buildSuccessResponseMessage(answerList);
     }
 
@@ -82,12 +79,11 @@ public class DataSearchController {
      * @return
      */
     @PostMapping("/allergicHistory")
-    public ResponseMessage allergicHistorySearch(SearchRequestVo diseasevo) {
-        String keyword = ServiceUtil.stringFilter(diseasevo.getKeyword());
+    public ResponseMessage allergicHistorySearch(Long userId, String keyword) {
+        keyword = ServiceUtil.stringFilter(keyword);
         if (StringUtils.isEmpty(keyword))
-            return new ResponseMessage();
-        diseasevo.setKeyword(keyword);
-        List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(diseasevo, DiseaseType.ALLERGICHISTORY);
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
+        List<IAnswerVo> answerList = basicQuestionService.diseaseSearch(userId, keyword, DiseaseType.ALLERGICHISTORY);
         return WebUtils.buildSuccessResponseMessage(answerList);
     }
 
@@ -99,21 +95,19 @@ public class DataSearchController {
      * @return
      */
     @PostMapping(value = "/concsymp")
-    public ResponseMessage diagnosisStart(SearchRequestVo diseasevo) {
-        LOGGER.info("伴随症状搜索: {} ", JSON.toJSON(diseasevo));
-        if (diseasevo == null || diseasevo.getUserId() == null) {
-            return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+    public ResponseMessage diagnosisStart(Long userId, Long diagnosisId, String sympCode, String keyword) {
+        if (userId == null || StringUtils.isEmpty(keyword)) {
+            return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
-        String keyword = ServiceUtil.stringFilter(diseasevo.getKeyword());
+        keyword = ServiceUtil.stringFilter(keyword);
         if (StringUtils.isEmpty(keyword)) {
             return new ResponseMessage();
         }
-        diseasevo.setKeyword(keyword);
-        UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(diseasevo.getUserId()));
+        UserInfo userInfo = userInfoService.queryByUserId(userId);
         if (userInfo == null) {
             return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
         }
-        LinkedHashSet<IAnswerVo> answerVos = symptomAccompanyService.listSymptomAccompany(diseasevo.getDiagnosisId(), diseasevo.getSympCode(), userInfo, diseasevo.getKeyword());
+        LinkedHashSet<IAnswerVo> answerVos = symptomAccompanyService.listSymptomAccompany(diagnosisId, sympCode, userInfo, keyword);
         return WebUtils.buildSuccessResponseMessage(answerVos);
     }
 
@@ -145,7 +139,7 @@ public class DataSearchController {
         Map<String, Object> param = new HashMap<>();
         param.put("keyword", keyword);
         List<DiagnosisMainSymptoms> mainList = symptomMainService.query(param);
-        mainList = mainList.stream().filter(e -> e.mainSymptomPredicate(userInfo, inType)).collect(toList());
+        mainList = mainList.stream().filter(e -> e.mainSymptomPredicate(userInfo, 1)).collect(toList());
 		List<BasicAnswerVo> mainvoList = mainList.stream().map(BasicAnswerVo::new).collect(Collectors.toList());
 		return WebUtils.buildSuccessResponseMessage(mainvoList);		
     }

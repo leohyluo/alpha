@@ -10,7 +10,9 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import com.alpha.commons.enums.Unit;
 
@@ -18,6 +20,7 @@ public class DateUtils {
 
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
 	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	public static final String TIME_FORMAT = "HH:mm:ss";
 	
 	/*public static float getAge(Date date) {
 		LocalDate birth = dateToLocalDate(date);
@@ -45,6 +48,13 @@ public class DateUtils {
 		}
 		float result = year + ((float)diffDay / (float)lengthOfYear);
 		return result;
+	}
+	
+	public static long getMonths(Date date) {
+		LocalDate birth = dateToLocalDate(date);
+		LocalDate today = LocalDate.now();
+		long months = ChronoUnit.MONTHS.between(birth, today);
+		return months;
 	}
 	
 	public static String getAgeText(Date date) {
@@ -176,6 +186,7 @@ public class DateUtils {
 		Date date = sdf.parse(dateStr);
 		return date;
 	}
+		
 
 	public static List<Integer> listMonth(int minValue,int maxValue){
 		List<Integer> result = new ArrayList<>();

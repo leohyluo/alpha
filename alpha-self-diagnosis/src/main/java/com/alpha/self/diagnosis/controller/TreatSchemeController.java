@@ -1,26 +1,26 @@
 package com.alpha.self.diagnosis.controller;
 
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSON;
+import com.alpha.commons.core.util.StringUtil;
 import com.alpha.commons.util.StringUtils;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
 import com.alpha.self.diagnosis.pojo.vo.DiseaseVo;
-import com.alpha.self.diagnosis.pojo.vo.SearchRequestVo;
 import com.alpha.self.diagnosis.service.DiagnosisDiseaseService;
-import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.treatscheme.pojo.vo.TreatSchemeVo;
 import com.alpha.treatscheme.service.TreatSchemeService;
 import com.alpha.user.service.UserInfoService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * Created by xc.xiong on 2017/10/12.
@@ -41,8 +41,8 @@ public class TreatSchemeController {
     private DiagnosisDiseaseService diagnosisDiseaseService;
 
     @PostMapping("/diseaseList")
-    public ResponseMessage diseaseList(@RequestBody SearchRequestVo vo) {
-        String diseaseName = vo.getKeyword();
+    public ResponseMessage diseaseList(String keyword) {
+        String diseaseName = keyword;
         if(StringUtils.isEmpty(diseaseName)) {
         	return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
@@ -59,17 +59,12 @@ public class TreatSchemeController {
      * @return
      */
     @PostMapping(value = "/get")
-    public ResponseMessage treatScheme(SearchRequestVo vo) {
+    public ResponseMessage treatScheme(String diseaseCode) {
         try {
-            LOGGER.info("治疗方案搜索: {}", JSON.toJSON(vo));
-            if (vo == null||vo.getDiseaseCode()==null ) {
+            if (StringUtils.isEmpty(diseaseCode)) {
                 return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
             }
-//            UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(userId));
-//            if (userInfo == null) {
-//                return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
-//            }
-            TreatSchemeVo treatSchemeVo = treatSchemeService.getTreatScheme(vo.getDiseaseCode());
+            TreatSchemeVo treatSchemeVo = treatSchemeService.getTreatScheme(diseaseCode);
             if (treatSchemeVo != null)
                 return WebUtils.buildSuccessResponseMessage(treatSchemeVo);
         } catch (Exception e) {

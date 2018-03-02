@@ -32,12 +32,12 @@
       <!--  查询主症状下的未回答问题,(包括有依赖的隐藏问题) -->
       select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode}
        and default_order>#{defaultOrder}
-       and (is_show > 0 OR dependency_question_code is not null)
+       and (is_show > 0 OR char_length(dependency_question_code) > 0)
        order by default_order ASC
     </select>
-    <!-- 查询主症状下的所有自动计算问题 -->
+    <!-- 查询主症状下的所有自动计算问题(年龄、季节) -->
     <select id="queryAutoQuestion" resultType="DataRecord" parameterType="HashMap">
-      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and is_show=0
+      select * from diagnosis_mainsymp_question where main_symp_code=#{mainSympCode} and is_show=0 and question_type in(103,104)
     </select>
 
     <!--查询下一个问题 -->

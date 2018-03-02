@@ -3,12 +3,44 @@
 <mapper namespace="com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp">
 
 
-    <select id="queryDiagnosisMainsympConcsymp" parameterType="HashMap" resultType="DataRecord">
+    <!-- <select id="queryDiagnosisMainsympConcsymp" parameterType="HashMap" resultType="DataRecord">
         select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
         dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age,dcs.display_type
         from diagnosis_mainsymp_concsymp dmcs INNER JOIN diagnosis_concomitant_symptom dcs on(dcs.symp_code=dmcs.conc_symp_code)
-        where dmcs.main_symp_code=#{mainSympCode}
+        where dmcs.main_symp_code=#{mainSympCode} AND IFNULL(dmcs.operate_type,'') != 'D'
+    </select> -->
+    <select id="queryDiagnosisMainsympConcsymp" parameterType="HashMap" resultType="DataRecord">
+        SELECT
+			dmcs.id,
+			dmcs.main_symp_code,
+			dmcs.disease_code,
+			dmcs.conc_symp_code,
+			dmcs.symp_spec,
+			dmcs.rate,
+			dmcs.default_order,
+			dcs.symp_name,
+			dcs.popu_name,
+			dcs.symbol,
+			dcs.gender,
+			dcs.min_age,
+			dcs.max_age,
+			dcs.display_type
+		FROM
+			diagnosis_mainsymp_concsymp dmcs
+		INNER JOIN diagnosis_concomitant_symptom dcs ON (
+			dcs.symp_code = dmcs.conc_symp_code
+		)
+		INNER JOIN diagnosis_disease_rate ddr
+		ON(
+			dmcs.disease_code = ddr.disease_code
+			AND dmcs.main_symp_code = ddr.main_symp_code
+		)
+		WHERE
+			dmcs.main_symp_code = #{mainSympCode}
+		AND IFNULL(dmcs.operate_type, '') not in ('D','H')
+		AND IFNULL(ddr.operate_type, '') not in ('D','H')
     </select>
+    
     <select id="queryConcsymp" parameterType="HashMap" resultType="DataRecord">
         select dmcs.id,dmcs.main_symp_code,dmcs.disease_code,dmcs.conc_symp_code,dmcs.symp_spec,dmcs.rate,dmcs.default_order,
         dcs.symp_name,dcs.popu_name,dcs.symbol,dcs.gender,dcs.min_age,dcs.max_age,dcs.display_type
@@ -23,6 +55,19 @@
             #{item}
         </foreach>
     </select>
+
+	<select id="queryByconcSympCodesWithoutMainSymp" parameterType="HashMap" resultType="DataRecord">
+		select *  from diagnosis_mainsymp_concsymp dmcs
+		where dmcs.conc_symp_code IN
+		<foreach item="item" index="index" collection="concSympCodes" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!--查询主症状下权重最高的伴随症状-->
+	<select id="getMaxWeightConcSympByMainCode" parameterType="HashMap" resultType="DataRecord">
+		select *  from diagnosis_mainsymp_concsymp dmcs where dmcs.main_symp_code=#{mainSympCode} ORDER BY dmcs.rate desc limit 1
+	</select>
     
     <select id="queryConcSympByCodes" parameterType="HashMap" resultType="DataRecord">
        SELECT

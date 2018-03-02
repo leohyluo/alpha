@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
+import com.alpha.commons.api.tencent.offical.dto.QRCodeDTO;
 import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.DateUtils;
@@ -28,8 +29,6 @@ import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionWithSearchVo;
 import com.alpha.self.diagnosis.pojo.vo.BasicRequestVo;
 import com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo;
-import com.alpha.self.diagnosis.pojo.vo.DiagnosisStartReqeustVo;
-import com.alpha.self.diagnosis.pojo.vo.DiseaseHistoryRequestVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
@@ -38,6 +37,7 @@ import com.alpha.self.diagnosis.service.BasicQuestionService;
 import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
 import com.alpha.self.diagnosis.service.DiagnosisService;
 import com.alpha.self.diagnosis.service.MedicineQuestionService;
+import com.alpha.self.diagnosis.service.OfficalAccountService;
 import com.alpha.self.diagnosis.service.SymptomMainService;
 import com.alpha.self.diagnosis.service.UserDiagnosisOutcomeService;
 import com.alpha.self.diagnosis.service.WecharService;
@@ -76,6 +76,8 @@ public class DiagnosisController {
     private WecharService wecharService;
     @Resource
     private UserBasicRecordService userBasicRecordService;
+    @Resource
+    private OfficalAccountService officalAccountService;
 
     /**
      * 开始问诊，生成问诊编号
@@ -83,9 +85,7 @@ public class DiagnosisController {
      * @return diagnosisId  唯一诊断编号
      */
     @RequestMapping(value = "/start", method = RequestMethod.POST, consumes = {"application/json", "application/x-www-form-urlencoded"})
-    public ResponseMessage diagnosisStart(DiagnosisStartReqeustVo vo) {
-        Long userId = vo.getUserId();
-        Integer inType = vo.getInType();
+    public ResponseMessage diagnosisStart(Long userId, Integer inType) {
         LOGGER.info("生成问诊编号,为导诊做准备: {} {}", userId, inType);
         if(userId == null) {
         	return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
@@ -140,7 +140,8 @@ public class DiagnosisController {
     public ResponseMessage diagnosisMedicineNext(String allParam) {
     	QuestionRequestVo questionVo = JSON.parseObject(allParam,QuestionRequestVo.class);
         LOGGER.info("循环获取下一个问题: {}", JSON.toJSONString(questionVo));
-        if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())) {
+        if (questionVo == null || questionVo.getDiagnosisId() == null || StringUtils.isEmpty(questionVo.getUserId())
+        		|| StringUtils.isEmpty(questionVo.getSystemType())) {
             return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
         UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(questionVo.getUserId()));
@@ -149,7 +150,8 @@ public class DiagnosisController {
         }
         try {
             if (StringUtils.isEmpty(questionVo.getQuestionCode())) {
-                BasicQuestionVo basicQuestionVo = basicQuestionService.getMainSymptomsQuestion(questionVo.getDiagnosisId(), userInfo);
+                BasicQuestionVo basicQuestionVo = basicQuestionService.
+                		getMainSymptomsQuestion(questionVo.getSystemType(), questionVo.getDiagnosisId(), userInfo);
                 return WebUtils.buildSuccessResponseMessage(basicQuestionVo);
             }
             IQuestionVo result;
@@ -213,8 +215,8 @@ public class DiagnosisController {
     
     /**
      * 就诊经历-添加药品
-     * @param diagnosisId
-     * @param userId
+     * @param
+     * @param
      * @return
      */
     @PostMapping("/drug/query")
@@ -265,10 +267,7 @@ public class DiagnosisController {
      * @return
      */
     @PostMapping("/diseaseHistory")
-    public ResponseMessage diseaseHistory(DiseaseHistoryRequestVo vo) {
-        Long userId = vo.getUserId();
-        Long diagnosisId = vo.getDiagnosisId();
-        Integer historyType = vo.getHistoryType();
+    public ResponseMessage diseaseHistory(Long userId, Long diagnosisId, String gender, String birth, Integer historyType) {
         if (userId == null || diagnosisId == null || historyType == null) {
             return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
         }
@@ -276,13 +275,13 @@ public class DiagnosisController {
         if (userInfo == null) {
             return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
         }
-        Integer gender = StringUtils.isEmpty(vo.getGender()) ? 1 : Integer.parseInt(vo.getGender());
-        Date birth = DateUtils.dayDiffence(ChronoUnit.YEARS, -1);
-        if(StringUtils.isNotEmpty(vo.getBirth())) {
-            birth = DateUtils.stringToDate(vo.getBirth());
+        Integer inputGender = StringUtils.isEmpty(gender) ? 1 : Integer.parseInt(gender);
+        Date birthday = DateUtils.dayDiffence(ChronoUnit.YEARS, -1);
+        if(StringUtils.isNotEmpty(birth)) {
+        	birthday = DateUtils.stringToDate(birth);
         }
-        userInfo.setGender(gender);
-        userInfo.setBirth(birth);
+        userInfo.setGender(inputGender);
+        userInfo.setBirth(birthday);
 
         IQuestionVo questionVo = diagnosisPastmedicalHistoryService.queryDiseaseHistory(userInfo, diagnosisId, historyType);
         BasicQuestionWithSearchVo resultVo = (BasicQuestionWithSearchVo) questionVo;
@@ -304,10 +303,22 @@ public class DiagnosisController {
     	if(record == null) {
     		return WebUtils.buildResponseMessage(ResponseStatus.INVALID_VALUE);
     	}
+    	UserInfo userInfo = userInfoService.queryByUserId(record.getUserId());
+    	if(userInfo == null) {
+    		return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+    	}
+    	
     	if(StringUtils.isNotEmpty(mobile)) {
     		record.setPhoneNum(mobile);
+    		userInfo.setPhoneNumber(mobile);
+    		userInfoService.save(userInfo);
     	}
     	record.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+    	//生成二维码
+    	QRCodeDTO codeDto = officalAccountService.getTempQRCode(userInfo, diagnosisId);
+    	if(codeDto != null && codeDto.isSuccess()) {
+    		record.setQrCode(codeDto.getMsg());
+    	}
     	//标记此次预问诊已结束
     	userBasicRecordService.updateUserBasicRecord(record);
         return WebUtils.buildSuccessResponseMessage();

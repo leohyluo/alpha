@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,9 +21,11 @@ import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
 import com.alpha.commons.web.WebUtils;
 import com.alpha.server.rpc.sys.SysConfig;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserFeedback;
 import com.alpha.user.pojo.UserFeedBackItem;
 import com.alpha.user.pojo.vo.UserFeedBackItemVo;
+import com.alpha.user.service.UserBasicRecordService;
 import com.alpha.user.service.UserFeedbackService;
 
 /**
@@ -36,6 +39,8 @@ public class FeedBackController {
 
     @Resource
     private UserFeedbackService userFeedbackService;
+    @Resource
+    private UserBasicRecordService userBasicRecordService;
 
     /**
      * 接收用户反馈信息
@@ -59,7 +64,7 @@ public class FeedBackController {
      * @return
      */
     @PostMapping("/useful/query/{diagnosisId}")
-    public ResponseMessage queryUseful(Long diagnosisId) {
+    public ResponseMessage queryUseful(@PathVariable Long diagnosisId) {
     	String clicked = "0";
     	String useful = "0";
     	//查询用户是否已经点过赞
@@ -75,10 +80,18 @@ public class FeedBackController {
     	if(sysConfig != null) {
     		useful = sysConfig.getConfigValue();
     	}
+    	//获取生成的二维码
+    	UserBasicRecord userBasicRecord = userBasicRecordService.findByDiagnosisId(diagnosisId);
+    	String qrCode = "";
+    	if(userBasicRecord != null)
+    		qrCode = userBasicRecord.getQrCode();
     	
     	Map<String, String> resultMap = new HashMap<>();
     	resultMap.put("clicked", clicked);
     	resultMap.put("useful", useful);
+    	resultMap.put("adTitle", "关注下方二维码，查看当前排队情况，获取更多宝宝相关知识。");
+    	resultMap.put("adImage", "alpha/images/elephone.png");
+    	resultMap.put("qrCode", qrCode);
     	return WebUtils.buildSuccessResponseMessage(resultMap);
     }
     

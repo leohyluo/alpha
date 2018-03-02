@@ -90,6 +90,10 @@ public class DiagnosisQuestionAnswer implements Serializable {
     @Transient
     @Column(name = "max_age")
     private Double maxAge;
+    
+    @Transient
+    @Column(name = "answer_image")
+    private String image;
 
     /**
      * 疾病编码
@@ -503,8 +507,14 @@ public class DiagnosisQuestionAnswer implements Serializable {
 	public void setCalculationFormula(String calculationFormula) {
 		this.calculationFormula = calculationFormula;
 	}
-	
-	
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
 
 	public String getAnswerTitle() {
 		return answerTitle;

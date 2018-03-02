@@ -7,6 +7,7 @@ import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.server.rpc.user.pojo.HisRegisterInfo;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.utils.AppUtils;
 
 /**
  * 用于接收医院返回的用户实体类
@@ -65,6 +66,8 @@ public class HisUserInfoVo {
     private String otherHospitalDiagnosis;
     //是否自己
     private String self;
+    //用户头像
+    private String userIcon;
     
     /**
      * 将挂号科室json字符串转为List集合
@@ -90,6 +93,7 @@ public class HisUserInfoVo {
     		this.birth = DateUtils.date2String(userInfo.getBirth(), DateUtils.DATE_FORMAT);
     	}
     	this.hisDepartmentList = hisDepartmentList;
+    	this.userIcon = AppUtils.getUserIcon(userInfo);
     	processSensitive(userInfo);
     }
 
@@ -301,6 +305,14 @@ public class HisUserInfoVo {
 		this.self = self;
 	}
 
+	public String getUserIcon() {
+		return userIcon;
+	}
+
+	public void setUserIcon(String userIcon) {
+		this.userIcon = userIcon;
+	}
+
 	/**
      * 敏感信息处理
      */
@@ -309,7 +321,7 @@ public class HisUserInfoVo {
             this.userName = "*".concat(this.userName.substring(1));
         }*/
         if (userInfo.getBirth() != null) {
-            this.age = DateUtils.getAgeByBirth(userInfo.getBirth()) + "岁";
+            this.age = DateUtils.getAgeText(userInfo.getBirth());
         }
         /*if (StringUtils.isNotEmpty(idcard) && idcard.length() > 8) {
             String remainStr = this.idcard.substring(4, this.idcard.length() - 4);

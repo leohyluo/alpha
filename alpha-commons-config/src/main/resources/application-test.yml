@@ -5,39 +5,40 @@ service:
       ip: 127.0.0.1
       hostname: peer1
       port: 19081
-    center2: 
+    center2:
       ip: 127.0.0.1
       hostname: peer2
       port: 19082
 eureka:
   client:
-    serviceUrl: 
-      defaultZone: http://${service.register.center.hostname}:${service.register.center.port}/eureka/
+    serviceUrl:
+      defaultZone: http://${service.register.center.ip}:${service.register.center.port}/eureka/
     registry-fetch-interval-seconds: 5 #拉取服务注册信息时间间隔,默认为30秒
-  instance: 
+  instance:
     lease-renewal-interval-in-seconds: 5 #心跳时间,默认为30秒
-    lease-expiration-duration-in-seconds: 10 #若eureka server在这时间内没收到心跳则移除该instance,默认为90秒    
-hystrix: 
-  command: 
-    default: 
-      execution: 
-        isolation: 
-          thread: 
-            timeoutInMilliseconds: 5000             
+    lease-expiration-duration-in-seconds: 10 #若eureka server在这时间内没收到心跳则移除该instance,默认为90秒
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
 #数据库配置
-db: 
-  host: 127.0.0.1
+db:
+  host: 192.168.29.24
   port: 3306
-  name: ifirstaid_encode_dev
-#数据源配置  
+  name: dr_alpha
+  public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIeMfolobgSenbQUUeSDQ/jvyjjJnBvu+v96HjaQma55SuDPMQxVI3GrtDcWmtKyj6RxvrPntQfblqWhCTn1p+kCAwEAAQ==
+#数据源配置
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    username: root
-    password: 
+    username: dsol
+    password: Uzlg0wrBVfXZFr/oFL5Y7PtG9S2y1YpXI8XyNeieB3zo1+lqptK5CMMMvj5zM/GQ6nXTc+zx9QYijY045mo+jQ==
     url: jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=true&characterEncoding=utf8&useOldAliasMetadataBehavior=true
-    druid: 
-      filter-class-names: stat 
+    druid:
+      filter-class-names: stat
       filters: stat,config
       #初始化连接大小
       initial-size: 8
@@ -50,8 +51,25 @@ spring:
       #事务查询超时时间
       transaction-query-timeout: 6000
       #关闭空闲连接超时时间
-      remove-abandoned-timeout: 1800  
+      remove-abandoned-timeout: 1800
 #mybatis配置
-mybatis:
-  config-location: classpath:mybatis-config.xml
-  mapper-locations: classpath:mapper/*.xml,classpath:commons/mapper/*.xml
+#mybatis:
+#  config-location: classpath:mybatis-config.xml
+#  mapper-locations: classpath:mapper/*.xml,classpath*:mapper/*Mapper.xml
+#ftp服务器配置
+ftp: 
+  server: 
+    ip: 120.76.153.220
+    port: 52151
+    userName: ftpuser
+    password: zhys%vVUUqy#igK3Ft?I
+  alpha: 
+    save-path: 
+      qr-code: alpha/images/qrcode
+#微信公众号配置
+wechar:
+    menu:
+      #就诊记录
+      diagnosisRecord: http%3A%2F%2Fjcyx18081.ebmsz.com%2Falpha%2Frecord.html
+      #阿尔法医生
+      alpha: http%3A%2F%2Fjcyx18081.ebmsz.com%2Falpha%2Falpha.html

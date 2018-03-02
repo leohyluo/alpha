@@ -457,7 +457,10 @@ public class DiagnosisMainsympQuestion {
 
 	public String getParseClass() {
 		if(this.displayType != null && this.displayType.equals(DisplayType.TEMPERATURE.getValue())) {
-			parseClass = Unit.CENTIGRADE2.getValue();
+			parseClass = Unit.TEMPERATURE.getValue();
+		}
+		if(this.displayType != null && this.displayType.equals(DisplayType.NUM_OF_TIMES.getValue())) {
+			parseClass = Unit.NUM_OF_TIMES.getValue();
 		}
 		return parseClass;
 	}

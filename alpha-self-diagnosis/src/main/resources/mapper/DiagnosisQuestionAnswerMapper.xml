@@ -21,11 +21,40 @@
 
     <!-- 根据问题编号查询问题 -->
     <select id="queryDiagnosisQuestionAnswer" parameterType="HashMap" resultType="DataRecord">
-      select dqa.id,dqa.question_code,da.answer_code,dqa.min_value,dqa.max_value,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
-      ,da.gender,da.min_age,da.max_age,ddmq.weight as question_weight,dqa.conn_code,dqa.calculation_formula
-      from diagnosis_question_answer dqa INNER join diagnosis_answer da on(da.answer_code=dqa.answer_code)
-      left join diagnosis_disease_mainsym_question ddmq on(ddmq.question_code=dqa.question_code and ddmq.disease_code=dqa.disease_code)
-	  LEFT JOIN sy_diagnosis_answer sda on sda.answer_code = dqa.conn_code 	
+      SELECT
+			dqa.id,
+			dqa.question_code,
+			da.answer_code,
+			dqa.min_value,
+			dqa.max_value,
+			da.content,
+			da.popu_content,
+			dqa.disease_code,
+			dqa.answer_spec,
+			dqa.weight,
+			dqa.default_order,
+			dqa.next_question_id,
+			da.gender,
+			da.min_age,
+			da.max_age,
+			da.answer_image,
+			ddmq.weight AS question_weight,
+			dqa.conn_code,
+			dqa.calculation_formula
+		FROM
+			diagnosis_question_answer dqa
+		INNER JOIN diagnosis_answer da ON (
+			da.answer_code = dqa.answer_code
+		)
+		LEFT JOIN diagnosis_disease_mainsym_question ddmq ON (
+			ddmq.question_code = dqa.question_code
+			AND ddmq.disease_code = dqa.disease_code
+			AND ddmq.main_sym_code = #{mainSympCode}
+		)
+		LEFT JOIN diagnosis_disease_rate ddr ON(
+			ddmq.disease_code = ddr.disease_code AND ddmq.main_sym_code = ddr.main_symp_code
+		)
+		LEFT JOIN sy_diagnosis_answer sda ON sda.answer_code = dqa.conn_code	
 	  <if test="wordsProperty != null">
 	  		AND sda.words_prop = #{wordsProperty}
 	  </if>
@@ -36,12 +65,15 @@
            	 #{item}
         </foreach>
 	  	</if>
-		AND IFNULL(dqa.operate_type, '') != 'D'
+	  	AND (char_length(ddr.disease_code) > 0 or dqa.disease_code = '-1')
+		AND IFNULL(dqa.operate_type, '') not in ('D', 'H')
+		AND IFNULL(ddmq.operate_type, '') not in ('D', 'H')
+		AND IFNULL(ddr.operate_type, '') not in ('D', 'H')
 	  </where>     	 
       
     </select>
 
-    <!-- 根据答案编号查询答案 -->
+    <!-- 根据答案编号查询答案 备份 -->
     <select id="queryByAnswerCodes" parameterType="HashMap" resultType="DataRecord">
         select dqa.conn_code,sda.answer_code as syAnswerCode,dqa.id,dqa.question_code,da.answer_code,da.content,da.popu_content,dqa.disease_code,dqa.answer_spec,dqa.weight,dqa.default_order,dqa.next_question_id
         ,da.gender,da.min_age,da.max_age from diagnosis_question_answer dqa INNER join diagnosis_answer da on(da.answer_code=dqa.answer_code)
@@ -50,6 +82,54 @@
         <foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </select>
+    
+    <!-- 根据主症状编码、问题编码、答案编码找出有效的疾病（非隐藏、非删除） -->
+    <select id="queryByAnswerCodes2" parameterType="HashMap" resultType="DataRecord">
+        SELECT
+			dqa.conn_code,
+			sda.answer_code AS syAnswerCode,
+			dqa.id,
+			dqa.question_code,
+			da.answer_code,
+			da.content,
+			da.popu_content,
+			dqa.disease_code,
+			dqa.answer_spec,
+			dqa.weight,
+			dqa.default_order,
+			dqa.next_question_id,
+			da.gender,
+			da.min_age,
+			da.max_age
+		FROM
+			diagnosis_question_answer dqa
+		INNER JOIN diagnosis_answer da ON (
+			da.answer_code = dqa.answer_code
+		)
+		LEFT JOIN diagnosis_disease_mainsym_question ddmq ON (
+			ddmq.question_code = dqa.question_code
+			AND ddmq.disease_code = dqa.disease_code
+			AND ddmq.main_sym_code = #{mainSympCode}
+		)
+		LEFT JOIN diagnosis_disease_rate ddr ON (
+			ddmq.disease_code = ddr.disease_code
+			AND ddmq.main_sym_code = ddr.main_symp_code
+		)
+		LEFT JOIN sy_diagnosis_answer sda ON dqa.conn_code = sda.answer_code
+		WHERE
+			dqa.question_code = #{questionCode}
+		AND da.answer_code IN 
+		<foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+		AND (
+			char_length(ddr.disease_code) > 0
+			OR dqa.disease_code = '-1'
+		)
+		AND IFNULL(dqa.operate_type, '') NOT IN ('D', 'H')
+		AND IFNULL(ddmq.operate_type, '') NOT IN ('D', 'H')
+		AND IFNULL(ddr.operate_type, '') NOT IN ('D', 'H')
     </select>
 
     <!-- 根据答案编号查询答案 -->
@@ -92,6 +172,65 @@
         </foreach>
         group by dqa.answer_code,dqa.question_code,dqa.disease_code,dms.symp_code
         order by dqa.disease_code,dmq.question_code
+    </select>
+    
+    <!-- 根据问题答案编码查询有效的疾病(未删除、未隐藏) -->
+    <select id="queryAnswers2" parameterType="HashMap" resultType="DataRecord">
+       SELECT
+			dms.symp_code,
+			dms.symp_name,
+			dms.standard_deviation AS 'question_standard_deviation',
+			dmq.question_code,
+			dmq.question_type,
+			dmq.title AS 'question_title',
+			dmq.standard_deviation AS 'answer_standard_deviation',
+			ddmq.weight AS 'question_weight',
+			dqa.answer_title,
+			dqa.answer_code,
+			dqa.disease_code,
+			dqa.answer_spec,
+			dqa.weight AS 'answer_weight'
+		FROM
+			diagnosis_mainsymp_question dmq
+		LEFT JOIN diagnosis_main_symptoms dms ON (
+			dmq.main_symp_code = dms.symp_code
+		)
+		LEFT JOIN diagnosis_question_answer dqa ON (
+			dqa.question_code = dmq.question_code
+		)
+		LEFT JOIN diagnosis_disease_mainsym_question ddmq ON (
+			ddmq.question_code = dmq.question_code
+			AND ddmq.main_sym_code = dmq.main_symp_code
+			AND ddmq.disease_code = dqa.disease_code
+			AND ddmq.main_sym_code = #{mainSympCode}
+		)
+		LEFT JOIN diagnosis_disease_rate ddr ON (
+			ddmq.disease_code = ddr.disease_code
+			AND ddmq.main_sym_code = ddr.main_symp_code
+		)
+		WHERE dqa.question_code IN
+        <foreach item="item" index="index" collection="questionCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and answer_code in
+        <foreach item="item" index="index" collection="answerCodes" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        AND (
+			char_length(ddr.disease_code) > 0
+			OR dqa.disease_code = '-1'
+		)
+		AND IFNULL(dqa.operate_type, '') NOT IN ('D', 'H')
+		AND IFNULL(ddmq.operate_type, '') NOT IN ('D', 'H')
+		AND IFNULL(ddr.operate_type, '') NOT IN ('D', 'H')
+		GROUP BY
+			dqa.answer_code,
+			dqa.question_code,
+			dqa.disease_code,
+			dms.symp_code
+		ORDER BY
+			dqa.disease_code,
+			dmq.question_code
     </select>
 
 	<!-- 获取问题下的隐藏答案 -->

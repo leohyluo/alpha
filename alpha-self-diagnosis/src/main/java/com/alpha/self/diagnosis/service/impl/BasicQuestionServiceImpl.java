@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
-import com.alpha.commons.enums.System;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.alpha.commons.enums.BasicQuestionType;
 import com.alpha.commons.enums.DiseaseType;
+import com.alpha.commons.enums.DisplayType;
+import com.alpha.commons.enums.System;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.StringUtils;
+import com.alpha.self.diagnosis.dao.DiagnosisMainSymptomsDao;
 import com.alpha.self.diagnosis.mapper.BasicQuestionMapper;
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
@@ -35,7 +37,6 @@ import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
-import com.alpha.self.diagnosis.pojo.vo.SearchRequestVo;
 import com.alpha.self.diagnosis.processor.AbstractBasicAnswerProcessor;
 import com.alpha.self.diagnosis.processor.BasicAnswerProcessorAdaptor;
 import com.alpha.self.diagnosis.service.BasicQuestionService;
@@ -44,6 +45,7 @@ import com.alpha.self.diagnosis.service.DiagnosisPastmedicalHistoryService;
 import com.alpha.self.diagnosis.service.MedicineAnswerService;
 import com.alpha.self.diagnosis.service.MedicineQuestionService;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisAllergicHistory;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisPastmedicalHistory;
 import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserInfo;
@@ -51,6 +53,7 @@ import com.alpha.server.rpc.user.pojo.UserMember;
 import com.alpha.user.service.UserBasicRecordService;
 import com.alpha.user.service.UserInfoService;
 import com.alpha.user.service.UserMemberService;
+import com.alpha.user.utils.AppUtils;
 
 @Service
 @Transactional
@@ -74,6 +77,8 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
     private DiagnosisAllergicHistoryService diagnosisAllergicHistoryService;
     @Resource
     private MedicineAnswerService medicineAnswerService;
+    @Resource
+    private DiagnosisMainSymptomsDao diagnosisMainSymptomsDao;
 
     @Override
     public BasicQuestion find(BasicQuestion question) {
@@ -123,7 +128,7 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
         UserInfo userInfo = getUserInfo(userId, inType, currentQuestion, answervo);
         //将用户回答的答案同步至用户信息
         currentQuestion.merge(userInfo, answerList);
-        userInfoService.updateUserInfo(userInfo, inType);
+        userInfoService.createOrUpdateUserInfo(userInfo, inType);
         BasicQuestionType questionType = BasicQuestionType.findByValue(questionCode);
         //如果当前问题是既往史、过敏史、体重则马上更新userBasicRecord
         if (questionType == BasicQuestionType.PAST_MEDICAL_HISTORY || questionType == BasicQuestionType.ALLERGIC_HISTORY
@@ -152,7 +157,7 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
             updateUserBasicRecord(diagnosisId, userInfo);
             //进入智能诊断逻辑
             //return medicineQuestionService.saveAnswerGetQuestion(diagnosisId, new QuestionRequestVo(), userInfo);
-            return getMainSymptomsQuestion(diagnosisId, userInfo);
+            return getMainSymptomsQuestion(null, diagnosisId, userInfo);
         }
         //根据问题找出对应的答案
         AbstractBasicAnswerProcessor answerProcessor = BasicAnswerProcessorAdaptor.getProcessor(question.getQuestionCode());
@@ -417,16 +422,15 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
     }
 
     @Override
-    public List<IAnswerVo> diseaseSearch(SearchRequestVo diseasevo, DiseaseType type) {
+    public List<IAnswerVo> diseaseSearch(Long userId, String keyword, DiseaseType type) {
         Map<String, Object> param = new HashMap<>();
-        String userId = diseasevo.getUserId();
-        UserInfo userInfo = userInfoService.queryByUserId(Long.valueOf(userId));
+        UserInfo userInfo = userInfoService.queryByUserId(userId);
         if (userInfo != null) {
             float age = DateUtils.getAge(userInfo.getBirth());
             param.put("gender", userInfo.getGender());
             param.put("age", age);
         }
-        String diseaseName = diseasevo.getKeyword();
+        String diseaseName = keyword;
         diseaseName = diseaseName.contains("%") ? diseaseName.replace("%", "\\%") : diseaseName;
 
         param.put("diseaseName", diseaseName);
@@ -458,17 +462,37 @@ public class BasicQuestionServiceImpl implements BasicQuestionService {
      *
      * @return
      */
-    public BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo) {
+    public BasicQuestionVo getMainSymptomsQuestion(String systemType, Long diagnosisId, UserInfo userInfo) {
         BasicQuestionVo questionVo = new BasicQuestionVo();
         List<IAnswerVo> basicAnswers = new ArrayList<>();
-
-        questionVo.setAnswers(basicAnswers);
-        questionVo.setQuestionTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
-        questionVo.setTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
+        
         questionVo.setQuestionCode("9990");
         questionVo.setDiagnosisId(diagnosisId);
-        questionVo.setType(QuestionEnum.主症状语义分析.getValue());
-        questionVo.setDisplayType("mainsymptom_input");
+        
+        //预问诊不需要主诉提问，直接返回主诉列表
+        if(systemType.equals(System.PRE.getValue())) {
+        	questionVo.setType(QuestionEnum.主症状.getValue());
+        	questionVo.setDisplayType(DisplayType.RADIO_MORE_INPUT_CONFIRM.getValue());
+        	String questionTitle = "请问{userName}哪里最不舒服?";
+        	questionTitle = AppUtils.setUserNameAtQuestionTitle(questionTitle, userInfo);
+        	questionVo.setQuestionTitle(questionTitle);
+        	questionVo.setTitle(questionTitle);
+        	//查询符合条件的主症状
+        	Map<String, Object> param = new HashMap<>();
+        	List<DiagnosisMainSymptoms> mainList = diagnosisMainSymptomsDao.query(param);
+    		mainList = mainList.stream().filter(e -> e.mainSymptomPredicate(userInfo, userInfo.getInType())).limit(6).collect(toList());
+            basicAnswers = mainList.stream().map(BasicAnswerVo::new).collect(Collectors.toList());
+            questionVo.setAnswers(basicAnswers);
+        } else {//阿尔法医生需要主诉提问
+        	questionVo.setType(QuestionEnum.主症状语义分析.getValue());
+        	questionVo.setDisplayType("mainsymptom_input");
+        	String questionTitle = "{userName}的基本情况我已经清楚了解，现在告诉我最不舒服的是什么";
+        	//questionTitle = userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么";
+        	questionTitle = AppUtils.setUserNameAtQuestionTitle(questionTitle, userInfo);
+        	questionVo.setQuestionTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
+        	questionVo.setTitle(userBasicRecordService.getUserName(diagnosisId, userInfo) + "的基本情况我已经清楚了解，现在告诉我最不舒服的是什么");
+        	questionVo.setAnswers(basicAnswers);
+        }
         questionVo.setUserId(userInfo.getUserId()+"");
         questionVo.setSympCode("");
         // 保存正向反向特异性疾病

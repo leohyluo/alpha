@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * 答案小类、同义词等相关表
@@ -68,6 +69,13 @@ public class SyDiagnosisAnswer implements Serializable {
      */
     @Column(name = "max_age")
     private Double maxAge;
+    
+    /**
+     * 答案图片
+     */
+    @Transient
+    @Column(name = "answer_image")
+    private String image;
 
     /**
      * 计算公式
@@ -159,9 +167,6 @@ public class SyDiagnosisAnswer implements Serializable {
     @Column(name = "words_prop")
     private String wordsProperty;
     
-    @Column(name = "answer_image")
-    private String image;
-
 	public Long getId() {
 		return id;
 	}
@@ -240,14 +245,6 @@ public class SyDiagnosisAnswer implements Serializable {
 
 	public void setWordsProperty(String wordsProperty) {
 		this.wordsProperty = wordsProperty;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
 	}
 
 	public String getIncreFlag() {
@@ -354,5 +351,12 @@ public class SyDiagnosisAnswer implements Serializable {
 		this.itDataStatus = itDataStatus;
 	}
 
-    
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+	
 }

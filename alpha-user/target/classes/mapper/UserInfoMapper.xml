@@ -33,6 +33,8 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
         <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
         <result column="in_type" jdbcType="TINYINT" property="inType" />
+        <result column="department_json" jdbcType="VARCHAR" property="departmentList" />
+        <result column="wechar_follow" jdbcType="INTEGER" property="wecharFollow" />
 <!-- 		<result column="department" jdbcType="VARCHAR" property="department" />
         <result column="cure_time" jdbcType="TIMESTAMP" property="cureTime" /> -->
     </resultMap>
@@ -45,13 +47,19 @@
 
     <!-- 根据条件查询用户信息-->
     <select id="getUserInfoByExternalUserId" resultMap="userInfo" parameterType="HashMap">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text,department_json,wechar_follow
         from user_info where external_user_id=#{externalUserId} and in_type=#{inType} LIMIT 1
     </select>
     
     <!-- 根据条件查询用户信息-->
+    <select id="queryByExternalUserId" resultMap="userInfo" parameterType="HashMap">
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text,department_json,wechar_follow
+        from user_info where external_user_id=#{externalUserId} LIMIT 1
+    </select>
+    
+    <!-- 根据条件查询用户信息-->
     <select id="queryByUserId" resultMap="userInfo" parameterType="java.lang.Long">
-        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text
+        SELECT id,user_id,external_user_id,user_name,birth,gender,idcard,phone_number,password,parent_id,liver_func,renal_func,height,weight,special_period,fertility_type,gestational_age,feed_type,pastmedical_history_code,pastmedical_history_text,allergic_history_code,allergic_history_text,create_time,last_update_time,in_type,department,cure_time,operation_code,operation_text,menstrual_period,vaccination_history_code,pastmedical_history_text,department_json,wechar_follow
         from user_info where user_id=#{userId}
     </select>
     
@@ -78,4 +86,15 @@
 		SELECT ui.* from user_info ui where 1=1 AND (EXISTS
 	(SELECT 1 from user_member um WHERE um.user_id = #{userId} AND ui.user_id = um.member_id) OR ui.user_id = #{userId})
 	</select>
+	
+	<select id="findbyUserIdList" resultType="DataRecord" parameterType="HashMap">
+		SELECT ui.* from user_info ui where ui.user_id in
+		<foreach item="item" index="index" collection="userIdList" open="(" separator="," close=")">
+					#{item}
+		</foreach>
+	</select>
+	
+	<select id="listByExternalUserId" resultType="DataRecord" parameterType="HashMap">
+        SELECT * from user_info where external_user_id=#{externalUserId}
+    </select>
 </mapper>

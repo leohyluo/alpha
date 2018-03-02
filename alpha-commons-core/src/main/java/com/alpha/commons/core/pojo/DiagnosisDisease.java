@@ -117,11 +117,11 @@ public class DiagnosisDisease implements Serializable {
     
     //智能排序阀值
     @Column(name = "threshold")
-    private Long threshold;
+    private Integer threshold;
     
     //用户选择次数
     @Column(name = "user_select_count")
-    private Long userSelectCount;
+    private Integer userSelectCount;
     
     //默认排序
     @Column(name = "default_order")
@@ -471,19 +471,19 @@ public class DiagnosisDisease implements Serializable {
 		this.defendOption = defendOption;
 	}
 
-	public Long getThreshold() {
+	public Integer getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Long threshold) {
+	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
 	}
 
-	public Long getUserSelectCount() {
+	public Integer getUserSelectCount() {
 		return userSelectCount;
 	}
 
-	public void setUserSelectCount(Long userSelectCount) {
+	public void setUserSelectCount(Integer userSelectCount) {
 		this.userSelectCount = userSelectCount;
 	}
 
@@ -495,5 +495,4 @@ public class DiagnosisDisease implements Serializable {
 		this.defaultOrder = defaultOrder;
 	}
 
-	
 }

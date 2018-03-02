@@ -12,7 +12,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import com.alpha.commons.core.framework.JsonReturnHandler;
+import com.alpha.commons.core.framework.CustomJSONReturnValueHandler;
 
 /**
  * Created by xc.xiong on 2017/9/21.
@@ -51,7 +51,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     @Override
 	public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> returnValueHandlers) {
     	System.out.println("add JsonReturnHandler to Spring HandlerMethodReturnValueHandler");
-    	returnValueHandlers.add(new JsonReturnHandler());
+    	returnValueHandlers.add(new CustomJSONReturnValueHandler());
 	}
 
 }

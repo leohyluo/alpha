@@ -100,6 +100,7 @@ public class BasicAnswerVo implements IAnswerVo {
         this.answerTitle = dmc.getSympName();
         this.defaultOrder = dmc.getDefaultOrder();
         this.displayType = dmc.getDisplayType();
+        this.description = dmc.getPopuName();
     }
 
     public String getAnswerTitle() {
@@ -194,6 +195,7 @@ public class BasicAnswerVo implements IAnswerVo {
         this.answerValue = dqAnswer.getAnswerCode();
         this.defaultOrder = dqAnswer.getDefaultOrder();
         this.syAnswer = dqAnswer.getSyAnswer();
+        this.image = dqAnswer.getImage();
     }
 
     @Override

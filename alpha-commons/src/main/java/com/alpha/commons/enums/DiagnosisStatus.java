@@ -1,9 +1,13 @@
 package com.alpha.commons.enums;
 
+import com.alpha.commons.util.StringUtils;
 
 public enum DiagnosisStatus {
 
 	REGISTERED("1", "已挂号"),
+	UN_ACTIVE("2", "未排队"),
+	ACTIVED("3", "已激活排队信息"),
+	IN_QUEUE("4", "排队中"),
     PRE_DIAGNOSIS_FINISH("10", "预问诊结束"),
     WAIT_CONFIRM("11", "等待医生确诊"),
     HIS_CONFIRMED("12", "医生确诊");
@@ -42,6 +46,9 @@ public enum DiagnosisStatus {
 	}
 	
 	public static String getText(String value) {
+		if(StringUtils.isEmpty(value)) {
+			return null;
+		}
 		String text = null;
 		DiagnosisStatus item = findByValue(value);
 		if(item != null) {

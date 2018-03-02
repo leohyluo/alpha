@@ -39,10 +39,12 @@
  	</resultMap>
  	
  	<select id="findByDiagnosisId" resultType="DataRecord" parameterType="HashMap">
- 		select * from user_basic_record
+ 		select ubr.*,hi.hospital_name as 'hospitalName' from user_basic_record ubr
+			LEFT JOIN hospital_info hi
+			ON ubr.hospital_code = hi.hospital_code
  		<where>
  			<if test="diagnosisId != null">
- 				diagnosis_id = #{diagnosisId}
+ 				ubr.diagnosis_id = #{diagnosisId}
  			</if>
  		</where>
  	</select>
@@ -65,21 +67,23 @@
  	</select>
  	
  	<select id="findFinishByUser" resultType="DataRecord" parameterType="HashMap">
- 		select * from user_basic_record
+ 		select ubr.*,hi.hospital_name as 'hospitalName' from user_basic_record ubr
+			LEFT JOIN hospital_info hi
+			ON ubr.hospital_code = hi.hospital_code
  		<where>
  			<if test="userId != null">
- 				and user_id = #{userId}
+ 				and ubr.user_id = #{userId}
  			</if>
  			<if test="status != null">
- 				and status = #{status}
+ 				and ubr.status = #{status}
  			</if>
  			<if test="hisRegisterNo != null">
- 				and his_register_no = #{hisRegisterNo}
+ 				and ubr.his_register_no = #{hisRegisterNo}
  			</if>
  			<if test="finishDate">
- 				and DATE(create_time) = #{finishDate}
+ 				and DATE(ubr.create_time) = #{finishDate}
  			</if>
- 			ORDER BY create_time desc
+ 			ORDER BY ubr.create_time desc
  		</where>
  	</select>
  	 	
@@ -114,11 +118,37 @@
  	
  	<!-- 获取用户所有就诊记录 -->
  	<select id="findByUserId" parameterType="HashMap" resultType="DataRecord">
- 		SELECT * from user_basic_record ubr where ubr.user_id = #{userId}
+ 		select ubr.*,hi.hospital_name as 'hospitalName',hi.hospital_icon as 'hospitalLogo' from user_basic_record ubr
+			LEFT JOIN hospital_info hi ON ubr.hospital_code = hi.hospital_code 
+ 			where ubr.user_id = #{userId} and ubr.status >= 10 order by ubr.create_time desc
  	</select>
  	
  	<!-- 查询用户最后一条就诊记录 -->
  	<select id="findLastFinishByUser" resultType="DataRecord" parameterType="HashMap">
  		select * from user_basic_record where user_id = #{userId} and status >= 10 ORDER BY create_time desc limit 0,1
+ 	</select>
+ 	
+ 	<!-- 查找当天未确诊并且已关注微信公众号的数据的数据 -->
+ 	<select id="findWecharUserUnFinishOnToday" resultType="DataRecord" parameterType="HashMap">
+ 		SELECT ubr.* FROM user_basic_record ubr
+		INNER JOIN user_info ui
+		ON ubr.user_id = ui.user_id
+		where ubr.`status` != #{status}
+		AND DATE(ubr.create_time) = CURDATE()
+		AND CHAR_LENGTH(ui.external_user_id) > 0
+		AND ui.wechar_follow = 1
+		AND ifnull(ubr.queue_info,'') = ''
+ 	</select>
+ 	
+ 	<!-- 查找当天未确诊并且已关注微信公众号的数据的数据 -->
+ 	<select id="findWecharUserUnFinishOnTodayByUserId" resultType="DataRecord" parameterType="HashMap">
+ 		SELECT ubr.* FROM user_basic_record ubr
+		INNER JOIN user_info ui
+		ON ubr.user_id = ui.user_id
+		where ubr.`status` != #{status}
+		AND DATE(ubr.create_time) = CURDATE()
+		AND CHAR_LENGTH(ui.external_user_id) > 0
+		AND ui.wechar_follow = 1
+		AND ubr.user_id = #{userId}
  	</select>
 </mapper>

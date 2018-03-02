@@ -2,7 +2,6 @@ package com.alpha.self.diagnosis.service;
 
 import java.util.List;
 
-import com.alpha.self.diagnosis.pojo.vo.AnalysisRequestVo;
 import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
 import com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo;
 import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
@@ -14,7 +13,7 @@ public interface DiagnosisService {
 
     BasicQuestionVo start(Long userId, Integer inType);
 
-    IQuestionVo lexicalAnalysisByTencent(AnalysisRequestVo vo);
+    IQuestionVo lexicalAnalysisByTencent(Long diagnosisId, Long userId, String content);
 
     List<DiagnosisMainSymptoms> lexicalAnalysisByBaidu(QuestionRequestVo questionVo, UserInfo userInfo);
 

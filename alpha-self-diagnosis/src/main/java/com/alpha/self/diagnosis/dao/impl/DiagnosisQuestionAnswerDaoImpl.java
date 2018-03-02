@@ -34,16 +34,12 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
     }
 
 
-    /**
-     * 根据问题编号查询所有的答案
-     *
-     * @param questionCodes
-     * @return
-     */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes) {
+    @Override
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, Collection<String> questionCodes) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCodes", questionCodes);
         params.put("wordsProperty", SyAnswerType.PARENT_ANSWER.getValue());
+        params.put("mainSympCode", mainSympCode);
         List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryDiagnosisQuestionAnswer", params);
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
@@ -56,6 +52,7 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
      * @param answerCode
      * @return
      */
+    @Override
     public DiagnosisQuestionAnswer getDiagnosisQuestionAnswer(String questionCode, String answerCode) {
         Map<String, Object> params = new HashMap<>();
         params.put("answerCode", answerCode);
@@ -68,13 +65,8 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         return dqAnswer;
     }
 
-    /**
-     * 根据答案编号查询答案
-     *
-     * @param answerCodes
-     * @return
-     */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
+    @Override
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer_backup(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
         Map<String, Object> params = new HashMap<>();
         answerCodes.addAll(hiddenAnswerCodes);
         params.put("questionCode", questionCode);
@@ -91,6 +83,7 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
      * @param questionCodes
      * @return
      */
+    @Override
     public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, Collection<String> answerCodes) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCodes", questionCodes);
@@ -99,14 +92,22 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
     }
+    
 
-    /**
-     * 根据答案编号查询答案
-     *
-     * @param answerCodes
-     * @param questionCodes
-     * @return
-     */
+	@Override
+	public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, String questionCode,
+			Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
+		Map<String, Object> params = new HashMap<>();
+        answerCodes.addAll(hiddenAnswerCodes);
+        params.put("mainSympCode", mainSympCode);
+        params.put("questionCode", questionCode);
+        params.put("answerCodes", answerCodes);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryByAnswerCodes2", params);
+        List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
+        return dqAnswers;
+	}
+
+	@Override
     public List<MedicineQuestionVo> listMedicineQuestionVo(Collection<String> questionCodes, Collection<String> answerCodes) {
         Map<String, Object> params = new HashMap<>();
         params.put("questionCodes", questionCodes);
@@ -115,6 +116,18 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         List<MedicineQuestionVo> mqvAnswers = JavaBeanMap.convertListToJavaBean(datas, MedicineQuestionVo.class);
         return mqvAnswers;
     }
+	
+	@Override
+	public List<MedicineQuestionVo> listMedicineQuestionVo2(String mainSympCode, Collection<String> questionCodes,
+			Collection<String> answerCodes) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("mainSympCode", mainSympCode);
+        params.put("questionCodes", questionCodes);
+        params.put("answerCodes", answerCodes);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer.queryAnswers2", params);
+        List<MedicineQuestionVo> mqvAnswers = JavaBeanMap.convertListToJavaBean(datas, MedicineQuestionVo.class);
+        return mqvAnswers;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -125,6 +138,5 @@ public class DiagnosisQuestionAnswerDaoImpl extends BaseDao<DiagnosisQuestionAns
         List<DiagnosisQuestionAnswer> dqAnswers = JavaBeanMap.convertListToJavaBean(datas, DiagnosisQuestionAnswer.class);
         return dqAnswers;
 	}
-
 
 }

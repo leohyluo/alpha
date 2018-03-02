@@ -1,10 +1,12 @@
 package com.alpha.user.service.impl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,7 +73,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfo create(UserInfo userInfo) {
         Long userId = sysSequenceService.getNextSequence("user_seq").longValue();
         userInfo.setUserId(userId);
-        userInfo.setExternalUserId(String.valueOf(userId));
+        //userInfo.setExternalUserId(String.valueOf(userId));
         userInfo.setCreateTime(new Date());
         userInfo.setLastUpdateTime(new Date());
         userInfoDao.insert(userInfo);
@@ -87,11 +89,13 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    public UserInfo updateUserInfo(UserInfo userInfo, int inType) {
-//		UserInfo user = userInfoMapper.getUserInfoByExternalUserId(userInfo.getExternalUserId(), inType);
-        UserInfo user = userInfoDao.getUserInfoByExternalUserId(userInfo.getExternalUserId(), inType);
+    public UserInfo createOrUpdateUserInfo(UserInfo userInfo, int inType) {
+        //UserInfo user = userInfoDao.getUserInfoByExternalUserId(userInfo.getExternalUserId(), inType);
+    	//UserInfo user = userInfoDao.getUserInfoByExternalUserId(userInfo.getExternalUserId());
+    	List<UserInfo> userList = this.listByExternalUserId(userInfo.getExternalUserId());
 
-        if (user == null || user.getUserId() == 0) {
+        //if (user == null || user.getUserId() == 0) {
+    	if (CollectionUtils.isEmpty(userList)) {
             userInfo.setUserId(sysSequenceService.getNextSequence("user_seq").longValue());
             userInfo.setInType(inType);
             userInfo.setCreateTime(new Date());
@@ -99,7 +103,14 @@ public class UserInfoServiceImpl implements UserInfoService {
             userInfoDao.insert(userInfo);
             return userInfo;
         }
-        user.setLastUpdateTime(new Date());
+        return updateUserInfo(userInfo);
+    }
+    
+	@Override
+	@Transactional(readOnly = false, propagation = Propagation.REQUIRED)
+	public UserInfo updateUserInfo(UserInfo userInfo) {
+		UserInfo user = userInfoDao.queryByUserId(userInfo.getUserId());
+		user.setLastUpdateTime(new Date());
         if (StringUtils.isNotEmpty(userInfo.getUserName()))
             user.setUserName(userInfo.getUserName());
         if (userInfo.getBirth() != null)
@@ -170,24 +181,69 @@ public class UserInfoServiceImpl implements UserInfoService {
         
         userInfoDao.update(user);
         return user;
-    }
+	}
 
     @Override
     public UserInfo queryByUserId(Long userId) {
         return userInfoDao.queryByUserId(userId);
     }
     
-
-	@Override
+	/*@Override
 	public UserInfo queryByExternalUserId(String externalUserId, int inType) {
 		return userInfoDao.getUserInfoByExternalUserId(externalUserId, inType);
+	}*/
+
+
+	@Override
+	public List<UserInfo> listByExternalUserId(String externalUserId) {
+		return userInfoDao.listByExternalUserId(externalUserId);
 	}
 
+	@Override
+	public UserInfo getSelfUserInfoByExternalUserId(String externalUserId) {
+		List<UserInfo> userList = this.listByExternalUserId(externalUserId);
+		if(CollectionUtils.isEmpty(userList)) {
+			return null;
+		}
+		if(userList.size() == 1) {
+			return userList.get(0);
+		} else {
+			for(UserInfo user : userList) {
+				List<UserMember> memberList = userMemberService.listByUserId(user.getUserId());
+				if(CollectionUtils.isNotEmpty(memberList)) {
+					return user;
+				}
+			}
+			logger.warn("根据externalUserId找到多个用户，但无法得知主用户");
+			return null;
+		}
+		/*userList = userList.stream().filter(e->GlobalConstants.SELF.equals(e.getUserName())).collect(Collectors.toList());
+		if(CollectionUtils.isNotEmpty(userList)) {
+			return userList.get(0);
+		} else {
+			return null;
+		}*/
+	}
 
     @Override
     public UserInfo save(Long diagnosisId, SaveUserInfoVo userInfo, OtherHospitalInfo hospitalInfo, int inType) {
         //更新用户信息
         if (userInfo != null) {
+        	HisRegisterInfo hisRegisterInfo = null;
+        	//医院挂号编码
+        	String hisRegisterNo = userInfo.getHisRegisterNo();
+        	if(StringUtils.isNotEmpty(hisRegisterNo)) {
+        		//设置hospitalCode
+        		UserInfo ui = queryByUserId(userInfo.getUserId());
+                String departmentListStr = ui.getDepartmentList();
+                if(StringUtils.isNotEmpty(departmentListStr)) {
+                	List<HisRegisterInfo> hisDepartmentList = JSONArray.parseArray(departmentListStr, HisRegisterInfo.class);
+                	Optional<HisRegisterInfo> optional = hisDepartmentList.stream().filter(e->e.getHisRegisterNo().equals(hisRegisterNo)).findFirst();
+                	if(optional.isPresent()) {
+                		hisRegisterInfo = optional.get();
+                	}
+                }
+        	}
             //既往史
             List<DiseaseHistoryVo> pastmedicalHistoryList = userInfo.getPastmedicalHistory();
             if (CollectionUtils.isNotEmpty(pastmedicalHistoryList)) {
@@ -216,10 +272,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             }
             UserInfo ui = new UserInfo();
             BeanCopierUtil.copy(userInfo, ui);
-            updateUserInfo(ui, inType);
+            //createOrUpdateUserInfo(ui, inType);
+            updateUserInfo(ui);
             //重新加载用户信息并将用户信息拷贝至UserBasicRecord
             ui = queryByUserId(userInfo.getUserId());
-            updateUserBasicRecord(diagnosisId, ui);
+            updateUserBasicRecord(diagnosisId, ui, hisRegisterInfo);
         }
         if (hospitalInfo != null) {
             //将医院就诊信息拷贝至UserBasicRecord
@@ -247,6 +304,20 @@ public class UserInfoServiceImpl implements UserInfoService {
     	List<HisRegisterInfo> hisDepartmentList = new ArrayList<>();
     	if (userId != null) {
     		userInfo = queryByUserId(userId);
+    		hisDepartmentList = JSONArray.parseArray(userInfo.getDepartmentList(), HisRegisterInfo.class);
+			if(CollectionUtils.isNotEmpty(hisDepartmentList)) {
+    			for(HisRegisterInfo dept : hisDepartmentList) {
+    				//根据就诊编码查询是否已完成预问诊
+    				String hisRegisterNo = dept.getHisRegisterNo();
+    				if(StringUtils.isNotEmpty(hisRegisterNo)) {
+    					UserBasicRecord record = userBasicRecordService.findFinishByUserId(userId, hisRegisterNo);
+    					if(record != null) {
+    						dept.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+    						dept.setDiagnosisId(String.valueOf(record.getDiagnosisId()));
+    					}
+    				}
+    			}
+			}
     	} else if(StringUtils.isNotEmpty(cardNo)) {
     		//调用第三方接口获取用户信息
     		String userStr = getThirdUser(cardNo);
@@ -266,17 +337,19 @@ public class UserInfoServiceImpl implements UserInfoService {
     			userInfo = list.get(0);
     			userId = userInfo.getUserId();
     			hisDepartmentList = JSONArray.parseArray(userInfo.getDepartmentList(), HisRegisterInfo.class);
-    			for(HisRegisterInfo dept : hisDepartmentList) {
-    				//根据就诊编码查询是否已完成预问诊
-    				String hisRegisterNo = dept.getHisRegisterNo();
-    				if(StringUtils.isNotEmpty(hisRegisterNo)) {
-    					UserBasicRecord record = userBasicRecordService.findFinishByUserId(userId, hisRegisterNo);
-    					if(record != null) {
-    						dept.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
-    					}
-    				}
+    			if(CollectionUtils.isNotEmpty(hisDepartmentList)) {
+	    			for(HisRegisterInfo dept : hisDepartmentList) {
+	    				//根据就诊编码查询是否已完成预问诊
+	    				String hisRegisterNo = dept.getHisRegisterNo();
+	    				if(StringUtils.isNotEmpty(hisRegisterNo)) {
+	    					UserBasicRecord record = userBasicRecordService.findFinishByUserId(userId, hisRegisterNo);
+	    					if(record != null) {
+	    						dept.setDiagnosisId(String.valueOf(record.getDiagnosisId()));
+	    						dept.setStatus(DiagnosisStatus.PRE_DIAGNOSIS_FINISH.getValue());
+	    					}
+	    				}
+	    			}
     			}
-    			
     			/*UserInfo alphaUserInfo = list.get(0);
     			mergeUserInfo(alphaUserInfo, userInfo);
     			userInfo = updateUserInfo(alphaUserInfo, userInfo.getInType());*/
@@ -338,7 +411,21 @@ public class UserInfoServiceImpl implements UserInfoService {
         		hisUserInfo.setOtherHospitalDrugList(drugList);
         	}
         }
-        	
+        List<HisRegisterInfo> deptList = hisUserInfo.getHisDepartmentList();
+        if(CollectionUtils.isNotEmpty(deptList)) {
+        	deptList.stream().filter(e->StringUtils.isNotEmpty(e.getCureTime())).peek(e->{
+        		String cureTimeStr = e.getCureTime();
+				if(StringUtils.isNotEmpty(cureTimeStr)) {
+					try {
+						Date cureTime = DateUtils.string2Date(cureTimeStr);
+						String cureDate = DateUtils.date2String(cureTime, DateUtils.DATE_FORMAT);
+						e.setCureTime(cureDate);
+					} catch (ParseException ex) {
+						ex.printStackTrace();
+					}
+				}
+        	}).collect(Collectors.toList());
+        }
         return hisUserInfo;
     }
     
@@ -366,8 +453,12 @@ public class UserInfoServiceImpl implements UserInfoService {
 	@Override
 	@Transactional
 	public HisUserInfoVo saveUserMember(Long userId, String memberName) {
+		UserInfo self = userInfoDao.queryByUserId(userId);
+		
 		UserInfo userInfo = new UserInfo();
 		userInfo.setUserName(memberName);
+		userInfo.setExternalUserId(self.getExternalUserId());
+		userInfo.setInType(InType.ALPHA.getValue());
 		userInfo = this.create(userInfo);
 		Long memberId = userInfo.getUserId();
 		
@@ -408,24 +499,32 @@ public class UserInfoServiceImpl implements UserInfoService {
      * @return
      */
     private String getThirdUser(String idcard) {
+    	if("123456".equals(idcard))
+    		return null;
     	String userName = RandomUtils.randomUserName();
     	String birth = DateUtils.date2String(RandomUtils.randomDate("2000-01-01", "2017-09-10"), DateUtils.DATE_FORMAT);
     	Integer gender = RandomUtils.getRandomNum(1, 2);
     	String cureTime = DateUtils.date2String(new Date(), DateUtils.DATE_TIME_FORMAT);
     	JSONObject json = new JSONObject();
     	json.put("userName", userName);
-    	json.put("birth", birth);
-    	json.put("gender", gender);
+//    	json.put("birth", birth);
+//    	json.put("gender", gender);
     	json.put("idcard", idcard);
     	json.put("inType", "1");
     	
     	JSONArray jarr = new JSONArray();
     	JSONObject dept1 = new JSONObject();
-    	dept1.put("hospitalCode", "A001");
+    	dept1.put("hospitalCode", "A002");
     	dept1.put("hisRegisterNo", System.currentTimeMillis()+"");
     	dept1.put("department", "小儿消化内科");
     	dept1.put("doctorName", "李珊珊");
     	dept1.put("cureTime", cureTime);
+    	
+    	try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     	
     	JSONObject dept2 = new JSONObject();
     	dept2.put("hospitalCode", "A002");
@@ -461,7 +560,7 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRED)
-    private void updateUserBasicRecord(Long diagnosisId, UserInfo userInfo) {
+    private void updateUserBasicRecord(Long diagnosisId, UserInfo userInfo, HisRegisterInfo hisRegisterInfo) {
         //将userInfo的数据同步至UserBasicRecord
         UserBasicRecord record = userBasicRecordService.findByDiagnosisId(diagnosisId);
         if (record == null) {
@@ -469,6 +568,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             return;
         }
         record.copyFromUserInfo(userInfo);
+        if(hisRegisterInfo != null) {
+        	record.copyFromHisRegisterInfo(hisRegisterInfo);
+        }
         userBasicRecordService.updateUserBasicRecord(record);
     }
 
@@ -482,7 +584,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
 
         BeanCopierUtil.copy(hospitalInfo, record);
-        List<DrugVo> useDrugList = hospitalInfo.getOtherHospitalDrugList();
+        List<DrugVo> useDrugList = hospitalInfo.getOtherHospitalUseDrugList();
         String otherHospitalDrugList = "[]";
         if(CollectionUtils.isNotEmpty(useDrugList)) {
         	otherHospitalDrugList = JSON.toJSONString(useDrugList);
@@ -497,4 +599,16 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
         userBasicRecordService.updateUserBasicRecord(record);
     }
+
+	@Override
+	public void save(UserInfo userInfo) {
+		userInfoDao.update(userInfo);
+	}
+
+	@Override
+	public List<UserInfo> listByUserId(List<Long> userIdList) {
+		return userInfoDao.listByUserId(userIdList);
+	}
+
+
 }

@@ -1,22 +1,22 @@
 package com.alpha.server.rpc.user.pojo;
 
-import com.alibaba.fastjson.JSONArray;
+import java.text.ParseException;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import com.alpha.commons.enums.FeedType;
 import com.alpha.commons.enums.FertilityType;
 import com.alpha.commons.enums.GestationalAge;
 import com.alpha.commons.enums.VaccinationHistory;
 import com.alpha.commons.enums.WomenSpecialPeriod;
 import com.alpha.commons.util.BeanCopierUtil;
-import com.alpha.commons.util.CollectionUtils;
+import com.alpha.commons.util.DateUtils;
 import com.alpha.commons.util.StringUtils;
-import com.alpha.server.rpc.user.pojo.UserInfo;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "user_basic_record")
@@ -195,6 +195,10 @@ public class UserBasicRecord {
     @Column(name = "other_hospital_diagnosis")
     private String otherHospitalDiagnosis;
 
+    //医院推送过来的排队信息
+    @Column(name = "queue_info")
+    private String queueInfo;
+
     /**
      * 挂号科室
      */
@@ -238,6 +242,15 @@ public class UserBasicRecord {
     private String hospitalCode;
     
     /**
+     * 医院名称
+     */
+    @Transient
+    private String hospitalName;
+    
+    @Transient
+    private String hospitalLogo;
+    
+    /**
      * 医生姓名
      */
     @Column(name = "doctor_name")
@@ -276,6 +289,10 @@ public class UserBasicRecord {
      */
     @Column(name = "his_register_no")
     private String hisRegisterNo;
+    
+    //二维码地址
+    @Column(name = "qr_code")
+    private String qrCode;
 
     public String getDepartment() {
         return department;
@@ -395,15 +412,25 @@ public class UserBasicRecord {
             Integer vaccinationHistoryCode = Integer.parseInt(userInfo.getVaccinationHistoryCode());
             this.vaccinationHistoryText = VaccinationHistory.getText(vaccinationHistoryCode);
         }
-        //设置hospitalCode
-        String departmentListStr = userInfo.getDepartmentList();
-        if(StringUtils.isNotEmpty(departmentListStr)) {
-        	List<HisRegisterInfo> hisDepartmentList = JSONArray.parseArray(departmentListStr, HisRegisterInfo.class);
-        	if(CollectionUtils.isNotEmpty(hisDepartmentList)) {
-        		String hospitalCode = hisDepartmentList.get(0).getHospitalCode();
-        		this.hospitalCode = hospitalCode; 
-        	}
-        }
+    }
+    
+    /**
+     * 提取医院编码、挂号科室、医生姓名
+     * @param hisRegisterInfo
+     */
+    public void copyFromHisRegisterInfo(HisRegisterInfo hisRegisterInfo) {
+    	this.hospitalCode = hisRegisterInfo.getHospitalCode();
+    	this.department = hisRegisterInfo.getDepartment();
+    	this.doctorName = hisRegisterInfo.getDoctorName();
+    	String hisCureTime = hisRegisterInfo.getCureTime();
+    	if(StringUtils.isNotEmpty(hisCureTime)) {
+    		try {
+				this.cureTime = DateUtils.string2DateTime(hisCureTime);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+    	}
+    	this.hisRegisterNo = hisRegisterInfo.getHisRegisterNo();
     }
 
     public Long getId() {
@@ -836,6 +863,36 @@ public class UserBasicRecord {
 	public void setPhoneNum(String phoneNum) {
 		this.phoneNum = phoneNum;
 	}
-	
-	
+
+	public String getHospitalName() {
+		return hospitalName;
+	}
+
+	public void setHospitalName(String hospitalName) {
+		this.hospitalName = hospitalName;
+	}
+
+	public String getHospitalLogo() {
+		return hospitalLogo;
+	}
+
+	public void setHospitalLogo(String hospitalLogo) {
+		this.hospitalLogo = hospitalLogo;
+	}
+
+	public String getQrCode() {
+		return qrCode;
+	}
+
+	public void setQrCode(String qrCode) {
+		this.qrCode = qrCode;
+	}
+
+    public String getQueueInfo() {
+        return queueInfo;
+    }
+
+    public void setQueueInfo(String queueInfo) {
+        this.queueInfo = queueInfo;
+    }
 }

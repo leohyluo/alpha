@@ -15,7 +15,7 @@ public interface HisApiService {
 	 * @param externalUserId
 	 * @return
 	 */
-	QueueDTO getQueuingInfo(String idcard);
+	QueueDTO getQueuingInfo(Long diagnosisId, String idcard);
 	
 	/**
 	 * 获取诊断信息

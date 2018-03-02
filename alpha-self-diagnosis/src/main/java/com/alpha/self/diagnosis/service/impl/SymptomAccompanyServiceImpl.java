@@ -1,9 +1,8 @@
 package com.alpha.self.diagnosis.service.impl;
 
 import com.alpha.commons.util.DateUtils;
-import com.alpha.commons.util.FigureUtil;
+import com.alpha.commons.util.StringUtils;
 import com.alpha.commons.util.sim.CosineSimilarAlgorithm;
-import com.alpha.commons.util.sim.Similarity;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
 import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
@@ -18,7 +17,6 @@ import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,27 +173,70 @@ public class SymptomAccompanyServiceImpl implements SymptomAccompanyService {
     public LinkedHashSet<IAnswerVo> listSymptomAccompany(Long diagnosisId, String mainSympCode, UserInfo userInfo, String keyword) {
         List<DiagnosisMainsympConcsymp> dmcs = this.listConcsymp(mainSympCode, userInfo);
         LinkedHashSet<IAnswerVo> answerVos = new LinkedHashSet<>();
-        for (Iterator i = dmcs.iterator(); i.hasNext(); ) {
-            DiagnosisMainsympConcsymp dmc = (DiagnosisMainsympConcsymp) i.next();
-            Double similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
 
-//            Double sympNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSympName()).toUpperCase(), keyword.toUpperCase());
-//            Double popuNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getPopuName()).toUpperCase(), keyword.toUpperCase());
-//            Double symbolSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSymbol()).toUpperCase(), keyword.toUpperCase());
-//            Double similarity = MedicineSortUtil.sortDouble(symbolSimilarity, popuNameSimilarity, sympNameSimilarity);
+        Iterator<DiagnosisMainsympConcsymp> it = dmcs.iterator();
+        while(it.hasNext()){
+            DiagnosisMainsympConcsymp dmc = it.next();
+            Double similarity = 0.0;
+            //判断关键词是否被包含
+            if(StringUtils.isChinese(keyword.toUpperCase())){
+//                System.out.println(keyword.toUpperCase() + " --  " +  dmc.getSympName() + " -- " + dmc.getSympName().indexOf(keyword));
+                if(dmc.getSympName().indexOf(keyword) < 0){
+                    similarity = 0.0;
+                }else{
+                    similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
+                }
+            }
+            else{
+                similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
+            }
+
             if (similarity < 0.5) {
-                i.remove();
+                it.remove();
             } else {
                 dmc.setSimilarity(similarity);
             }
-
         }
+
+//        for (Iterator i = dmcs.iterator(); i.hasNext(); ) {
+//            DiagnosisMainsympConcsymp dmc = (DiagnosisMainsympConcsymp) i.next();
+//
+//            Double similarity = 0.0;
+//            //判断关键词是否被包含
+//            if(StringUtils.isChinese(keyword.toUpperCase())){
+//                System.out.println(keyword.toUpperCase() + " --  " +  dmc.getSympName() + " -- " + dmc.getSympName().indexOf(keyword));
+//                if(dmc.getSympName().indexOf(keyword) < 0){
+//                    i.remove();
+//                }else{
+//                    similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
+//                }
+//            }
+//            else{
+//                similarity = CosineSimilarAlgorithm.cosSimilarityByString(keyword.toUpperCase(), dmc.getSympName());
+//            }
+//
+////            Double sympNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSympName()).toUpperCase(), keyword.toUpperCase());
+////            Double popuNameSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getPopuName()).toUpperCase(), keyword.toUpperCase());
+////            Double symbolSimilarity = Similarity.sim(FigureUtil.valueOfString(dmc.getSymbol()).toUpperCase(), keyword.toUpperCase());
+////            Double similarity = MedicineSortUtil.sortDouble(symbolSimilarity, popuNameSimilarity, sympNameSimilarity);
+//            if (similarity < 0.5) {
+//                i.remove();
+//            } else {
+//                dmc.setSimilarity(similarity);
+//            }
+//
+//        }
         MedicineSortUtil.sortDiagnosisMainsympConcsymp(dmcs);
         for (DiagnosisMainsympConcsymp dmc : dmcs) {
             BasicAnswerVo answer = new BasicAnswerVo(dmc);
             answerVos.add(answer);
         }
         return answerVos;
+    }
+
+    @Override
+    public DiagnosisMainsympConcsymp getMaxWeightConcSymp(String mainSympCode) {
+        return diagnosisMainsympConcsympDao.getMaxWeightConcSymp(mainSympCode);
     }
 
     /**

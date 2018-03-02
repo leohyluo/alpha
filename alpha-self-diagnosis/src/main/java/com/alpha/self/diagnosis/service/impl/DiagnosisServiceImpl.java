@@ -1,5 +1,24 @@
 package com.alpha.self.diagnosis.service.impl;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.alibaba.fastjson.JSON;
 import com.alpha.commons.api.baidu.naturelanguage.NatureLanguageApi;
 import com.alpha.commons.api.tencent.ApiConstants;
@@ -8,7 +27,6 @@ import com.alpha.commons.api.tencent.vo.KeywordResultVo;
 import com.alpha.commons.api.tencent.vo.Keywords;
 import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.core.service.SysSequenceService;
-import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.web.ResponseStatus;
@@ -16,8 +34,20 @@ import com.alpha.self.diagnosis.dao.UserDiagnosisDetailDao;
 import com.alpha.self.diagnosis.pojo.BasicAnswer;
 import com.alpha.self.diagnosis.pojo.BasicQuestion;
 import com.alpha.self.diagnosis.pojo.Synonym;
-import com.alpha.self.diagnosis.pojo.vo.*;
-import com.alpha.self.diagnosis.service.*;
+import com.alpha.self.diagnosis.pojo.vo.AnswerRequestVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.DiagnosisResultVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.QuestionRequestVo;
+import com.alpha.self.diagnosis.pojo.vo.UserDiagnosisOutcomeVo;
+import com.alpha.self.diagnosis.service.BasicAnswerService;
+import com.alpha.self.diagnosis.service.BasicQuestionService;
+import com.alpha.self.diagnosis.service.DiagnosisService;
+import com.alpha.self.diagnosis.service.SymptomMainService;
+import com.alpha.self.diagnosis.service.SynonymService;
+import com.alpha.self.diagnosis.service.UserDiagnosisOutcomeService;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
 import com.alpha.server.rpc.user.pojo.UserBasicRecord;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
@@ -25,17 +55,6 @@ import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.user.service.UserBasicRecordService;
 import com.alpha.user.service.UserInfoService;
 import com.alpha.user.service.UserMemberService;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
@@ -109,14 +128,14 @@ public class DiagnosisServiceImpl implements DiagnosisService {
 
     @Deprecated
     @Override
-    public IQuestionVo lexicalAnalysisByTencent(AnalysisRequestVo vo) {
+    public IQuestionVo lexicalAnalysisByTencent(Long diagnosisId, Long userId, String content) {
         IQuestionVo questionVo = null;
-        Long diagnosisId = vo.getDiagnosisId();
+        //Long diagnosisId = vo.getDiagnosisId();
         //初始化文智
         WenZhiApi wenzhiApi = new WenZhiApi();
         TreeMap<String, Object> keywordParams = new TreeMap<String, Object>();
-        keywordParams.put("title", vo.getContent());
-        keywordParams.put("content", vo.getContent());
+        keywordParams.put("title", content);
+        keywordParams.put("content", content);
         //调用腾迅API获取关键词
         String result = wenzhiApi.invoke(ApiConstants.ACTION_TEXT_KWYWORDS, keywordParams);
         KeywordResultVo keywordResultVo = JSON.parseObject(result, KeywordResultVo.class);

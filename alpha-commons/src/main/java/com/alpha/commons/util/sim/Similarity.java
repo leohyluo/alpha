@@ -74,8 +74,8 @@ public class Similarity {
 
 
     public static void main(String[] args) {
-        String s1 = "神经性头痛";
-        String s2 = "经性头痛";
+        String s1 = "龟头性痛";
+        String s2 = "头痛";
         Similarity similarity = new Similarity(s1, s2);
         System.out.println(similarity.sim());
 

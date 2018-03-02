@@ -14,8 +14,8 @@ public enum Unit {
     SEASON("season", "季"),	//季节
     YEAR("year", "年"),			//年
     CENTIGRADE("centigrade", "摄氏度"),
-    CENTIGRADE2("centigrade2", "℃"),//摄氏度
-    NUM_OF_TIMES("num_of_times","次");	
+    TEMPERATURE("temperature", "℃"),
+    NUM_OF_TIMES("times","次");	
 
 	private String value;
     private String text;

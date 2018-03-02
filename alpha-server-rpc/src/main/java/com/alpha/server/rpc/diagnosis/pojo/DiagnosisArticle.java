@@ -33,6 +33,14 @@ public class DiagnosisArticle implements Serializable {
 	@Column(name = "article_icon")
 	private String articleIcon;
 	
+	// 作者
+	@Column(name = "article_author")
+	private String author;
+
+	// 来源
+	@Column(name = "article_source")
+	private String source;
+	
 	@Column(name = "create_time")
 	private Date createTime;
 	
@@ -101,6 +109,22 @@ public class DiagnosisArticle implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 	
 	

@@ -7,7 +7,7 @@ package com.alpha.self.diagnosis.pojo.enums;
 public enum SyAnswerType {
 
     SUB_ANSWER("1", "子类"),
-    PARENT_ANSWER("2", "大类"),
+    PARENT_ANSWER("大类", "大类"),
 	SYMTOM("3", "同义词");
 
     private String value;

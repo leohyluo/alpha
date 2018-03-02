@@ -1,8 +1,7 @@
 package com.alpha.user.controller;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
-import com.alpha.commons.enums.UserType;
 import com.alpha.commons.util.CollectionUtils;
 import com.alpha.commons.web.ResponseMessage;
 import com.alpha.commons.web.ResponseStatus;
@@ -70,7 +68,7 @@ public class UserController {
             //获取用户信息
             //如果存在用户信息，返回用户信息
             //如果不存在，生成一个临时的用户，返回UserId
-            user = userInfoService.updateUserInfo(user, inType);
+            user = userInfoService.createOrUpdateUserInfo(user, inType);
 //			LOGGER.info("用户信息,{},{}",inType, JSON.toJSON(user));
             return new ResponseMessage(user);
         } catch (Exception e) {
@@ -88,11 +86,21 @@ public class UserController {
     	if(StringUtils.isEmpty(externalUserId)) {
     		return WebUtils.buildResponseMessage(ResponseStatus.REQUIRED_PARAMETER_MISSING);
     	}
-    	UserInfo userInfo = userInfoService.queryByExternalUserId(externalUserId, inType);
+    	List<HisUserInfoVo> userList = new ArrayList<>();
+    	//UserInfo userInfo = userInfoService.queryByExternalUserId(externalUserId, inType);
+    	UserInfo userInfo = userInfoService.getSelfUserInfoByExternalUserId(externalUserId);
     	if(userInfo == null) {
-    		return WebUtils.buildResponseMessage(ResponseStatus.USER_NOT_FOUND);
+    		userInfo = new UserInfo();
+    		userInfo.setUserName("自己");
+    		userInfo.setExternalUserId(externalUserId);
+    		userInfo = userInfoService.create(userInfo);
+    		HisUserInfoVo hisUserInfoVo = new HisUserInfoVo(userInfo, null);
+    		hisUserInfoVo.setSelf("Y");
+    		userList.add(hisUserInfoVo);
+    		
+    		return WebUtils.buildSuccessResponseMessage(userList);
     	}
-    	List<HisUserInfoVo> userList = userInfoService.list(userInfo.getUserId());
+    	userList = userInfoService.list(userInfo.getUserId());
     	return WebUtils.buildSuccessResponseMessage(userList);
     }
 

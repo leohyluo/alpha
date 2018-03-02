@@ -3,6 +3,7 @@ package com.alpha.self.diagnosis.pojo.vo2;
 import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.utils.AppUtils;
 
 /**
  * 成员列表
@@ -15,13 +16,16 @@ public class MemberListVo {
 	private String userName;
 	private String age;
 	private Integer gender;
+	private String userIcon;
 	
 	public MemberListVo() {}
 	
 	public MemberListVo(UserInfo userInfo) {
 		BeanCopierUtil.copy(userInfo, this);
-		if(userInfo.getBirth() != null)
+		if(userInfo.getBirth() != null) {
 			this.age = DateUtils.getAgeText(userInfo.getBirth());
+			this.userIcon = AppUtils.getUserIcon(userInfo);
+		}
 	}
 	
 	public Long getUserId() {
@@ -48,4 +52,13 @@ public class MemberListVo {
 	public void setGender(Integer gender) {
 		this.gender = gender;
 	}
+
+	public String getUserIcon() {
+		return userIcon;
+	}
+
+	public void setUserIcon(String userIcon) {
+		this.userIcon = userIcon;
+	}
+	
 }

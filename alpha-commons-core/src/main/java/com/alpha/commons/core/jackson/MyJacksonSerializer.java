@@ -25,7 +25,7 @@ public class MyJacksonSerializer {
 		if(StringUtils.isNotEmpty(exclude)) {
 			List<String> fieldList = Stream.of(exclude.split(",")).map(String::trim).collect(Collectors.toList());
 			String[] fields = new String[fieldList.size()];
-			jacksonFilter.exclude(clazz, fields);
+			jacksonFilter.exclude(clazz, fieldList.toArray(fields));
 		}
 		//为class类应用过滤器
 		mapper.addMixIn(clazz, jacksonFilter.getClass());

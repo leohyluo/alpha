@@ -288,6 +288,10 @@ public class UserInfo implements Serializable {
      */
     @Column(name = "version_evolution")
     private String versionEvolution;
+    
+    //1:已关注微信公众号 0:未关注
+    @Column(name = "wechar_follow")
+    private Integer wecharFollow;
 
     /**
      * 既往史json字符串
@@ -629,6 +633,14 @@ public class UserInfo implements Serializable {
 
 	public void setHisDepartmentList(List<HisRegisterInfo> hisDepartmentList) {
 		this.hisDepartmentList = hisDepartmentList;
+	}
+
+	public Integer getWecharFollow() {
+		return wecharFollow;
+	}
+
+	public void setWecharFollow(Integer wecharFollow) {
+		this.wecharFollow = wecharFollow;
 	}
 
 	public Map<BasicQuestionType, Object> toMap() {

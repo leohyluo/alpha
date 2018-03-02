@@ -3,22 +3,16 @@ package com.alpha.self.diagnosis.service;
 import java.util.List;
 import java.util.Map;
 
-import com.alpha.self.diagnosis.pojo.vo2.DiseaseDetailVo;
+import com.alpha.self.diagnosis.pojo.vo2.ArticleDetailVo;
 import com.alpha.self.diagnosis.pojo.vo2.DiagnosisRecordListVo;
+import com.alpha.self.diagnosis.pojo.vo2.DiseaseDetailVo;
 import com.alpha.self.diagnosis.pojo.vo2.DiseaseListVo;
 import com.alpha.self.diagnosis.pojo.vo2.DrugDetailVo;
 import com.alpha.self.diagnosis.pojo.vo2.DrugListVo;
-import com.alpha.self.diagnosis.pojo.vo2.MemberListVo;
 import com.alpha.self.diagnosis.pojo.vo2.UserBasicInfoVo;
 
 public interface WecharService {
 	
-	/**
-	 * 关注微信公众号
-	 * @param wecharId
-	 * @param userId
-	 */
-	void follow(String wecharId, Long userId);
 
 	/**
 	 * 获取用户预问诊信息
@@ -34,6 +28,13 @@ public interface WecharService {
 	 * @return 排队信息、疑似诊断结果、精选资讯
 	 */
 	Map<String, Object> getDiagnosisDetail(Long userId, String idcard, Long diagnosisId);
+	
+	/**
+	 * 获取文章详情
+	 * @param articleCode
+	 * @return
+	 */
+	ArticleDetailVo getArticleDetail(String articleCode);
 	
 	/**
 	 * 查询热门疾病
@@ -69,12 +70,12 @@ public interface WecharService {
 	DrugDetailVo getDrugDetail(String drugCode);
 	
 	/**
-	 * 根据用户id查出所有的成员列表
+	 * 根据用户id查出所有的成员列表及每个成员的就医记录
 	 * @param userId
-	 * @return
+	 * @return 用户成员、就诊记录
 	 */
-	List<MemberListVo> listMemberListByUserId(Long userId);
-	
+	List<Map<String, Object>> listMemberDiagnosisDetail(Long userId);
+		
 	/**
 	 * 查看用户就医记录
 	 * @param userId
@@ -95,4 +96,6 @@ public interface WecharService {
 	 * @return
 	 */
 	UserBasicInfoVo getUserBasicInfo(Long userId);
+	
+	
 }

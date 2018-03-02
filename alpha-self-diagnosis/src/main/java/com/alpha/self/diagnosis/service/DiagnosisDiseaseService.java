@@ -22,6 +22,14 @@ public interface DiagnosisDiseaseService {
      */
     Map<String, DiagnosisDisease> mapDiagnosisDisease(Collection diseaseCodes,UserInfo userInfo);
 
+    /**
+     * 根据用户过滤疾病
+     * @param diseaseCode
+     * @param userInfo
+     * @return
+     */
+    Boolean filterByUserInfo(String diseaseCode, UserInfo userInfo);
+
     List<DiseaseVo> findByDiseaseName(String diseaseName);
     
     /**

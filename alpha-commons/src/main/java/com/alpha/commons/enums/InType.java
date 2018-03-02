@@ -4,7 +4,8 @@ package com.alpha.commons.enums;
 public enum InType {
 
 	HIS(1, "医院"),
-    WECHAR(2, "微信");
+    WECHAR(2, "微信"),
+    ALPHA(3, "阿尔法");
 
     private int value;
     private String text;

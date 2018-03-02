@@ -18,6 +18,7 @@ public enum QuestionEnum {
     伴随症状(102),
     年龄问题(103),
     季节问题(104),
+    常见伴随症状(105),
     诊断结果(200);
 
     private Integer value;

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,6 +20,7 @@ public class DrugOnSellDetail {
 
     private static final long serialVersionUID = -8287624935798507470L;
 
+    @Id
     @Column(name = "id")
     private Long id;
 
@@ -234,19 +236,19 @@ public class DrugOnSellDetail {
      * 药品评价数
      */
     @Column(name = "c045")
-    private int pinjCount;
+    private Integer pinjCount;
 
     /**
      * 药品销售量
      */
     @Column(name = "c046")
-    private int sellCount;
+    private Integer sellCount;
 
     /**
      * 是否是主推药品
      */
     @Column(name = "c047")
-    private int isTop;
+    private Integer isTop;
 
     /**
      * 说明书编码
@@ -291,11 +293,11 @@ public class DrugOnSellDetail {
     
     //智能排序阀值
     @Column(name = "threshold")
-    private Long threshold;
+    private Integer threshold;
     
     //用户选择次数
     @Column(name = "user_select_count")
-    private Long userSelectCount;
+    private Integer userSelectCount;
 
 
     public String getPacking() {
@@ -341,27 +343,27 @@ public class DrugOnSellDetail {
         this.onsellId = onsellId;
     }
 
-    public int getIsTop() {
+    public Integer getIsTop() {
         return isTop;
     }
 
-    public void setIsTop(int isTop) {
+    public void setIsTop(Integer isTop) {
         this.isTop = isTop;
     }
 
-    public int getPinjCount() {
+    public Integer getPinjCount() {
         return pinjCount;
     }
 
-    public void setPinjCount(int pinjCount) {
+    public void setPinjCount(Integer pinjCount) {
         this.pinjCount = pinjCount;
     }
 
-    public int getSellCount() {
+    public Integer getSellCount() {
         return sellCount;
     }
 
-    public void setSellCount(int sellCount) {
+    public void setSellCount(Integer sellCount) {
         this.sellCount = sellCount;
     }
 
@@ -705,19 +707,19 @@ public class DrugOnSellDetail {
 		this.id = id;
 	}
 
-	public Long getThreshold() {
+	public Integer getThreshold() {
 		return threshold;
 	}
 
-	public void setThreshold(Long threshold) {
+	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
 	}
 
-	public Long getUserSelectCount() {
+	public Integer getUserSelectCount() {
 		return userSelectCount;
 	}
 
-	public void setUserSelectCount(Long userSelectCount) {
+	public void setUserSelectCount(Integer userSelectCount) {
 		this.userSelectCount = userSelectCount;
 	}
 

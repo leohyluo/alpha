@@ -2,6 +2,10 @@ package com.alpha.self.diagnosis.pojo.vo2;
 
 import java.util.Date;
 
+import com.alpha.commons.util.BeanCopierUtil;
+import com.alpha.commons.util.DateUtils;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisArticle;
+
 /**
  * 资讯详情
  * @author Administrator
@@ -25,9 +29,14 @@ public class ArticleDetailVo {
 	//来源
 	private String source;
 	
-	private Date createTime;
+	private String createTime;
 	
-	private Date updateTime;
+	public ArticleDetailVo(DiagnosisArticle article) {
+		BeanCopierUtil.copy(article, this);
+		if(article.getCreateTime() != null) {
+			this.createTime = DateUtils.date2String(article.getCreateTime(), DateUtils.DATE_TIME_FORMAT);
+		}
+	}
 
 	public String getArticleCode() {
 		return articleCode;
@@ -85,21 +94,15 @@ public class ArticleDetailVo {
 		this.source = source;
 	}
 
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+	
 	
 	
 }

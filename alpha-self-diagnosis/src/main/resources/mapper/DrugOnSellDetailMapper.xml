@@ -10,10 +10,11 @@
         		and c007 like CONCAT('%',#{keyword},'%')
         	</if>
         </where>
+        limit 0,30
     </select>
 
 	<select id="queryByDrugCode" parameterType="HashMap" resultType="DataRecord">
-        SELECT * FROM zhys_drug where drug_code = #{drugCode} 
+        SELECT * FROM zhys_drug where c003 = #{drugCode} 
     </select>
     
     <!-- 根据用户行为获取热门药品 -->

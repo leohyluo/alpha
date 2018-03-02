@@ -61,4 +61,10 @@ public class UserDiagnosisOutcomeDaoImpl extends BaseDao<UserDiagnosisOutcome, L
         return udds;
     }
 
+    @Override
+    public void deleteByDiagnosisId(Long diagnosisId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("diagnosisId", diagnosisId);
+        super.deleteByStatement("com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome.deleteByDiagnosisId", params);
+    }
 }

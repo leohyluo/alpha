@@ -71,4 +71,10 @@ public interface SymptomAccompanyService {
      */
     LinkedHashSet<IAnswerVo> listSymptomAccompany(Long diagnosisId, String mainSympCode, UserInfo userInfo, String keyword);
 
+    /**
+     * 查询主症状下权重最高的伴随症状
+     * @param mainSympCode
+     * @return
+     */
+    DiagnosisMainsympConcsymp getMaxWeightConcSymp(String mainSympCode);
 }

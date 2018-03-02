@@ -23,4 +23,5 @@ public interface UserMemberDao extends IBaseDao<UserMember, Long> {
      * @return
      */
     List<UserMember> listByUserIdAndMemberName(Long userId, String memberName);
+    
 }

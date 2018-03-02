@@ -1,7 +1,9 @@
 package com.alpha.user.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -35,6 +37,14 @@ public class UserMemberServiceImpl implements UserMemberService {
 	@Override
 	public List<UserMember> listByUserIdAndMemberName(Long userId, String memberName) {
 		return userMemberDao.listByUserIdAndMemberName(userId, memberName);
+	}
+
+	@Override
+	public void deleteByUserId(Long userId) {
+		String statement = "com.alpha.user.mapper.UserMemberMapper.deleteByMemberId";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("userId", userId);
+		userMemberDao.deleteByStatement(statement, parameters);
 	}
 
 }

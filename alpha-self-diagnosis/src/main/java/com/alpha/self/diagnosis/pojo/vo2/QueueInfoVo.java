@@ -34,6 +34,8 @@ public class QueueInfoVo {
 	private String waitTime;
 	// 排队状态(未排队、排队中)
 	private String status;
+	//医生姓名
+	private String doctorName;
 	// 时间
 	private String currentTime;
 
@@ -138,6 +140,14 @@ public class QueueInfoVo {
 
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
+	}
+
+	public String getDoctorName() {
+		return doctorName;
+	}
+
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
 	}
 
 }

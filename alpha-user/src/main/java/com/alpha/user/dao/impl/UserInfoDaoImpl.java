@@ -38,14 +38,38 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo, Long> implements UserInfo
      * @param inType
      * @return
      */
+   /* @Override
     public UserInfo getUserInfoByExternalUserId(String externalUserId, int inType) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("externalUserId", externalUserId);
         params.put("inType", inType);
         UserInfo userInfo = selectOne("com.alpha.user.mapper.UserInfoMapper.getUserInfoByExternalUserId", params);
         return userInfo;
-    }
+    }*/
+    
+	/*@Override
+	public UserInfo getUserInfoByExternalUserId(String externalUserId) {
+		Map<String, Object> params = new HashMap<String, Object>();
+        params.put("externalUserId", externalUserId);
+        UserInfo userInfo = selectOne("com.alpha.user.mapper.UserInfoMapper.queryByExternalUserId", params);
+        return userInfo;
+	}*/
 
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listByExternalUserId(String externalUserId) {
+		 String statement = "com.alpha.user.mapper.UserInfoMapper.listByExternalUserId";
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("externalUserId", externalUserId);
+			List<DataRecord> list = super.selectForList(statement, map);
+	        List<UserInfo> resultList = new ArrayList<>();
+	        if (resultList != null) {
+	            resultList = JavaBeanMap.convertListToJavaBean(list, UserInfo.class);
+	        }
+	        return resultList;
+	}
+    
     @Override
     public UserInfo queryByUserId(Long userId) {
         UserInfo userInfo = selectOne("com.alpha.user.mapper.UserInfoMapper.queryByUserId", userId);
@@ -93,5 +117,20 @@ public class UserInfoDaoImpl extends BaseDao<UserInfo, Long> implements UserInfo
         }
         return resultList;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserInfo> listByUserId(List<Long> userIdList) {
+		String statement = "com.alpha.user.mapper.UserInfoMapper.findbyUserIdList";
+        Map<String, Object> param = new HashMap<>();
+        param.put("userIdList", userIdList);
+		List<DataRecord> list = super.selectForList(statement, param);
+        List<UserInfo> resultList = new ArrayList<>();
+        if (resultList != null) {
+            resultList = JavaBeanMap.convertListToJavaBean(list, UserInfo.class);
+        }
+        return resultList;
+	}
+
 
 }

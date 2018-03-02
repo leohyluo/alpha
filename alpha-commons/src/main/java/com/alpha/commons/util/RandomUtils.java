@@ -129,7 +129,7 @@ public class RandomUtils {
 	
 	public static String randomUserName() {
 		String firstNames = "李,王,张,刘,陈,杨,赵,黄,周,吴";
-		String lastNames = "星星,洋洋,毛毛,大大,小小,明明,玲玲,贱贱,华华,淘淘";
+		String lastNames = "星星,洋洋,毛毛,大大,小小,明明,玲玲,建军,华华,晓磊";
 		String[] firstNameArr = firstNames.split(",");
 		String[] lastNameArr = lastNames.split(",");
 		int r1 = getRandomNum(0, 9);

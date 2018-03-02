@@ -26,4 +26,10 @@ public interface UserDiagnosisOutcomeDao extends IBaseDao<UserDiagnosisOutcome, 
      * @return
      */
     List<UserDiagnosisOutcome> listUserDiagnosisOutcome(Long diagnosisId, String diseaseCode);
+
+    /**
+     * 删除诊断结果
+     * @param diagnosisId
+     */
+    void deleteByDiagnosisId(Long diagnosisId);
 }

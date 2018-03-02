@@ -1,5 +1,6 @@
 package com.alpha.self.diagnosis.utils;
 
+import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympQuestion;
 import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
@@ -40,6 +41,75 @@ public class DiseaseWeightUtil {
         }
     }
     
+    /**
+     * 计算伴随症状权重
+     * 症状权重=问题 * 伴随症状+伴随症状
+     *
+     * @param
+     */
+    public static Double diagnosisOutcome2(int questionSize, String diseaseName,  StringBuffer calculationFormula, List<MedicineQuestionVo>  mqvs, DiagnosisMainsympQuestion dmQuestion) {
+        try {
+            MedicineQuestionVo mqv = null;
+            //Y伴随症状问题权重
+            Double Y = 0.0;
+            Double N = 0d;//答案
+            for (MedicineQuestionVo mdc : mqvs) {
+                calculationFormula.append("<p>" + diseaseName + " " + mdc.getDiseaseCode());
+                calculationFormula.append(" >> " + mdc.getQuestionTitle() + " " + mdc.getQuestionCode());
+                calculationFormula.append(" $" + mdc.getAnswerTitle() + " " + mdc.getAnswerCode() + "</p>");
+                if(mqv == null) {
+                    mqv = mdc;
+                    Double Y1 = questionWeightFormula(questionSize, mqv.getQuestionWeight(), mqv.getQuestionStandardDeviation(), calculationFormula); //问题
+                    if (Y == 0.0) {
+                        Y = Y1;
+                    }
+                }
+                Double answerWeight = mdc.getAnswerWeight();
+                N = N + answerWeightFormula(answerWeight, mqv.getAnswerStandardDeviation(), dmQuestion, calculationFormula);
+            }
+            return diseaseWeightFormula(Y, N, calculationFormula);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0d;
+        }
+    }
+
+    /**
+     * 计算单个伴随症状权重
+     * 症状权重=问题 * 关键伴随症状
+     *
+     * @param
+     */
+    public static Double calcSingleConcSympWeight(int questionSize, String diseaseName, StringBuffer calculationFormula, List<MedicineQuestionVo>  mqvs, DiagnosisMainsympQuestion dmQuestion) {
+        try {
+            MedicineQuestionVo mqv = null;
+            //Y伴随症状问题权重
+            Double Y = 0.0;
+            Double N = 0d;//答案
+            for (MedicineQuestionVo mdc : mqvs) {
+                calculationFormula.append("<p>" + diseaseName + " " + mdc.getDiseaseCode());
+                calculationFormula.append(" >> " + mdc.getQuestionTitle() + " " + mdc.getQuestionCode());
+                calculationFormula.append(" $" + mdc.getAnswerTitle() + " " + mdc.getAnswerCode() + "</p>");
+                if(mqv == null) {
+                    mqv = mdc;
+                    Double Y1 = questionWeightFormula(questionSize, mqv.getQuestionWeight(), mqv.getQuestionStandardDeviation(), calculationFormula); //问题
+                    if (Y == 0.0) {
+                        Y = Y1;
+                    }
+                }
+                Double answerWeight = mdc.getAnswerWeight();
+                N = answerWeightFormula(answerWeight, mqv.getAnswerStandardDeviation(), dmQuestion, calculationFormula);
+                calculationFormula.append("</br>");
+                calculationFormula.append("Weight: " + (N * Y) + " = " + N + " * " + Y);
+                N = N * Y;
+            }
+            return N;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0d;
+        }
+    }
+
     /**
      * 计算伴随症状权重
      * 症状权重=问题 * 伴随症状+伴随症状

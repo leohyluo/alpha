@@ -76,4 +76,17 @@ public interface UserBasicRecordDao extends IBaseDao<UserBasicRecord, Long> {
      * @return
      */
     UserBasicRecord getLastFinishByUserId(Long userId);
+    
+    /**
+     * 查找当天未确诊并且已关注微信公众号的数据的数据
+     * @return
+     */
+    List<UserBasicRecord> listWecharUserUnFinishOnToday();
+    
+    /**
+     * 查找具体某一个用户当天未确诊并且已关注微信公众号的数据的数据
+     * @param userId
+     * @return
+     */
+    List<UserBasicRecord> listWecharUserUnFinishOnTodayByUserId(Long userId);
 }

@@ -54,6 +54,7 @@ public class UserBasicInfoVo {
     	BeanCopierUtil.copy(userInfo, this);
     	if(userInfo.getBirth() != null) {
     		this.birth = DateUtils.date2String(userInfo.getBirth(), DateUtils.DATE_FORMAT);
+    		this.age = DateUtils.getAgeText(userInfo.getBirth());
     	}
     }
     

@@ -65,6 +65,28 @@ public class DiagnosisDiseaseServiceImpl implements DiagnosisDiseaseService {
     }
 
     @Override
+    public Boolean filterByUserInfo(String diseaseCode, UserInfo userInfo) {
+        DiagnosisDisease disease = diagnosisDiseaseDao.getDiagnosisDisease(diseaseCode);
+        if(disease == null) {
+            return false;
+        }
+        //过滤性别
+        if (disease.getGender() != null && disease.getGender() > 0 && disease.getGender() != userInfo.getGender()) {
+           return false;
+        }
+        //过滤特殊时期
+        if (disease.getSpecialPeriod() != null && disease.getSpecialPeriod() > 0 && StringUtils.isNotEmpty(userInfo.getSpecialPeriod()) &&userInfo.getSpecialPeriod().equals(disease.getSpecialPeriod()+"") ) {
+            return false;
+        }
+        //过滤年龄
+        float age = DateUtils.getAge(userInfo.getBirth());
+        if ((disease.getMinAge() != null && disease.getMinAge() > age) || (disease.getMaxAge() != null && disease.getMaxAge() < age)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public List<DiseaseVo> findByDiseaseName(String diseaseName) {
         Map<String, Object> params = new HashMap<>();
         params.put("diseaseName", diseaseName);
@@ -97,7 +119,7 @@ public class DiagnosisDiseaseServiceImpl implements DiagnosisDiseaseService {
 		TreatAdviceVo treatAdvice = null;
 		if(disease != null) {
 			//更新用户选择次数
-			Long userSelectCount = disease.getUserSelectCount() == null ? 0L : disease.getUserSelectCount();
+			Integer userSelectCount = disease.getUserSelectCount() == null ? 0 : disease.getUserSelectCount();
 			userSelectCount++;
 			disease.setUserSelectCount(userSelectCount);
 			diagnosisDiseaseDao.update(disease);

@@ -53,6 +53,23 @@ spring:
       #关闭空闲连接超时时间
       remove-abandoned-timeout: 1800  
 #mybatis配置
-mybatis:
-  config-location: classpath:mybatis-config.xml
-  mapper-locations: classpath:mapper/*.xml,classpath:user/mapper/*.xml,classpath:core/mapper/*.xml
+#mybatis:
+#  config-location: classpath:mybatis-config.xml
+#  mapper-locations: classpath:mapper/*.xml,classpath:user/mapper/*.xml,classpath:core/mapper/*.xml
+#ftp服务器配置
+ftp: 
+  server: 
+    ip: 120.76.153.220
+    port: 52151
+    userName: ftpuser
+    password: zhys%vVUUqy#igK3Ft?I
+  alpha: 
+    save-path: 
+      qr-code: alpha/images/qrcode
+#微信公众号配置
+wechar:
+    menu:
+      #就诊记录
+      diagnosisRecord: https%3A%2F%2Fh5ppe.dr.zhyaoshi.com%2Frecord.html
+      #阿尔法医生
+      alpha: https%3A%2F%2Fh5ppe.dr.zhyaoshi.com%2Falpha.html

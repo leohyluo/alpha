@@ -1,12 +1,17 @@
 package com.alpha.user.pojo.vo;
 
-import com.alpha.server.rpc.user.pojo.UserInfo;
-
 import java.util.List;
+
+import com.alpha.server.rpc.user.pojo.UserInfo;
 
 public class SaveUserInfoVo extends UserInfo {
 
     private static final long serialVersionUID = -7403810824414902472L;
+    
+    /**
+     * 医院挂号号码
+     */
+    private String hisRegisterNo;
 
     /**
      * 既往史
@@ -34,5 +39,13 @@ public class SaveUserInfoVo extends UserInfo {
         this.allergicHistory = allergicHistory;
     }
 
+	public String getHisRegisterNo() {
+		return hisRegisterNo;
+	}
+
+	public void setHisRegisterNo(String hisRegisterNo) {
+		this.hisRegisterNo = hisRegisterNo;
+	}
+    
 
 }

@@ -20,12 +20,10 @@ public interface BasicQuestionService {
 
     /**
      * 疾病搜索
-     *
-     * @param diseasevo 客户端搜索参数
      * @param type      疾病类型
      * @return
      */
-    List<IAnswerVo> diseaseSearch(SearchRequestVo diseasevo, DiseaseType type);
+    List<IAnswerVo> diseaseSearch(Long userId, String keyword, DiseaseType type);
 
     /**
      * 生成主症状问题
@@ -33,7 +31,7 @@ public interface BasicQuestionService {
      *
      * @return
      */
-    BasicQuestionVo getMainSymptomsQuestion(Long diagnosisId, UserInfo userInfo);
+    BasicQuestionVo getMainSymptomsQuestion(String systemType, Long diagnosisId, UserInfo userInfo);
     
     /**
      * 根据出生日期或年龄查询要回答的问题

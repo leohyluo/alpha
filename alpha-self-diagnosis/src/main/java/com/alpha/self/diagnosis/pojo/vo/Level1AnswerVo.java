@@ -49,7 +49,7 @@ public class Level1AnswerVo implements IAnswerVo {
     
     public Level1AnswerVo(SyDiagnosisAnswer sda) {
     	this.answerValue = sda.getAnswerCode();
-    	this.answerTitle = sda.getPopuContent();
+    	this.answerTitle = sda.getContent();
     	this.image = sda.getImage();
     }
     

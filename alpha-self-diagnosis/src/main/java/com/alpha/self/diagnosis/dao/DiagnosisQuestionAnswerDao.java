@@ -18,7 +18,7 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @param questionCodes
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, Collection<String> questionCodes);
 
 
     /**
@@ -36,7 +36,14 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @param answerCodes
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer_backup(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
+    
+    /**
+     * 根据主症状编码、问题编码、答案编码找出有效的疾病（非隐藏、非删除）
+     * @param answerCodes
+     * @return
+     */
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
 
     /**
      * 根据答案编号查询答案
@@ -55,6 +62,15 @@ public interface DiagnosisQuestionAnswerDao extends IBaseDao<DiagnosisQuestionAn
      * @return
      */
     List<MedicineQuestionVo> listMedicineQuestionVo(Collection<String> questionCodes, Collection<String> answerCodes);
+    
+    /**
+     * 根据问题、答案编号查询有效的疾病
+     *
+     * @param answerCodes
+     * @param questionCodes
+     * @return
+     */
+    List<MedicineQuestionVo> listMedicineQuestionVo2(String mainSympCode, Collection<String> questionCodes, Collection<String> answerCodes);
     
     /**
      * 查询问题下的所有隐藏答案

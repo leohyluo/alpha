@@ -1,5 +1,8 @@
 package com.alpha.self.diagnosis.pojo.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alpha.commons.util.StringUtils;
+
 /**
  * 数据传输类-排队提醒
  * @author Administrator
@@ -27,6 +30,8 @@ public class QueueDTO {
 	private String waitTime;
 	//排队状态(未排队、排队中)
 	private String status;
+	//医生姓名
+	private String doctorName;
 	//时间
 	private String currentTime;
 	
@@ -96,6 +101,40 @@ public class QueueDTO {
 	public void setWaitTime(String waitTime) {
 		this.waitTime = waitTime;
 	}
+	public String getDoctorName() {
+		return doctorName;
+	}
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
+	}
+	public JSONObject toWecharTemplateData() {
+		JSONObject data = new JSONObject();
+		/*addTemplateContent(data, "tips", this.tip, null);
+		addTemplateContent(data, "userName", this.userName, null);
+		addTemplateContent(data, "gender", Gender.getGenderText(this.gender), null);
+		addTemplateContent(data, "age", this.age, null);
+		addTemplateContent(data, "hospitalName", this.hospitalName, null);
+		addTemplateContent(data, "department", this.department, null);
+		addTemplateContent(data, "queuingNumber", this.queuingNumber, null);
+		addTemplateContent(data, "prevQueuingNumber", this.prevQueuingNumber, null);
+		addTemplateContent(data, "waitTime", this.waitTime, null);
+		addTemplateContent(data, "status", DiagnosisStatus.getText(this.status), null);*/
+		
+		addTemplateContent(data, "keyword1", this.queuingNumber, null);
+		addTemplateContent(data, "keyword2", this.department, null);
+		addTemplateContent(data, "keyword3", this.doctorName, null);
+		addTemplateContent(data, "remark", "您前面还有"+this.prevQueuingNumber+"个人在排队", null);
+		
+		return data;
+	}
 	
-	
+	private void addTemplateContent(JSONObject data, String key, String value, String color) {
+		value = StringUtils.isEmpty(value) ? "暂无" : value;
+		JSONObject node = new JSONObject();
+		node.put("value", value);
+		if(StringUtils.isNotEmpty(color)) {
+			node.put("color", color);
+		}
+		data.put(key, node);
+	}
 }

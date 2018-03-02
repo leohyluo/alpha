@@ -6,20 +6,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.commons.enums.DiagnosisStatus;
-import com.alpha.commons.enums.InType;
 import com.alpha.commons.util.BeanCopierUtil;
 import com.alpha.commons.util.CollectionUtils;
+import com.alpha.commons.util.StringUtils;
 import com.alpha.self.diagnosis.dao.DiagnosisArticleDao;
 import com.alpha.self.diagnosis.dao.DrugDao;
 import com.alpha.self.diagnosis.pojo.dto.QueueDTO;
+import com.alpha.self.diagnosis.pojo.vo2.ArticleDetailVo;
 import com.alpha.self.diagnosis.pojo.vo2.ArticleListVo;
 import com.alpha.self.diagnosis.pojo.vo2.DiagnosisRecordListVo;
 import com.alpha.self.diagnosis.pojo.vo2.DiseaseDetailVo;
@@ -42,6 +46,7 @@ import com.alpha.server.rpc.user.pojo.UserDiagnosisOutcome;
 import com.alpha.server.rpc.user.pojo.UserInfo;
 import com.alpha.treatscheme.dao.DiagnosisDiseaseDao;
 import com.alpha.user.dao.UserBasicRecordDao;
+import com.alpha.user.dao.UserInfoDao;
 import com.alpha.user.dao.UserMemberDao;
 import com.alpha.user.service.UserInfoService;
 
@@ -50,6 +55,8 @@ public class WecharServiceImpl implements WecharService {
 	
 	@Resource
 	private UserInfoService userInfoService;
+	@Resource
+	private UserInfoDao userInfoDao;
 	@Resource
 	private HisApiService hisApiService;
 	@Resource
@@ -66,17 +73,8 @@ public class WecharServiceImpl implements WecharService {
 	private DrugDao drugDao; 
 	@Resource
 	private UserMemberDao userMemberDao;
+	private Logger logger = LoggerFactory.getLogger(getClass());
 
-
-	@Override
-	public void follow(String wecharId, Long userId) {
-		UserInfo userInfo = userInfoService.queryByUserId(userId);
-		if(userInfo != null) {
-			userInfo.setExternalUserId(wecharId);
-			userInfoService.updateUserInfo(userInfo, InType.WECHAR.getValue());
-		}
-	}
-	
 	@Override
 	public Map<String, Object> getUserDiagnosisInfo(Long userId) {
 		UserInfo userInfo = userInfoService.queryByUserId(userId);
@@ -88,7 +86,7 @@ public class WecharServiceImpl implements WecharService {
 		List<PreDiagnosisResultVo> preDiagnosisResultVoList = new ArrayList<>();
 		if(CollectionUtils.isNotEmpty(recordList)) {
 			for(UserBasicRecord itemRecord : recordList) {
-				PreDiagnosisResultVo preDiagnosisResultVo = new PreDiagnosisResultVo(itemRecord);
+				PreDiagnosisResultVo preDiagnosisResultVo = new PreDiagnosisResultVo(itemRecord, userInfo);
 				preDiagnosisResultVoList.add(preDiagnosisResultVo);
 			}
 		}
@@ -103,7 +101,8 @@ public class WecharServiceImpl implements WecharService {
 		Map<String, Object> map = new HashMap<>();
 		UserBasicRecord userBasicRecord = userBasicRecordDao.findByDiagnosisId(diagnosisId);
 		//预问诊结果
-		PreDiagnosisResultVo preDiagnosisResultVo = new PreDiagnosisResultVo(userBasicRecord);
+		UserInfo userInfo = userInfoService.queryByUserId(userId);
+		PreDiagnosisResultVo preDiagnosisResultVo = new PreDiagnosisResultVo(userBasicRecord, userInfo);
 		map.put("preDiagnosisResult", preDiagnosisResultVo);
 		
 		//精彩资讯
@@ -131,8 +130,13 @@ public class WecharServiceImpl implements WecharService {
 			return map;
 		}
 		//排队提醒
-		QueueDTO queueDto = hisApiService.getQueuingInfo(idcard);
-		QueueInfoVo queueVo = new QueueInfoVo(queueDto);
+		QueueInfoVo queueVo = null;
+		if(StringUtils.isNotEmpty(idcard)) {
+			QueueDTO queueDto = hisApiService.getQueuingInfo(diagnosisId, idcard);
+			queueVo = new QueueInfoVo(queueDto);
+		} else {
+			logger.warn("用户{}的身份证号码为空,无法查询排队信息", userId);
+		}
 		map.put("queueInfo", queueVo);
 		//疑似结果
 		List<DiseaseListVo> diseaseListVoList = new ArrayList<>();
@@ -145,6 +149,16 @@ public class WecharServiceImpl implements WecharService {
 		}
 		map.put("diseaseList", diseaseListVoList);
 		return map;
+	}
+	
+	@Override
+	public ArticleDetailVo getArticleDetail(String articleCode) {
+		DiagnosisArticle article = diagnosisArticleDao.getByArticleCode(articleCode);
+		ArticleDetailVo articleDetailVo = null;
+		if(article != null) {
+			articleDetailVo = new ArticleDetailVo(article);
+		}
+		return articleDetailVo;
 	}
 
 	@Override
@@ -176,7 +190,7 @@ public class WecharServiceImpl implements WecharService {
 	@Override
 	public DiseaseDetailVo getTreatSchema(String diseaseCode) {
 		DiagnosisDisease disease = diagnosisDiseaseDao.getDiagnosisDisease(diseaseCode);
-		Long userSelectCount = disease.getUserSelectCount() == null ? 0L : disease.getUserSelectCount();
+		Integer userSelectCount = disease.getUserSelectCount() == null ? 0 : disease.getUserSelectCount();
 		userSelectCount++;
 		disease.setUserSelectCount(userSelectCount);
 		diagnosisDiseaseDao.update(disease);
@@ -195,20 +209,42 @@ public class WecharServiceImpl implements WecharService {
 	public DrugDetailVo getDrugDetail(String drugCode) {
 		DrugOnSellDetail drug = drugDao.getByDrugCode(drugCode);
 		if(drug != null) {
+			Integer userSelectCount = drug.getUserSelectCount() == null ? 0 : drug.getUserSelectCount();
+			userSelectCount++;
+			drug.setUserSelectCount(userSelectCount);
+			drugDao.update(drug);
+			
 			return BeanCopierUtil.uniformCopy(drug, DrugDetailVo::new);
 		}
 		return null;
 	}
 
 	@Override
-	public List<MemberListVo> listMemberListByUserId(Long userId) {
+	public List<Map<String, Object>> listMemberDiagnosisDetail(Long userId) {
 		List<UserInfo> userInfoList = userInfoService.listUserMemberInfo(userId);
-		return userInfoList.stream().map(MemberListVo::new).collect(toList());
+		logger.info("用户{}共有{}个成员", userId, userInfoList.size());
+		List<MemberListVo> memberVoList = userInfoList.stream().map(MemberListVo::new).collect(toList());
+		List<Map<String, Object>> resultList = new ArrayList<>();
+		for(MemberListVo member : memberVoList) {
+			List<DiagnosisRecordListVo> diagnosisRecordList = this.listUserDiagnosisRecord(member.getUserId());
+			if(CollectionUtils.isEmpty(diagnosisRecordList)) {
+				logger.info("用户{}无就诊记录", member.getUserId());
+			} else {
+				logger.info("用户{}共有{}条就诊记录", member.getUserId(), diagnosisRecordList.size());
+				Map<String, Object> map = new HashMap<>();
+				map.put("memberInfo", member);
+				map.put("diagnosisRecord", diagnosisRecordList);
+				resultList.add(map);
+			}
+		}
+		return resultList;
 	}
 
 	@Override
 	public List<DiagnosisRecordListVo> listUserDiagnosisRecord(Long userId) {
 		List<UserBasicRecord> recordList = userBasicRecordDao.listByUserId(userId);
+		//阿尔法的就诊记录暂时不出现在预问诊的就医记录中
+		recordList = recordList.stream().filter(e->StringUtils.isNotEmpty(e.getHisRegisterNo())).collect(Collectors.toList());
 		List<DiagnosisRecordListVo> voList = recordList.stream().map(DiagnosisRecordListVo::new).collect(toList());
 		return voList;
 	}
@@ -216,11 +252,12 @@ public class WecharServiceImpl implements WecharService {
 	@Override
 	public List<Map<String, Object>> listMemberHealthFile(Long userId) {
 		List<Map<String, Object>> resultList = new ArrayList<>();
-		List<MemberListVo> membervoList = this.listMemberListByUserId(userId);
+		List<UserInfo> userInfoList = userInfoService.listUserMemberInfo(userId);
+		List<MemberListVo> membervoList = userInfoList.stream().map(MemberListVo::new).collect(toList());
 		for(MemberListVo member : membervoList) {
 			Map<String, Object> memberMap = new HashMap<>();
 			memberMap.put("memberInfo", member);
-			UserBasicRecord record = userBasicRecordDao.getLastFinishByUserId(userId);
+			UserBasicRecord record = userBasicRecordDao.getLastFinishByUserId(member.getUserId());
 			HisDiagnosisResultVo hisDiagnosisResultVo = null;
 			if(record != null) {
 				hisDiagnosisResultVo = new HisDiagnosisResultVo(record);
@@ -237,4 +274,6 @@ public class WecharServiceImpl implements WecharService {
 		UserBasicInfoVo basicInfo = new UserBasicInfoVo(userInfo);
 		return basicInfo;
 	}
+
+
 }

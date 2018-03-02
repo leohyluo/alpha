@@ -33,7 +33,7 @@ public class OtherHospitalInfo {
     /**
      * 其它医院用药列表
      */
-    private List<DrugVo> otherHospitalDrugList;
+    private List<DrugVo> otherHospitalUseDrugList;
 
     /**
      * 治疗效果
@@ -101,13 +101,11 @@ public class OtherHospitalInfo {
         this.otherHospitalDiagnosis = otherHospitalDiagnosis;
     }
 
-	public List<DrugVo> getOtherHospitalDrugList() {
-		return otherHospitalDrugList;
+	public List<DrugVo> getOtherHospitalUseDrugList() {
+		return otherHospitalUseDrugList;
 	}
 
-	public void setOtherHospitalDrugList(List<DrugVo> otherHospitalDrugList) {
-		this.otherHospitalDrugList = otherHospitalDrugList;
+	public void setOtherHospitalUseDrugList(List<DrugVo> otherHospitalUseDrugList) {
+		this.otherHospitalUseDrugList = otherHospitalUseDrugList;
 	}
-
-    
 }

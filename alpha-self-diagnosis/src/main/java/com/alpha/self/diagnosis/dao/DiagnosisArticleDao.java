@@ -18,5 +18,12 @@ public interface DiagnosisArticleDao extends IBaseDao<DiagnosisArticle, Long> {
 	 * @return
 	 */
     List<DiagnosisArticle> listTop5ByMainSympCode(String mainSympCode);
+    
+    /**
+     * 查看文章详情
+     * @param articleCode
+     * @return
+     */
+    DiagnosisArticle getByArticleCode(String articleCode);
 
 }

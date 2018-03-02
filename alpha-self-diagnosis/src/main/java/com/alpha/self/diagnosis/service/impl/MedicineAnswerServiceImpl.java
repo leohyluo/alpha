@@ -1,6 +1,7 @@
 package com.alpha.self.diagnosis.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alpha.commons.core.pojo.DiagnosisDisease;
 import com.alpha.commons.enums.Unit;
 import com.alpha.commons.exception.ServiceException;
 import com.alpha.commons.util.CollectionUtils;
@@ -23,6 +24,7 @@ import com.alpha.server.rpc.diagnosis.pojo.DiagnosisQuestionAnswer;
 import com.alpha.server.rpc.diagnosis.pojo.SyDiagnosisAnswer;
 import com.alpha.server.rpc.user.pojo.UserDiagnosisDetail;
 import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.treatscheme.dao.DiagnosisDiseaseDao;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,8 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
     private SyDiagnosisAnswerDao syDiagnosisAnswerDao;
     @Resource
     private DiagnosisMainsympNeConcsympService diagnosisMainsympNeConcsympService;
+    @Resource
+    private DiagnosisDiseaseDao diagnosisDiseaseDao;
 
     /**
      * 记录用户的答案
@@ -72,54 +76,54 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         DiagnosisMainsympQuestion diagnosisQuestion = diagnosisMainsympQuestionDao.getDiagnosisMainsympQuestion(questionCode, mainSympCode);
         //判断当前问题是否有答案转化标志
         if(diagnosisQuestion != null && StringUtils.isNotEmpty(diagnosisQuestion.getParseClass())) {
-        	final String parseClass = diagnosisQuestion.getParseClass();
-        	List<DiagnosisQuestionAnswer> diagnosisAnswerList = this.listDiagnosisQuestionAnswer(questionCode, userInfo);
-        	List<AnswerRequestVo> answervoList = questionVo.getAnswers();
-        	//遍历客户端回答的答案
-        	for(AnswerRequestVo answerVo : answervoList) {
-        		String inputAnswer = answerVo.getContent();
-        		//如是温度,则将页面传进来的37.5转为37.5℃
-        		if(parseClass.equals(Unit.CENTIGRADE2.getValue())) {
-        			inputAnswer = inputAnswer.concat(Unit.CENTIGRADE2.getText());
-        		}
-        		String inputAnswerWithUnit = inputAnswer;
-        		//页面自由输入的答案与数据库的某一个答案匹配
-        		Optional<DiagnosisQuestionAnswer> answerOptional = diagnosisAnswerList.stream().filter(e->matchWithUnit(inputAnswerWithUnit, parseClass, e)).findFirst();
-        		if(answerOptional.isPresent()) {
-        			answerCodes.add(answerOptional.get().getAnswerCode());
-        			answerContents.add(inputAnswerWithUnit);
-        			//答案转化成功后模拟页面构造参数
-        			answerVo.setContent(answerOptional.get().getAnswerCode());
-        			answerVo.setAnswerTitle(inputAnswerWithUnit);
-        		} else {
-        			LOGGER.error("页面的答案没能与知识库的答案匹配");
-        			answerCodes.add("-1");
-        			answerContents.add(inputAnswerWithUnit);
-        		}
-        	}
+            final String parseClass = diagnosisQuestion.getParseClass();
+            List<DiagnosisQuestionAnswer> diagnosisAnswerList = this.listDiagnosisQuestionAnswer(mainSympCode, questionCode, userInfo);
+            List<AnswerRequestVo> answervoList = questionVo.getAnswers();
+            //遍历客户端回答的答案
+            for(AnswerRequestVo answerVo : answervoList) {
+                String inputAnswer = answerVo.getContent();
+                //如是温度,则将页面传进来的37.5转为37.5℃
+                if(parseClass.equals(Unit.TEMPERATURE.getValue())) {
+                    inputAnswer = inputAnswer.concat(Unit.TEMPERATURE.getText());
+                }
+                String inputAnswerWithUnit = inputAnswer;
+                //页面自由输入的答案与数据库的某一个答案匹配
+                Optional<DiagnosisQuestionAnswer> answerOptional = diagnosisAnswerList.stream().filter(e->matchWithUnit(inputAnswerWithUnit, parseClass, e)).findFirst();
+                if(answerOptional.isPresent()) {
+                    answerCodes.add(answerOptional.get().getAnswerCode());
+                    answerContents.add(inputAnswerWithUnit);
+                    //答案转化成功后模拟页面构造参数
+                    answerVo.setContent(answerOptional.get().getAnswerCode());
+                    answerVo.setAnswerTitle(inputAnswerWithUnit);
+                } else {
+                    LOGGER.error("页面的答案没能与知识库的答案匹配");
+                    answerCodes.add("-1");
+                    answerContents.add(inputAnswerWithUnit);
+                }
+            }
         } else {
-        	for (AnswerRequestVo answerVo : questionVo.getAnswers()) {
-        		answerCodes.add(answerVo.getContent());
-        		answerContents.add(answerVo.getAnswerTitle());
-        	}
+            for (AnswerRequestVo answerVo : questionVo.getAnswers()) {
+                answerCodes.add(answerVo.getContent());
+                answerContents.add(answerVo.getAnswerTitle());
+            }
         }
         //添加阴性伴随症状
         if(questionVo.getType() == QuestionEnum.伴随症状.getValue()) {
-        	//主症状下的所有阴性伴随症状
-        	List<DiagnosisMainsympNeConcsymp> neconcsympList = diagnosisMainsympNeConcsympService.listDiagnosisMainsympNeConcsymp(mainSympCode);
-        	neconcsympList.stream().filter(e->!answerCodes.contains(e.getConcSympCode())).forEach(e->{
-        		answerCodes.add(e.getConcNesympCode());
-        		if(StringUtils.isNotEmpty(e.getConcSympName())) {
-        			answerContents.add(e.getConcSympName());
-        		}
-        	});
-        } 
+            //主症状下的所有阴性伴随症状
+            List<DiagnosisMainsympNeConcsymp> neconcsympList = diagnosisMainsympNeConcsympService.listDiagnosisMainsympNeConcsymp(mainSympCode);
+            neconcsympList.stream().filter(e->!answerCodes.contains(e.getConcSympCode())).forEach(e->{
+                answerCodes.add(e.getConcNesympCode());
+                if(StringUtils.isNotEmpty(e.getConcSympName())) {
+                    answerContents.add(e.getConcSympName());
+                }
+            });
+        }
         //查询该问题下的所有隐藏答案
         List<String> hiddenAnswerCodes = new ArrayList<>();
         if(questionVo.getType() == QuestionEnum.医学问题.getValue()) {
-        	List<DiagnosisQuestionAnswer> hiddenAnswerList = diagnosisQuestionAnswerDao.listHiddenAnswers(questionCode);
-        	if(CollectionUtils.isNotEmpty(hiddenAnswerList)) {
-        	    LOGGER.info("开始处理问题"+questionCode+"的隐藏答案");
+            List<DiagnosisQuestionAnswer> hiddenAnswerList = diagnosisQuestionAnswerDao.listHiddenAnswers(questionCode);
+            if(CollectionUtils.isNotEmpty(hiddenAnswerList)) {
+                LOGGER.info("开始处理问题"+questionCode+"的隐藏答案");
                 //找出未回答的隐藏答案编码
                 hiddenAnswerCodes = hiddenAnswerList.stream().filter(e -> !answerCodes.contains(e.getMutuallyAnswerCode()))
                         .map(DiagnosisQuestionAnswer::getAnswerCode).distinct().collect(Collectors.toList());
@@ -140,20 +144,20 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
                 LOGGER.info("问题"+questionCode+"的隐藏答案为"+hiddenAnswerCodes);
             }
         }
-        
+
         UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(questionVo.getDiagnosisId(), questionVo.getQuestionCode());
         if (udd == null) {
             throw new ServiceException(ResponseStatus.INVALID_VALUE, "没有找到提问记录");
         }
 //        Map<Integer, Set<String>> answerSpecMap = this.mapAnswerSpec(questionVo.getQuestionCode(), answerCodes);
-        
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionVo.getQuestionCode(), answerCodes, hiddenAnswerCodes);
+
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionVo.getQuestionCode(), answerCodes, hiddenAnswerCodes);
         Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
         for (DiagnosisQuestionAnswer dqa : dqAnswers) {
             Set<String> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dqa.getAnswerSpec());
             if(StringUtils.isNotEmpty(dqa.getDiseaseCode())) {
-            	specSet.add(dqa.getDiseaseCode());
-            	answerSpecMap.put(dqa.getAnswerSpec(), specSet);
+                specSet.add(dqa.getDiseaseCode());
+                answerSpecMap.put(dqa.getAnswerSpec(), specSet);
             }
 //            answerContents.add(dqa.getContent());
         }
@@ -180,38 +184,38 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
      * @param questionVo
      */
     public void saveDiagnosisAnswer(BasicQuestionVo questionVo, UserInfo userInfo) {
-    	Long diagnosisId = questionVo.getDiagnosisId();
-    	String questionCode = questionVo.getQuestionCode();
-    	//查询同一就诊过程中主诉是否有变化
-    	String sympCode = questionVo.getSympCode();
-    	List<UserDiagnosisDetail> otherMainSympDetailList = userDiagnosisDetailDao.listUserDiagnosisDetail(diagnosisId, sympCode);
-    	if(CollectionUtils.isNotEmpty(otherMainSympDetailList)) {
-    		//删除其它主诉的问诊过程
-    		userDiagnosisDetailDao.deleteUserDiagnosisDetail(diagnosisId, sympCode);
-    	}
-    	
-    	UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(diagnosisId, questionCode);
-    	if(udd != null) {
-    		return;
-    	}
-    	
+        Long diagnosisId = questionVo.getDiagnosisId();
+        String questionCode = questionVo.getQuestionCode();
+        //查询同一就诊过程中主诉是否有变化
+        String sympCode = questionVo.getSympCode();
+        List<UserDiagnosisDetail> otherMainSympDetailList = userDiagnosisDetailDao.listUserDiagnosisDetail(diagnosisId, sympCode);
+        if(CollectionUtils.isNotEmpty(otherMainSympDetailList)) {
+            //删除其它主诉的问诊过程
+            userDiagnosisDetailDao.deleteUserDiagnosisDetail(diagnosisId, sympCode);
+        }
+
+        UserDiagnosisDetail udd = userDiagnosisDetailDao.getUserDiagnosisDetail(diagnosisId, questionCode);
+        if(udd != null) {
+            return;
+        }
+
         List<String> answerCodes = new ArrayList<>();
         List<String> answerContents = new ArrayList<>();
-                
+
         for (IAnswerVo answerVo : questionVo.getAnswers()) {
             if (answerVo instanceof BasicAnswerVo) {
-            	BasicAnswerVo answer = (BasicAnswerVo) answerVo;
-            	answerCodes.add(answer.getAnswerValue());
-            	answerContents.add(answer.getAnswerTitle());								
-			} else if (answerVo instanceof Level1AnswerVo) {
-				Level1AnswerVo answer = (Level1AnswerVo) answerVo;
-            	answerCodes.add(answer.getAnswerValue());
-            	answerContents.add(answer.getAnswerTitle());
-			}
+                BasicAnswerVo answer = (BasicAnswerVo) answerVo;
+                answerCodes.add(answer.getAnswerValue());
+                answerContents.add(answer.getAnswerTitle());
+            } else if (answerVo instanceof Level1AnswerVo) {
+                Level1AnswerVo answer = (Level1AnswerVo) answerVo;
+                answerCodes.add(answer.getAnswerValue());
+                answerContents.add(answer.getAnswerTitle());
+            }
         }
         udd = new UserDiagnosisDetail();
         udd.setDiagnosisId(questionVo.getDiagnosisId());
-        udd.setUserId(0L);
+        udd.setUserId(userInfo.getUserId());
         udd.setMemberId(userInfo.getUserId());
         udd.setQuestionCode(questionVo.getQuestionCode());
         udd.setAnswerCode(JSON.toJSONString(answerCodes));
@@ -232,29 +236,30 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
      * @param userInfo
      * @return
      */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, UserInfo userInfo) {
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, String questionCode, UserInfo userInfo) {
         //查询答案
         ArrayList<String> questionCodes = new ArrayList<>();
         questionCodes.add(questionCode);
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionCodes);
         dqAnswers = filterHiddenAnswer(questionCode, dqAnswers);
         filterAnswer(dqAnswers, userInfo);
         //查询小类所属的大类答案编码
         List<String> syanswercodeList = dqAnswers.stream().filter(e->StringUtils.isNotEmpty(e.getSyAnswerCode()))
-        	.map(DiagnosisQuestionAnswer::getSyAnswerCode).distinct().collect(Collectors.toList());
+                .map(DiagnosisQuestionAnswer::getSyAnswerCode).distinct().collect(Collectors.toList());
         if(CollectionUtils.isEmpty(syanswercodeList)) {
-        	return dqAnswers;
+            return dqAnswers;
         }
         //根据大类编码查询答案大类
         List<SyDiagnosisAnswer> syDiagnosisAnswerList = syDiagnosisAnswerDao.listSyDiagnosisAnswer(syanswercodeList, SyAnswerType.PARENT_ANSWER.getValue());
         Map<String, SyDiagnosisAnswer> syAnswerMap = syDiagnosisAnswerList.stream().collect(Collectors.toMap(SyDiagnosisAnswer::getAnswerCode, Function.identity()));
         //建立小类与大类的关联关系
         dqAnswers = dqAnswers.stream().peek(e->{
-        	if(StringUtils.isNotEmpty(e.getSyAnswerCode())) {
-        		SyDiagnosisAnswer syAnswer = syAnswerMap.get(e.getSyAnswerCode());
-        		e.setSyAnswer(syAnswer);
-        		LOGGER.info(e.getContent()+"所属大类为"+syAnswer.getPopuContent());
-        	}
+            if(StringUtils.isNotEmpty(e.getSyAnswerCode())) {
+                SyDiagnosisAnswer syAnswer = syAnswerMap.get(e.getSyAnswerCode());
+                e.setSyAnswer(syAnswer);
+                if(syAnswer != null)
+                    LOGGER.info(e.getContent()+"所属大类为"+syAnswer.getContent());
+            }
         }).collect(Collectors.toList());
         return dqAnswers;
     }
@@ -266,31 +271,31 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
      * @param userInfo
      * @return
      */
-    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, UserInfo userInfo) {
+    public List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, Collection<String> questionCodes, UserInfo userInfo) {
         //查询答案
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCodes);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionCodes);
         filterAnswer(dqAnswers, userInfo);
         return dqAnswers;
     }
-    
 
-	@Override
-	public List<SyDiagnosisAnswer> listSyDiagnosisAnswer(String connCode, UserInfo userInfo) {
-		List<SyDiagnosisAnswer> answerList = syDiagnosisAnswerDao.listSyDiagnosisAnswer(connCode, SyAnswerType.SUB_ANSWER.getValue());
-		filterSyAnswer(answerList, userInfo);
-		return answerList;
-	}
-    
+
+    @Override
+    public List<SyDiagnosisAnswer> listSyDiagnosisAnswer(String connCode, UserInfo userInfo) {
+        List<SyDiagnosisAnswer> answerList = syDiagnosisAnswerDao.listSyDiagnosisAnswer(connCode, SyAnswerType.SUB_ANSWER.getValue());
+        filterSyAnswer(answerList, userInfo);
+        return answerList;
+    }
+
     /**
      * 过滤隐藏答案
      * @param dqAnswers
      */
     public List<DiagnosisQuestionAnswer> filterHiddenAnswer(String questionCode, List<DiagnosisQuestionAnswer> dqAnswers) {
-    	List<DiagnosisQuestionAnswer> hiddenAnswerList = diagnosisQuestionAnswerDao.listHiddenAnswers(questionCode);
-    	Set<String> hiddenAnswerCodeSet = hiddenAnswerList.stream().map(DiagnosisQuestionAnswer::getAnswerCode).collect(Collectors.toSet());
-    	List<DiagnosisQuestionAnswer> answerList = dqAnswers.stream().filter(e->!hiddenAnswerCodeSet.contains(e.getAnswerCode())).collect(Collectors.toList());
-    	System.out.println("answerList.size="+answerList.size());
-    	return answerList;
+        List<DiagnosisQuestionAnswer> hiddenAnswerList = diagnosisQuestionAnswerDao.listHiddenAnswers(questionCode);
+        Set<String> hiddenAnswerCodeSet = hiddenAnswerList.stream().map(DiagnosisQuestionAnswer::getAnswerCode).collect(Collectors.toSet());
+        List<DiagnosisQuestionAnswer> answerList = dqAnswers.stream().filter(e->!hiddenAnswerCodeSet.contains(e.getAnswerCode())).collect(Collectors.toList());
+        System.out.println("answerList.size="+answerList.size());
+        return answerList;
     }
 
     public void filterAnswer(List<DiagnosisQuestionAnswer> dqAnswers, UserInfo userInfo) {
@@ -311,8 +316,10 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
     /**
      * 根据答案查询所有的答案，计算特异性
      */
-    public Map<Integer, Set<String>> mapAnswerSpec(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
-        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCode, answerCodes, hiddenAnswerCodes);
+    @Override
+    public Map<Integer, Set<String>> mapAnswerSpec(String mainSympCode, String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes) {
+        //List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(questionCode, answerCodes, hiddenAnswerCodes);
+        List<DiagnosisQuestionAnswer> dqAnswers = diagnosisQuestionAnswerDao.listDiagnosisQuestionAnswer(mainSympCode, questionCode, answerCodes, hiddenAnswerCodes);
         Map<Integer, Set<String>> answerSpecMap = new HashMap<>();
         for (DiagnosisQuestionAnswer dqa : dqAnswers) {
             Set<String> specSet = answerSpecMap.get(dqa.getAnswerSpec()) == null ? new HashSet<String>() : answerSpecMap.get(dqa.getAnswerSpec());
@@ -379,48 +386,53 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         }
         return questionMap;
     }
-	
-	private static boolean matchWithUnit(String inputAnswer, String parseClass, DiagnosisQuestionAnswer answer) {
-		Unit inputUnit = Unit.containText(inputAnswer);
-		if(inputUnit == null) {
-			return false;
-		}
-		Double minValue = answer.getMinValue();
-		Double maxValue = answer.getMaxValue();
-		Double inputAnswerWithoutUnit = Double.valueOf(inputAnswer.replace(inputUnit.getText(), ""));
-		if(inputUnit == Unit.MINUTE || inputUnit == Unit.HOUR || inputUnit == Unit.DAY || inputUnit == Unit.WEEK
-				|| inputUnit == Unit.MONTH || inputUnit == Unit.SEASON || inputUnit == Unit.YEAR) {
-			
-			Unit unit = Unit.findByValue(parseClass);
-			
-			Double answerOfInput = DateUtils.toMillSeond(inputAnswerWithoutUnit, inputUnit);
-			Double answerOfMin = DateUtils.toMillSeond(minValue, unit);
-			Double answerOfMax = DateUtils.toMillSeond(maxValue, unit);
-			if(answerOfInput.doubleValue() >= answerOfMin.doubleValue()
-					&& answerOfInput.doubleValue() <= answerOfMax.doubleValue()) {
-				return true;
-			}
-		} else if (inputUnit == Unit.CENTIGRADE) {
-			if(inputAnswerWithoutUnit >= minValue && inputAnswerWithoutUnit <= maxValue) {
-				return true;
-			}
-				
-		} else if (inputUnit == Unit.NUM_OF_TIMES) {
-			if(inputAnswerWithoutUnit >= minValue && inputAnswerWithoutUnit <= maxValue) {
-				return true;
-			}
-		}
-		return false;	
-	}
-	
-	/**
-	 * 过滤小类答案
-	 * @param dqAnswers
-	 * @param userInfo
-	 */
-	private void filterSyAnswer(List<SyDiagnosisAnswer> dqAnswers, UserInfo userInfo) {
+
+    private static boolean matchWithUnit(String inputAnswer, String parseClass, DiagnosisQuestionAnswer answer) {
+        Unit inputUnit = Unit.containText(inputAnswer);
+        if(inputUnit == null) {
+            return false;
+        }
+        Double minValue = answer.getMinValue();
+        Double maxValue = answer.getMaxValue();
+        Double inputAnswerWithoutUnit = Double.valueOf(inputAnswer.replace(inputUnit.getText(), ""));
+        if(inputUnit == Unit.MINUTE || inputUnit == Unit.HOUR || inputUnit == Unit.DAY || inputUnit == Unit.WEEK
+                || inputUnit == Unit.MONTH || inputUnit == Unit.SEASON || inputUnit == Unit.YEAR) {
+
+            Unit unit = Unit.findByValue(parseClass);
+
+            Double answerOfInput = DateUtils.toMillSeond(inputAnswerWithoutUnit, inputUnit);
+            Double answerOfMin = DateUtils.toMillSeond(minValue, unit);
+            Double answerOfMax = DateUtils.toMillSeond(maxValue, unit);
+            if(answerOfInput.doubleValue() >= answerOfMin.doubleValue()
+                    && answerOfInput.doubleValue() <= answerOfMax.doubleValue()) {
+                return true;
+            }
+        } else if (inputUnit == Unit.CENTIGRADE) {
+            if(inputAnswerWithoutUnit >= minValue && inputAnswerWithoutUnit <= maxValue) {
+                return true;
+            }
+
+        } else if (inputUnit == Unit.TEMPERATURE) {
+            if(inputAnswerWithoutUnit >= minValue && inputAnswerWithoutUnit <= maxValue) {
+                return true;
+            }
+
+        } else if (inputUnit == Unit.NUM_OF_TIMES) {
+            if(inputAnswerWithoutUnit >= minValue && inputAnswerWithoutUnit <= maxValue) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 过滤小类答案
+     * @param dqAnswers
+     * @param userInfo
+     */
+    private void filterSyAnswer(List<SyDiagnosisAnswer> dqAnswers, UserInfo userInfo) {
         for (Iterator iterator = dqAnswers.iterator(); iterator.hasNext(); ) {
-        	SyDiagnosisAnswer answer = (SyDiagnosisAnswer) iterator.next();
+            SyDiagnosisAnswer answer = (SyDiagnosisAnswer) iterator.next();
             if (answer.getGender() != null && answer.getGender() > 0 && answer.getGender() != userInfo.getGender()) {
                 iterator.remove();
                 continue;//过滤性别
@@ -433,50 +445,50 @@ public class MedicineAnswerServiceImpl implements MedicineAnswerService {
         }
     }
 
-	@Override
-	public LinkedHashSet<IAnswerVo> mapAnswerLevel(List<IAnswerVo> answerList) {
-		List<IAnswerVo> level1AnswerList = new ArrayList<>();
-		for(IAnswerVo itemAnswer : answerList) {
-        	BasicAnswerVo bav = (BasicAnswerVo) itemAnswer;
-        	SyDiagnosisAnswer syAnswer = bav.getSyAnswer();
-        	if(syAnswer != null) {
-        		String syAnswerCode = syAnswer.getAnswerCode();
-        		Optional<Level1AnswerVo> lv1optional = level1AnswerList.stream().map(e->{
-        			Level1AnswerVo lv1 = (Level1AnswerVo) e;
-        			return lv1;
-        		}).filter(e->e.getAnswerValue().equals(syAnswerCode)).findFirst();
-        		
-        		if(lv1optional.isPresent()) {
-        			Level1AnswerVo level1Answer = lv1optional.get();
-        			List<Level2AnswerVo> level2AnswerList = level1Answer.getLevel2Answers();
-        			if(level2AnswerList == null) {
-        				level2AnswerList = new ArrayList<>();
-        				level1Answer.setLevel2Answers(level2AnswerList);
-        			}
-        			//将BasicAnswerVo转为Level2AnswerVo
-        			Level2AnswerVo level2Answer = new Level2AnswerVo(bav);
-        			level2AnswerList.add(level2Answer);
-        		} else {
-        			Level1AnswerVo level1Answer = new Level1AnswerVo(syAnswer);
-        			Level2AnswerVo level2Answer = new Level2AnswerVo(bav);
-        			List<Level2AnswerVo> level2AnswerList = level1Answer.getLevel2Answers();
-        			if(level2AnswerList == null) {
-        				level2AnswerList = new ArrayList<>();
-        				level2AnswerList.add(level2Answer);
-        				level1Answer.setLevel2Answers(level2AnswerList);
-        			} else {
-        				level2AnswerList.add(level2Answer);
-        			}
-        			
-        			level1AnswerList.add(level1Answer);
-        		}
-        	} else {
-        		IAnswerVo level1Answer = new Level1AnswerVo(bav);
-        		level1AnswerList.add(level1Answer);
-        	}
-		}	
-		LinkedHashSet<IAnswerVo> lhs = new LinkedHashSet<>(level1AnswerList);
-		return lhs;
-	}
+    @Override
+    public LinkedHashSet<IAnswerVo> mapAnswerLevel(List<IAnswerVo> answerList) {
+        List<IAnswerVo> level1AnswerList = new ArrayList<>();
+        for(IAnswerVo itemAnswer : answerList) {
+            BasicAnswerVo bav = (BasicAnswerVo) itemAnswer;
+            SyDiagnosisAnswer syAnswer = bav.getSyAnswer();
+            if(syAnswer != null) {
+                String syAnswerCode = syAnswer.getAnswerCode();
+                Optional<Level1AnswerVo> lv1optional = level1AnswerList.stream().map(e->{
+                    Level1AnswerVo lv1 = (Level1AnswerVo) e;
+                    return lv1;
+                }).filter(e->e.getAnswerValue().equals(syAnswerCode)).findFirst();
+
+                if(lv1optional.isPresent()) {
+                    Level1AnswerVo level1Answer = lv1optional.get();
+                    List<Level2AnswerVo> level2AnswerList = level1Answer.getLevel2Answers();
+                    if(level2AnswerList == null) {
+                        level2AnswerList = new ArrayList<>();
+                        level1Answer.setLevel2Answers(level2AnswerList);
+                    }
+                    //将BasicAnswerVo转为Level2AnswerVo
+                    Level2AnswerVo level2Answer = new Level2AnswerVo(bav);
+                    level2AnswerList.add(level2Answer);
+                } else {
+                    Level1AnswerVo level1Answer = new Level1AnswerVo(syAnswer);
+                    Level2AnswerVo level2Answer = new Level2AnswerVo(bav);
+                    List<Level2AnswerVo> level2AnswerList = level1Answer.getLevel2Answers();
+                    if(level2AnswerList == null) {
+                        level2AnswerList = new ArrayList<>();
+                        level2AnswerList.add(level2Answer);
+                        level1Answer.setLevel2Answers(level2AnswerList);
+                    } else {
+                        level2AnswerList.add(level2Answer);
+                    }
+
+                    level1AnswerList.add(level1Answer);
+                }
+            } else {
+                IAnswerVo level1Answer = new Level1AnswerVo(bav);
+                level1AnswerList.add(level1Answer);
+            }
+        }
+        LinkedHashSet<IAnswerVo> lhs = new LinkedHashSet<>(level1AnswerList);
+        return lhs;
+    }
 
 }

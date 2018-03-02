@@ -3,6 +3,7 @@ package com.alpha.self.diagnosis.dao.impl;
 import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
+import com.alpha.commons.util.CollectionUtils;
 import com.alpha.self.diagnosis.dao.DiagnosisMainsympConcsympDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp;
 import com.alpha.server.rpc.diagnosis.pojo.vo.MedicineQuestionVo;
@@ -77,7 +78,16 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
         return dmcs;
     }
 
-	@SuppressWarnings("unchecked")
+    @Override
+    public List<DiagnosisMainsympConcsymp> listByConcSympCodes(Collection concSympCodes) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("concSympCodes", concSympCodes);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.queryByconcSympCodesWithoutMainSymp", params);
+        List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
+        return dmcs;
+    }
+
+    @SuppressWarnings("unchecked")
 	@Override
 	public List<MedicineQuestionVo> listDiagnosisMainsympConcsymp(String mainSympCode, List<String> concSympCodes) {
 		Map<String, Object> params = new HashMap<>();
@@ -87,6 +97,19 @@ public class DiagnosisMainsympConcsympDaoImpl extends BaseDao<DiagnosisMainsympC
         List<MedicineQuestionVo> dmcs = JavaBeanMap.convertListToJavaBean(datas, MedicineQuestionVo.class);
         return dmcs;
 	}
+
+    @Override
+    public DiagnosisMainsympConcsymp getMaxWeightConcSymp(String mainSympCode) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("mainSympCode", mainSympCode);
+        List<DataRecord> datas = super.selectForList("com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainsympConcsymp.getMaxWeightConcSympByMainCode", params);
+        List<DiagnosisMainsympConcsymp> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisMainsympConcsymp.class);
+        DiagnosisMainsympConcsymp result = null;
+        if(CollectionUtils.isNotEmpty(dmcs)) {
+            result = dmcs.get(0);
+        }
+        return result;
+    }
 
 
 }

@@ -7,8 +7,10 @@ public class GlobalConstants {
 	public static final Integer PAST_MEDICAL_HISTORY_THRESHOLD = 10000;
 	//过敏史阀值
 	public static final Integer ALLERGIC_HISTORY_THRESHOLD = 10000;
-	//热门疾病疾阀值
+	//热门疾病阀值
 	public static final Integer HOT_DISEASE_THRESHOLD = 1000;
+	//热门药品阀值
+	public static final Integer HOT_DRUG_THRESHOLD = 1000;
 	//热门疾病疾显示数量
 	public static final Integer HOT_DISEASE_COUNT = 30;
 	//热门疾病疾显示数量
@@ -24,4 +26,9 @@ public class GlobalConstants {
 	public static final String USER_NAME_YOU = "您";
 	public static final String USER_NAME1_YOU = "同学";
 	public static final String UNKNOWN_ANSWER = "不清楚";
+	//自己
+	public static final String SELF = "自己";
+	public static final String KEY_CONC_SYMP_NAME = "关键伴随症状";
+	
+	public static final String IMAGE_BASE_URL = "alpha/images";
 }

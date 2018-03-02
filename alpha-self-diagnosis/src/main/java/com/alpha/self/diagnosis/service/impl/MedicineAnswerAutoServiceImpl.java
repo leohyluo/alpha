@@ -57,7 +57,7 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
                 questionCodes.add(dmq.getQuestionCode());
             }
             //查询所有问题的答案
-            List<DiagnosisQuestionAnswer> autoAnswers = medicineAnswerService.listDiagnosisQuestionAnswer(questionCodes, userInfo);
+            List<DiagnosisQuestionAnswer> autoAnswers = medicineAnswerService.listDiagnosisQuestionAnswer(mainSympCode, questionCodes, userInfo);
             for (DiagnosisQuestionAnswer dqa : autoAnswers) {
                 Set<DiagnosisQuestionAnswer> set = answerMap.get(dqa.getQuestionCode()) == null ? new HashSet<>() : answerMap.get(dqa.getQuestionCode());
                 set.add(dqa);
@@ -103,8 +103,9 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
     public void filterAnswerByAge(Collection<DiagnosisQuestionAnswer> dqas, UserInfo userInfo) {
         for (Iterator iterator = dqas.iterator(); iterator.hasNext(); ) {
             DiagnosisQuestionAnswer dqa = (DiagnosisQuestionAnswer) iterator.next();
-            float age = DateUtils.getAge(userInfo.getBirth());
-            if ((dqa.getMinValue() != null && dqa.getMinValue() > age) || (dqa.getMaxValue() != null && dqa.getMaxValue() < age)) {
+            //float age = DateUtils.getAge(userInfo.getBirth());
+            float months = DateUtils.getMonths(userInfo.getBirth());
+            if ((dqa.getMinValue() != null && dqa.getMinValue() > months) || (dqa.getMaxValue() != null && dqa.getMaxValue() < months)) {
                 iterator.remove();
             }
         }
@@ -120,7 +121,7 @@ public class MedicineAnswerAutoServiceImpl implements MedicineAnswerAutoService 
     public void filterAnswerBySeason(Collection<DiagnosisQuestionAnswer> dqas, UserInfo userInfo) {
         Calendar todayCal = Calendar.getInstance();
         todayCal.setTime(new Date());
-        int month = todayCal.get(Calendar.MONTH);
+        int month = todayCal.get(Calendar.MONTH) + 1;
         for (Iterator iterator = dqas.iterator(); iterator.hasNext(); ) {
             DiagnosisQuestionAnswer dqa = (DiagnosisQuestionAnswer) iterator.next();
             Double minValue = dqa.getMinValue();

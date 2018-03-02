@@ -1,31 +1,31 @@
 package com.alpha.self.diagnosis.service.impl;
 
-import com.alpha.commons.core.sql.DataSet;
-import com.alpha.commons.enums.AppType;
-import com.alpha.self.diagnosis.dao.DiagnosisMainSymptomsDao;
-import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
-import com.alpha.self.diagnosis.pojo.vo.*;
-import com.alpha.self.diagnosis.service.MedicineAnswerService;
-import com.alpha.self.diagnosis.service.SymptomMainService;
-import com.alpha.self.diagnosis.utils.AppUtils;
-import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
-import com.alpha.server.rpc.user.pojo.UserInfo;
-import com.alpha.user.service.UserBasicRecordService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
+import com.alpha.commons.core.sql.DataSet;
+import com.alpha.commons.enums.AppType;
+import com.alpha.self.diagnosis.dao.DiagnosisMainSymptomsDao;
+import com.alpha.self.diagnosis.pojo.enums.QuestionEnum;
+import com.alpha.self.diagnosis.pojo.vo.BasicAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionVo;
+import com.alpha.self.diagnosis.pojo.vo.BasicQuestionWithMoreVo;
+import com.alpha.self.diagnosis.pojo.vo.IAnswerVo;
+import com.alpha.self.diagnosis.pojo.vo.IQuestionVo;
+import com.alpha.self.diagnosis.service.MedicineAnswerService;
+import com.alpha.self.diagnosis.service.SymptomMainService;
+import com.alpha.server.rpc.diagnosis.pojo.DiagnosisMainSymptoms;
+import com.alpha.server.rpc.user.pojo.UserInfo;
+import com.alpha.user.utils.AppUtils;
 
 /**
  * Created by xc.xiong on 2017/9/11.

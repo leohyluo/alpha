@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
+import com.alpha.commons.util.CollectionUtils;
 import com.alpha.self.diagnosis.dao.DiagnosisArticleDao;
 import com.alpha.server.rpc.diagnosis.pojo.DiagnosisArticle;
 
@@ -28,6 +29,21 @@ public class DiagnosisArticleDaoImpl extends BaseDao<DiagnosisArticle, Long> imp
         List<DataRecord> datas = super.selectForList(statement, params);
         List<DiagnosisArticle> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisArticle.class);
         return dmcs;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public DiagnosisArticle getByArticleCode(String articleCode) {
+		String statement = NAME_SPACE.concat(".queryByArticleCode");
+		Map<String, Object> params = new HashMap<>();
+		params.put("articleCode", articleCode);
+		List<DataRecord> datas = super.selectForList(statement, params);
+        List<DiagnosisArticle> dmcs = JavaBeanMap.convertListToJavaBean(datas, DiagnosisArticle.class);
+        DiagnosisArticle article = null;
+        if(CollectionUtils.isNotEmpty(dmcs)) {
+        	article = dmcs.get(0);
+        }
+        return article;
 	}
 	
 	@Autowired

@@ -14,13 +14,15 @@ public class HisRegisterInfo {
 	//医生姓名
 	private String doctorName;
 	//就诊日期
-	private Date cureTime;
+	private String cureTime;
 	//挂号科室
 	private String department;
 	//医院挂号号码
 	private String hisRegisterNo;
 	//状态(1:排除中 10:预问诊结束)
 	private String status;
+	//预问诊id(医院不用传,此字段仅作为前端展示)
+	private String diagnosisId;
 	
 	public String getDoctorName() {
 		return doctorName;
@@ -28,10 +30,10 @@ public class HisRegisterInfo {
 	public void setDoctorName(String doctorName) {
 		this.doctorName = doctorName;
 	}
-	public Date getCureTime() {
+	public String getCureTime() {
 		return cureTime;
 	}
-	public void setCureTime(Date cureTime) {
+	public void setCureTime(String cureTime) {
 		this.cureTime = cureTime;
 	}
 	public String getDepartment() {
@@ -57,6 +59,12 @@ public class HisRegisterInfo {
 	}
 	public void setHospitalCode(String hospitalCode) {
 		this.hospitalCode = hospitalCode;
+	}
+	public String getDiagnosisId() {
+		return diagnosisId;
+	}
+	public void setDiagnosisId(String diagnosisId) {
+		this.diagnosisId = diagnosisId;
 	}
 	
 }

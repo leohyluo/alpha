@@ -26,7 +26,15 @@ public interface UserInfoService {
      * @param inType
      * @return
      */
-    UserInfo updateUserInfo(UserInfo userInfo, int inType);
+    UserInfo createOrUpdateUserInfo(UserInfo userInfo, int inType);
+    
+    /**
+     * 更新用户信息
+     * @param userInfo
+     * @param inType
+     * @return
+     */
+    UserInfo updateUserInfo(UserInfo userInfo);
 
     /**
      * 保存用户基础信息
@@ -50,7 +58,16 @@ public interface UserInfoService {
      * @param inType
      * @return
      */
-    UserInfo queryByExternalUserId(String externalUserId, int inType);
+    //UserInfo queryByExternalUserId(String externalUserId, int inType);
+    
+    /**
+     * 根据externalUserId获取自己用户信息
+     * @param externalUserId
+     * @return
+     */
+    UserInfo getSelfUserInfoByExternalUserId(String externalUserId);
+    
+    List<UserInfo> listByExternalUserId(String externalUserId);
 
     /**
      * 创建用户
@@ -104,4 +121,19 @@ public interface UserInfoService {
      * @return
      */
     List<UserInfo> listUserMemberInfo(Long userId);
+    
+    /**
+     * 保存用户信息
+     * @param userInfo
+     */
+    void save(UserInfo userInfo);
+    
+    /**
+     * 查询用户
+     * @param userIdList
+     * @return
+     */
+    List<UserInfo> listByUserId(List<Long> userIdList);
+    
+    
 }

@@ -21,4 +21,10 @@ public interface UserMemberService {
      * @return
      */
     List<UserMember> listByUserIdAndMemberName(Long userId, String memberName);
+    
+    /**
+     * 根据用户id删除
+     * @param memberId
+     */
+    void deleteByUserId(Long userId);
 }

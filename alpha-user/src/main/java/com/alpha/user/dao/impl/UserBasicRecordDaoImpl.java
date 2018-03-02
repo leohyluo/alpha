@@ -1,21 +1,23 @@
 package com.alpha.user.dao.impl;
 
-import com.alpha.commons.core.dao.impl.BaseDao;
-import com.alpha.commons.core.sql.dto.DataRecord;
-import com.alpha.commons.core.util.JavaBeanMap;
-import com.alpha.commons.enums.DiagnosisStatus;
-import com.alpha.commons.util.DateUtils;
-import com.alpha.server.rpc.user.pojo.UserBasicRecord;
-import com.alpha.user.dao.UserBasicRecordDao;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
+
+import com.alpha.commons.core.dao.impl.BaseDao;
+import com.alpha.commons.core.sql.dto.DataRecord;
+import com.alpha.commons.core.util.JavaBeanMap;
+import com.alpha.commons.enums.DiagnosisStatus;
+import com.alpha.commons.enums.InType;
+import com.alpha.commons.util.DateUtils;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
+import com.alpha.user.dao.UserBasicRecordDao;
 
 @Repository
 public class UserBasicRecordDaoImpl extends BaseDao<UserBasicRecord, Long> implements UserBasicRecordDao {
@@ -182,11 +184,12 @@ public class UserBasicRecordDaoImpl extends BaseDao<UserBasicRecord, Long> imple
 		Map<String, Object> param = new HashMap<>();
 		param.put("userId", userId);
 		String statement = NAME_SPACE + ".findLastFinishByUser";
-		Object obj = super.selectOne(statement, param);
-		UserBasicRecord record = null;
-		if(obj != null) {
-			record = (UserBasicRecord) obj;
-		}
+		DataRecord data = super.selectOne(statement, param);
+		if (data == null)
+			return null;
+		UserBasicRecord record = new UserBasicRecord();
+		JavaBeanMap.convertMapToJavaBean(data, record);
+
 		return record;
 	}
 	
@@ -197,6 +200,26 @@ public class UserBasicRecordDaoImpl extends BaseDao<UserBasicRecord, Long> imple
         if (resultList != null) {
             resultList = JavaBeanMap.convertListToJavaBean(list, UserBasicRecord.class);
         }
+        return resultList;
+	}
+
+	@Override
+	public List<UserBasicRecord> listWecharUserUnFinishOnToday() {
+		Map<String, Object> param = new HashMap<>();
+		param.put("status", DiagnosisStatus.HIS_CONFIRMED.getValue());
+		param.put("inType", InType.WECHAR.getValue());
+		String statement = NAME_SPACE + ".findWecharUserUnFinishOnToday";
+		List<UserBasicRecord> resultList = executeBatch(statement, param);
+        return resultList;
+	}
+	
+	@Override
+	public List<UserBasicRecord> listWecharUserUnFinishOnTodayByUserId(Long userId) {
+		Map<String, Object> param = new HashMap<>();
+		param.put("status", DiagnosisStatus.HIS_CONFIRMED.getValue());
+		param.put("userId", userId);
+		String statement = NAME_SPACE + ".findWecharUserUnFinishOnTodayByUserId";
+		List<UserBasicRecord> resultList = executeBatch(statement, param);
         return resultList;
 	}
 

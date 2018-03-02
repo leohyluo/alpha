@@ -28,6 +28,12 @@ public class DiagnosisAnswer implements Serializable {
     private String answerCode;
 
     /**
+     * 答案图片
+     */
+    @Column(name = "answer_image")
+    private String answerImage;
+    
+    /**
      * 答案内容
      */
     @Column(name = "content")
@@ -336,7 +342,6 @@ public class DiagnosisAnswer implements Serializable {
         return this.medicalDataStatus;
     }
 
-
     public void setItDataStatus(Integer itDataStatus) {
         this.itDataStatus = itDataStatus;
     }
@@ -345,5 +350,13 @@ public class DiagnosisAnswer implements Serializable {
         return this.itDataStatus;
     }
 
+	public String getAnswerImage() {
+		return answerImage;
+	}
 
+	public void setAnswerImage(String answerImage) {
+		this.answerImage = answerImage;
+	}
+
+    
 }

@@ -5,10 +5,11 @@ public enum DisplayType {
 
 	MAINSYMPTOM_INPUT("mainsymptom_input", "主诉输入"),
     RADIO_MAINSYMP("radio_mainsymp", "主诉选择"),
+    RADIO_MORE_INPUT_CONFIRM("radio_more_input_confirm", "预问诊主诉选择"),
     RADIO("radio", "医学单选"),
     CHECKBOX("checkbox", "医学多选"),
     DAYS("days", "主诉时间"),
-    NUM_OF_TIMES("num_of_times","次数"),
+    NUM_OF_TIMES("times","次数"),
     CHECKBOX_MORE_INPUT_CONFIRM("checkbox_more_input_confirm", "伴随症状"),
     TEMPERATURE("temperature", "体温");
 

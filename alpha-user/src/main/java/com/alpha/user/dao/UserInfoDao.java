@@ -20,7 +20,16 @@ public interface UserInfoDao extends IBaseDao<UserInfo, Long> {
      * @param inType
      * @return
      */
-    UserInfo getUserInfoByExternalUserId(String externalUserId, int inType);
+    //UserInfo getUserInfoByExternalUserId(String externalUserId, int inType);
+    
+    /**
+     * 查询用户信息
+     *
+     * @param externalUserId
+     * @param inType
+     * @return
+     */
+    List<UserInfo> listByExternalUserId(String externalUserId);
 
     UserInfo queryByUserId(Long userId);
 
@@ -39,4 +48,12 @@ public interface UserInfoDao extends IBaseDao<UserInfo, Long> {
      * @return
      */
     List<UserInfo> listUserMemberInfo(Long userId);
+    
+    /**
+     * 根据用户id查询
+     * @param userId
+     * @return
+     */
+    List<UserInfo> listByUserId(List<Long> userId);
+    
 }

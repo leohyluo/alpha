@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Repository;
 
+import com.alpha.commons.constants.GlobalConstants;
 import com.alpha.commons.core.dao.impl.BaseDao;
 import com.alpha.commons.core.sql.dto.DataRecord;
 import com.alpha.commons.core.util.JavaBeanMap;
@@ -59,6 +60,8 @@ public class DrugDaoImpl extends BaseDao<DrugOnSellDetail, Long> implements Drug
 	public List<DrugOnSellDetail> listUserHotDrug() {
 		String statement = NAME_SPACE.concat(".getUserHotDrug");
 		Map<String, Object> params = new HashMap<>();
+		params.put("threshold", GlobalConstants.HOT_DRUG_THRESHOLD);
+		params.put("size", GlobalConstants.HOT_DRUG_COUNT);
         List<DataRecord> datas = super.selectForList(statement, params);
         List<DrugOnSellDetail> drugList = JavaBeanMap.convertListToJavaBean(datas, DrugOnSellDetail.class);
         return drugList;

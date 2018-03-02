@@ -11,5 +11,7 @@
       select * from user_diagnosis_outcome where diagnosis_id=#{diagnosisId} and disease_code=#{diseaseCode}
     </select>
 
-
+    <delete id="deleteByDiagnosisId" parameterType="HashMap">
+        delete from user_diagnosis_outcome where diagnosis_id=#{diagnosisId}
+    </delete>
 </mapper>

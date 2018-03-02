@@ -35,7 +35,7 @@ public interface MedicineAnswerService {
      * @param userInfo
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String questionCode, UserInfo userInfo);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, String questionCode, UserInfo userInfo);
 
     /**
      * 获取所有的答案，并过滤年龄，性别
@@ -44,12 +44,12 @@ public interface MedicineAnswerService {
      * @param userInfo
      * @return
      */
-    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(Collection<String> questionCodes, UserInfo userInfo);
+    List<DiagnosisQuestionAnswer> listDiagnosisQuestionAnswer(String mainSympCode, Collection<String> questionCodes, UserInfo userInfo);
 
     /**
      * 根据答案查询所有的答案，计算特异性
      */
-    Map<Integer, Set<String>> mapAnswerSpec(String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
+    Map<Integer, Set<String>> mapAnswerSpec(String mainSympCode, String questionCode, Collection<String> answerCodes, Collection<String> hiddenAnswerCodes);
 
     /**
      * 查询正向特异性的疾病编码

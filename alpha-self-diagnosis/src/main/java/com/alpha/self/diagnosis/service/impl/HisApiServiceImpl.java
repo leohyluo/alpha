@@ -14,28 +14,44 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alpha.commons.enums.APICode;
+import com.alpha.commons.enums.DiagnosisStatus;
 import com.alpha.commons.util.DateUtils;
 import com.alpha.self.diagnosis.dao.HospitalApiDao;
 import com.alpha.self.diagnosis.pojo.dto.DiagnosisInfoDTO;
 import com.alpha.self.diagnosis.pojo.dto.QueueDTO;
 import com.alpha.self.diagnosis.service.HisApiService;
 import com.alpha.server.rpc.diagnosis.pojo.HospitalApi;
+import com.alpha.server.rpc.user.pojo.UserBasicRecord;
+import com.alpha.user.service.UserBasicRecordService;
 
 @Service
 public class HisApiServiceImpl implements HisApiService {
 	
 	@Resource
 	private HospitalApiDao hospitalApiDao;
+	@Resource
+	private UserBasicRecordService userBasicRecordService; 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Override
-	public QueueDTO getQueuingInfo(String idcard) {
+	public QueueDTO getQueuingInfo(Long diagnosisId, String idcard) {
+		UserBasicRecord basicRecord = userBasicRecordService.findByDiagnosisId(diagnosisId);
 		// 模拟His返回排队信息json字符串
+		String department = "未知";
+		String doctorName = "未知";
+		if(basicRecord == null) {
+			logger.error("根据就诊id{}无法找到就诊记录", diagnosisId);
+		} else {
+			department = basicRecord.getDepartment();
+			doctorName = basicRecord.getDoctorName();
+		}
 		JSONObject json = new JSONObject();
-		json.put("tip", "提示:请到护士站进行击活");
-		json.put("queuingNumber", "暂无");
-		json.put("prevQueuingNumber", "暂无");
-		json.put("status", "未排队");
+		json.put("tip", "提示:排队中");
+		json.put("queuingNumber", "A502");
+		json.put("department", department);
+		json.put("doctorName", doctorName);
+		json.put("prevQueuingNumber", "67人");
+		json.put("status", DiagnosisStatus.IN_QUEUE.getText());
 		json.put("currentTime", DateUtils.date2String(new Date(), DateUtils.DATE_FORMAT));
 
 		QueueDTO queueDto = JSON.parseObject(json.toJSONString(), QueueDTO.class);
